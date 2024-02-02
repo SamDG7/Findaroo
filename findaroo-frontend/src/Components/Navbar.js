@@ -1,21 +1,40 @@
 import React from 'react';
 import logo from '../Findaroo.png';
+import "./Navbar.css"
+import {ButtonTransparent} from './Buttons';
+import {Link} from "react-router-dom";
 
 const Navbar = () => {
     return (
-        <nav className="bg-gray-800 p-4 fixed w-full z-10 top-0">
-            <div className="container mx-auto">
-                {/* Your navbar content goes here */}
-                <div className="flex items-center justify-between">
-                    <img src={logo} alt="Findaroo"/>
-                    <div className="flex space-x-4">
-                        <a href="#" className="text-white">Home</a>
-                        <a href="#" className="text-white">About</a>
-                        <a href="#" className="text-white">Services</a>
-                        <a href="#" className="text-white">Contact</a>
-                    </div>
-                </div>
-            </div>
+        <nav className="fixed w-full z-10 top-0">
+            <ul style={{
+                'list-style-type': 'none',
+                margin: 0,
+                padding: '0.5vw',
+                'padding-top': '0.75vw',
+                overflow: 'hidden',
+            }}>
+                <li>
+                    <Link to="/">
+                        <img src={logo} alt="Findaroo" align="left"/>
+                    </Link>
+                </li>
+                <li style={{float: "right"}}>
+                    <Link to="/Profile">
+                        <ButtonTransparent text={"Profile"}/>
+                    </Link>
+                </li>
+                <li style={{float: "right"}}>
+                    <Link to="/Messages">
+                        <ButtonTransparent text={"Messages"}/>
+                    </Link>
+                </li>
+                <li style={{float: "right"}}>
+                    <Link to="/Search">
+                        <ButtonTransparent text={"Search"}/>
+                    </Link>
+                </li>
+            </ul>
         </nav>
     );
 };

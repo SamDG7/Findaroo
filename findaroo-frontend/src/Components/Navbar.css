@@ -1,0 +1,10 @@
+nav {
+    background-color: var(--default-white);
+    color: var(--default-black);
+    font-family: "Good Times", monospace;
+}
+
+img {
+    max-width: 20vw;
+    padding-left: 0.5vw;
+}
