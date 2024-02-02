@@ -1,0 +1,28 @@
+@import "../Utils/Colors.css";
+
+/* Used for most buttons */
+.ButtonStandard {
+    background-color: var(--default-grey);
+    color: var(--default-black);
+    font-family: "Good Times", monospace;
+    font-size: 1.5vw;
+    padding: 0.5vw;
+}
+
+/* Used for important buttons */
+.ButtonImportant {
+    background-color: var(--default-yellow);
+    color: var(--default-black);
+    font-family: "Good Times", monospace;
+    font-size: 1.5vw;
+    padding: 0.5vw;
+}
+
+/* Used for buttons who do not have a background color */
+.ButtonTransparent {
+    background-color: transparent;
+    color: var(--default-black);
+    font-family: "Good Times", monospace;
+    font-size: 1.5vw;
+    padding: 0.25vw 0.5vw;
+}

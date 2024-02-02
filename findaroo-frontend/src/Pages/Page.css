@@ -1,0 +1,9 @@
+@import "../Utils/Colors.css";
+
+.Page {
+    background-color: var(--default-grey);
+    color: var(--default-black);
+    font-family: "Good Times", monospace;
+    text-align: center;
+    padding-top: 4vw;
+}

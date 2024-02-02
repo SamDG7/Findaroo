@@ -1,0 +1,14 @@
+/* This is used if you need to reverence our colors in CSS
+To reference in JS use the Colors.js file instead. */
+
+/* You do not need to import this, just use var(--varName)*/
+
+:root {
+    --default-white: #ffffff; /*Used for main elements */
+    --default-grey: #e6e6e6; /*Used for backgrounds, input fields, and buttons */
+    --default-darkGrey: #6b6b6b; /*Used for greyed out text */
+    --default-black: #000000; /*Used for most normal text */
+    --default-blue: #0054ff; /*Used for hyperlinks */
+    --default-red: #ff0000; /*Used for notifications */
+    --default-yellow: #ffd800; /*Used for important buttons */
+}
