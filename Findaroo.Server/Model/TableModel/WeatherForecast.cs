@@ -1,4 +1,4 @@
-namespace Findaroo.Server
+namespace Findaroo.Server.Model.TableModel
 {
     public class WeatherForecast
     {

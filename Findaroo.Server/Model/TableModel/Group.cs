@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Findaroo.Server.Model
+namespace Findaroo.Server.Model.TableModel
 {
     public class Group
     {
         [Key]
-        String group_id { get; set; }
-        String group_name { get; set; }
+        string group_id { get; set; }
+        string group_name { get; set; }
         DateTime date_created { get; set; }
     }
 }
