@@ -18,9 +18,22 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpGet]
-        public User getUser()
+        public User getUser(String user_id)
         {
-            return new User("Ryan", "Doan", "doan23@purdue.edu");
+            if (user_id == null)
+            {
+                Response.StatusCode = 404;
+                return new User();
+            }
+            User user = _psql.user.Find(user_id);
+
+            if (user == null)
+            {
+                Response.StatusCode = 404;
+                return new User();
+            }
+
+            return user;
         }
 
         [HttpPost]
@@ -28,6 +41,12 @@ namespace Findaroo.Server.Controllers
         {
             _psql.user.Add(new User(postUserRequest));
             _psql.SaveChanges();
+        }
+
+        [HttpPut]
+        public void updateUser([FromBody] )
+        {
+
         }
     }
 }
