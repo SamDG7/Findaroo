@@ -1,4 +1,5 @@
-﻿using Findaroo.Server.Model.RequestModel;
+﻿using Findaroo.Server.Mapper;
+using Findaroo.Server.Model.RequestModel;
 using Findaroo.Server.Model.TableModel;
 using Findaroo.Server.PostgreSQL;
 using Microsoft.AspNetCore.Http;
@@ -44,9 +45,20 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpPut]
-        public void updateUser([FromBody] )
+        public void updateUser([FromBody] UpdateUserRequest updateUserRequest)
         {
+            if (updateUserRequest.user_id == null)
+            {
+                Response.StatusCode = 404;
+                return;
+            }
 
+            User user = _psql.user.Find(updateUserRequest.user_id);
+
+            UserMapper.update(user, updateUserRequest);
+
+            _psql.user.Update(user);
+            _psql.SaveChanges();
         }
     }
 }
