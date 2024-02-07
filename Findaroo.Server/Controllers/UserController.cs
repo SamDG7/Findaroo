@@ -60,5 +60,26 @@ namespace Findaroo.Server.Controllers
             _psql.user.Update(user);
             _psql.SaveChanges();
         }
+
+        [HttpDelete]
+        public void removeUser([FromBody] String user_id)
+        {
+            if (user_id == null)
+            {
+                Response.StatusCode = 404;
+                return;
+            }
+
+            User toBeDeleted = _psql.user.Find(user_id);
+
+            if (toBeDeleted == null)
+            {
+                Response.StatusCode = 404;
+                return;
+            }
+
+            _psql.user.Remove(toBeDeleted);
+            _psql.SaveChanges();
+        }
     }
 }
