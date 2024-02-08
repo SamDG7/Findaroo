@@ -6,14 +6,21 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
+
+// All pages should be imported here:
 import Home from "./Pages/Home"
 import Messages from "./Pages/Messages"
 import Search from "./Pages/Search"
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
+import Login from "./Pages/Login";
+import SignUp from "./Pages/SignUp";
+import ForgotPassword from "./Pages/ForgotPassword";
 
-// This is where the
-const router = createBrowserRouter([
+const authenticated = false;
+
+// This is where the site layout is created
+const router = createBrowserRouter(authenticated ? [
     {
         path: "/",
         element: <Home />,
@@ -33,8 +40,41 @@ const router = createBrowserRouter([
         path: "/Profile",
         element: <Profile />,
         errorElement: <Error />,
+    },
+    {
+        path: "/Login",
+        element: <Login />,
+        errorElement: <Error />,
+    },
+    {
+        path: "/SignUp",
+        element: <SignUp />,
+        errorElement: <Error />,
+    },
+    {
+        path: "/ForgotPassword",
+        element: <ForgotPassword />,
+        errorElement: <Error />,
     }
-]);
+] : [
+    // This makes it so if someone is not logged in, it refuses to load other pages and makes them login or sign up
+    {
+        path: "/",
+        element: <Login />,
+        errorElement: <Error />,
+    },
+    {
+        path: "/Login",
+        element: <Login />,
+        errorElement: <Error />,
+    },
+    {
+        path: "/SignUp",
+        element: <SignUp />,
+        errorElement: <Error />,
+    },
+    ]
+);
 
 // https://reactrouter.com/en/main/start/tutorial
 

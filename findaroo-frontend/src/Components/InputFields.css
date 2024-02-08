@@ -1,0 +1,19 @@
+@import "../Utils/Colors.css";
+
+/* Used for most inputs */
+.InputStandard {
+    background-color: var(--default-grey);
+    color: var(--default-black);
+    font-family: "Good Times", monospace;
+    font-size: 1vw;
+    padding: 0.5vw;
+}
+
+/* Used for important buttons */
+.InputImportant {
+    background-color: var(--default-yellow);
+    color: var(--default-black);
+    font-family: "Good Times", monospace;
+    font-size: 1vw;
+    padding: 0.5vw;
+}
