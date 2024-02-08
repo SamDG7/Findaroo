@@ -8,10 +8,10 @@ const Navbar = () => {
     return (
         <nav className="fixed w-full z-10 top-0">
             <ul style={{
-                'list-style-type': 'none',
+                'listStyleType': 'none',
                 margin: 0,
                 padding: '0.5vw',
-                'padding-top': '0.75vw',
+                'paddingTop': '0.75vw',
                 overflow: 'hidden',
             }}>
                 <li>
