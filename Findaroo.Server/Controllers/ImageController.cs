@@ -20,7 +20,7 @@ namespace Findaroo.Server.Controllers
         {
             try
             {
-                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imageModel.image_name);
+                string path = Path.Combine(Directory.GetCurrentDirectory(), imageModel.image_name);
 
                 using (Stream stream = new FileStream(path, FileMode.Create))
                 {
