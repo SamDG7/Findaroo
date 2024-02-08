@@ -4,7 +4,7 @@ import logo from '../Findaroo.png';
 import React, {useState} from "react";
 import {ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputPassword} from "../Components/InputFields";
-import { redirect } from "react-router-dom";
+import {Link, redirect} from "react-router-dom";
 
 export default function SignUp() {
     const [firstName, setFirstName] = useState();
@@ -26,7 +26,13 @@ export default function SignUp() {
                 <InputStandard name="Username: " onChangeFunction={(e) => setUsername(e.target.value)}/>
                 <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
                 <InputPassword name="Confirm Password: " onChangeFunction={(e) => setPasswordConfirm(e.target.value)}/>
-                <ButtonImportant text="Sign Up" onClickFunction={SignUpCall} />
+                <ButtonImportant text="Sign Up" onClickFunction={SignUpCall}/>
+                <h3>
+                    Already have an account?
+                </h3>
+                <Link to="/Login">
+                    <ButtonImportant text="Login"/>
+                </Link>
             </div>
         </div>
     );
