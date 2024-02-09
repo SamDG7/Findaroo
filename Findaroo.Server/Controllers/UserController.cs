@@ -4,6 +4,7 @@ using Findaroo.Server.Model.TableModel;
 using Findaroo.Server.PostgreSQL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Findaroo.Server.Controllers
 {
@@ -38,10 +39,13 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpPost]
-        public void postUser([FromBody] PostUserRequest postUserRequest)
+        public string postUser([FromBody] PostUserRequest postUserRequest)
         {
-            _psql.user.Add(new User(postUserRequest));
+            User user = new User(postUserRequest);
+            _psql.user.Add(user);
             _psql.SaveChanges();
+
+            return user.user_id;
         }
 
         [HttpPut]
@@ -62,15 +66,15 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpDelete]
-        public void removeUser([FromBody] String user_id)
+        public void removeUser([FromBody] DeleteUserRequest deleteUserRequest)
         {
-            if (user_id == null)
+            if (deleteUserRequest.user_id == null)
             {
                 Response.StatusCode = 404;
                 return;
             }
 
-            User toBeDeleted = _psql.user.Find(user_id);
+            User toBeDeleted = _psql.user.Find(deleteUserRequest.user_id);
 
             if (toBeDeleted == null)
             {

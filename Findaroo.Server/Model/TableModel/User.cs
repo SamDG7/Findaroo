@@ -8,7 +8,6 @@ namespace Findaroo.Server.Model.TableModel
     public class User
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string user_id { get; set; }
         public string first_name { get; set; }
         public string last_name { get; set; }
@@ -24,6 +23,7 @@ namespace Findaroo.Server.Model.TableModel
         public string? school { get; set; }
         public int rating { get; set; }
         public DateTime date_created { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime date_modified { get; set; }
         public bool status { get; set; }
 

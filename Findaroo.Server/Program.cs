@@ -12,6 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PostgresContext>(options => options.UseNpgsql(
     builder.Configuration.GetConnectionString("psql"))
 );
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var app = builder.Build();
 

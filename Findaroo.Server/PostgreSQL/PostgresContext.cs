@@ -14,8 +14,8 @@ namespace Findaroo.Server.PostgreSQL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
-                .Property(x => x.user_id)
-                .HasDefaultValue(Guid.NewGuid().ToString());
+                .Property(x => x.date_modified)
+                .HasDefaultValueSql("current_timestamp");
         }
     }
 }
