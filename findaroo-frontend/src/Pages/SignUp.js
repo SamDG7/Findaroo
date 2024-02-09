@@ -6,6 +6,8 @@ import {ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputPassword} from "../Components/InputFields";
 import {Link, redirect} from "react-router-dom";
 
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
 export default function SignUp() {
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
@@ -41,9 +43,19 @@ export default function SignUp() {
     function SignUpCall() {
         if (password === passwordConfirm) {
             console.log("Signing up " + firstName + " " + lastName + " with email " + email + " as " + username + " with password " + password);
-
-            // After everything is done, return to the login page
-            redirect("/Login");
+            const auth = getAuth();
+            createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+                const user = userCredential.user;
+                console.log("User signed up: " + user.email);
+                // After everything is done, return to the login page
+                redirect("/");
+            }).catch((error) =>{    
+                const errorCode = error.code; 
+                const errorMessage = error.message; 
+                console.log(errorCode + " " + errorMessage);
+            })
+            
+            
         } else {
             console.log("Passwords are different");
             // This will probably make a popup or change the UI, so I can help with this later - Andy
