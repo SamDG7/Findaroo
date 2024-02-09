@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Findaroo.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8e917edbb26f848cf177074e54b6ba3cdd92a793")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+af6dc23db765e85d8205c69100cd26cd1b5385de")]
 [assembly: System.Reflection.AssemblyProductAttribute("Findaroo.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Findaroo.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

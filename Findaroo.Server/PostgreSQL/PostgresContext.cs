@@ -14,6 +14,9 @@ namespace Findaroo.Server.PostgreSQL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
+                .Property(x => x.user_id)
+                .HasDefaultValueSql("gen_random_uuid()");
+            modelBuilder.Entity<User>()
                 .Property(x => x.date_modified)
                 .HasDefaultValueSql("current_timestamp");
         }
