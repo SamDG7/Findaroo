@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "AWSSDK.Core/3.7.302.7": {
+      "AWSSDK.Core/3.7.302.8": {
         "type": "package",
         "compile": {
           "lib/net8.0/AWSSDK.Core.dll": {
@@ -34,10 +34,10 @@
           }
         }
       },
-      "AWSSDK.S3/3.7.305.23": {
+      "AWSSDK.S3/3.7.305.24": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.7.302.7, 4.0.0)"
+          "AWSSDK.Core": "[3.7.302.8, 4.0.0)"
         },
         "compile": {
           "lib/net8.0/AWSSDK.S3.dll": {
@@ -226,15 +226,15 @@
     }
   },
   "libraries": {
-    "AWSSDK.Core/3.7.302.7": {
-      "sha512": "0iT0NehcE8zye3R5Ixr8x1BnGDiG8OArmF4RbpXyUn/9Bsj1i4vPkePl4Q4HEvkfXjoCa8c6M0qwD9m5CYKSyA==",
+    "AWSSDK.Core/3.7.302.8": {
+      "sha512": "6qKoc8+plcVdGV/pJDJ2T5pXTu+oMKVTCSisg3zB4mbSwsa14YC58QxZF4Ga2fFcpJbi+ChRdOBkpTF4oyTDzA==",
       "type": "package",
-      "path": "awssdk.core/3.7.302.7",
+      "path": "awssdk.core/3.7.302.8",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "awssdk.core.3.7.302.7.nupkg.sha512",
+        "awssdk.core.3.7.302.8.nupkg.sha512",
         "awssdk.core.nuspec",
         "images/AWSLogo.png",
         "lib/net35/AWSSDK.Core.dll",
@@ -273,17 +273,17 @@
         "lib/netstandard2.0/AWSSDK.Extensions.NETCore.Setup.pdb"
       ]
     },
-    "AWSSDK.S3/3.7.305.23": {
-      "sha512": "2jIPRfqr1k+WcGU3Y4wv1e9RLFXBHjjp6wF/nzIDyvAEuYC4lVFW4zkh7uySddrfUT21ROKt7RQbu8rfo/A0Dw==",
+    "AWSSDK.S3/3.7.305.24": {
+      "sha512": "nOOpRSE+FPzCDpIFHo2S3nDckPBfny/4oxmGir50xrd7ADe0ivKFE2SdCexkRiVeyyaMNvZu6A/JXmc8ynMtyw==",
       "type": "package",
-      "path": "awssdk.s3/3.7.305.23",
+      "path": "awssdk.s3/3.7.305.24",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.S3.CodeAnalysis.dll",
         "analyzers/dotnet/cs/SharedAnalysisCode.dll",
-        "awssdk.s3.3.7.305.23.nupkg.sha512",
+        "awssdk.s3.3.7.305.24.nupkg.sha512",
         "awssdk.s3.nuspec",
         "images/AWSLogo.png",
         "lib/net35/AWSSDK.S3.dll",
@@ -728,7 +728,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "AWSSDK.Extensions.NETCore.Setup >= 3.7.300",
-      "AWSSDK.S3 >= 3.7.305.23",
+      "AWSSDK.S3 >= 3.7.305.24",
       "Microsoft.AspNetCore.SpaProxy >= 8.*-*",
       "Swashbuckle.AspNetCore >= 6.4.0"
     ]
@@ -778,7 +778,7 @@
           },
           "AWSSDK.S3": {
             "target": "Package",
-            "version": "[3.7.305.23, )"
+            "version": "[3.7.305.24, )"
           },
           "Microsoft.AspNetCore.SpaProxy": {
             "target": "Package",

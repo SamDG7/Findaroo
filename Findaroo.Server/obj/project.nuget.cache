@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "s9o0Y/mIoYkKieL7CXM3Njjk81qCrlVXJcbTsrK5+PMdtcz7Li7L9sraqRXxc6nJcWel+Dw/qpYOQbypiyEzXQ==",
+  "dgSpecHash": "jfdP4gfTD5FX2JWwLg726w8bhlGQPRKOV+/kELkWjwb9ZIkx23uROYUy/FN4upJtUPiPJbXIJ1okx8my3t93eA==",
   "success": true,
   "projectFilePath": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\doann\\.nuget\\packages\\awssdk.core\\3.7.302.7\\awssdk.core.3.7.302.7.nupkg.sha512",
+    "C:\\Users\\doann\\.nuget\\packages\\awssdk.core\\3.7.302.8\\awssdk.core.3.7.302.8.nupkg.sha512",
     "C:\\Users\\doann\\.nuget\\packages\\awssdk.extensions.netcore.setup\\3.7.300\\awssdk.extensions.netcore.setup.3.7.300.nupkg.sha512",
-    "C:\\Users\\doann\\.nuget\\packages\\awssdk.s3\\3.7.305.23\\awssdk.s3.3.7.305.23.nupkg.sha512",
+    "C:\\Users\\doann\\.nuget\\packages\\awssdk.s3\\3.7.305.24\\awssdk.s3.3.7.305.24.nupkg.sha512",
     "C:\\Users\\doann\\.nuget\\packages\\microsoft.aspnetcore.spaproxy\\8.0.1\\microsoft.aspnetcore.spaproxy.8.0.1.nupkg.sha512",
     "C:\\Users\\doann\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\doann\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\2.0.0\\microsoft.extensions.configuration.abstractions.2.0.0.nupkg.sha512",

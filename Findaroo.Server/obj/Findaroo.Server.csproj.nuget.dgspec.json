@@ -46,7 +46,7 @@
             },
             "AWSSDK.S3": {
               "target": "Package",
-              "version": "[3.7.305.23, )"
+              "version": "[3.7.305.24, )"
             },
             "Microsoft.AspNetCore.SpaProxy": {
               "target": "Package",
