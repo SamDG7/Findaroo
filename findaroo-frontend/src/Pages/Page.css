@@ -1,0 +1,50 @@
+@import "../Utils/Colors.css";
+
+/* For the background and setup of a page */
+.Page {
+    background-color: var(--default-grey);
+    color: var(--default-black);
+    font-family: "Good Times", monospace;
+    text-align: center;
+    padding-top: 4vw;
+}
+
+/* For divs with a background */
+.Panel {
+    background-color: var(--default-white);
+}
+
+/* For divs with a background */
+.Row {
+    display : flex;
+    flex-direction : row;
+    padding: 0.5vw;
+}
+
+/* For divs with a background */
+.Column {
+    display : flex;
+    flex-direction : column;
+    padding: 0.5vw;
+}
+
+/* For very large headings */
+h1 {
+    font-family: "Good Times", monospace;
+    font-size: 2vw;
+    padding: 0.5vw;
+}
+
+/* For normal headings */
+h2 {
+    font-family: "Good Times", monospace;
+    font-size: 1.5vw;
+    padding: 0.5vw;
+}
+
+/* For normal headings */
+h3 {
+    font-family: "Good Times", monospace;
+    font-size: 1vw;
+    padding: 0.5vw;
+}
