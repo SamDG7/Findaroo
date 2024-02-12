@@ -18,15 +18,19 @@ export default function Login() {
                 <img src={logo} alt="Findaroo" align="left"/>
                 <InputStandard name="Username/Email: " onChangeFunction={(e) => setUsername(e.target.value)}/>
                 <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
-                <ButtonImportant text="Sign In" onClickFunction={LoginCall}/>
                 <Link to="/ForgotPassword">
-                    <ButtonTransparent text="Forgot password?"/>
+                    <h3 className="TextLink">
+                        Forgot password?
+                    </h3>
                 </Link>
+                <ButtonImportant text="Sign In" onClickFunction={LoginCall}/>
                 <h3>
                     Don't have an account?
                 </h3>
                 <Link to="/SignUp">
-                    <ButtonImportant text="Sign Up"/>
+                    <h3 className="TextLink">
+                        Sign up
+                    </h3>
                 </Link>
             </div>
         </div>

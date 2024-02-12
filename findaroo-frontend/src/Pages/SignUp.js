@@ -14,6 +14,9 @@ export default function SignUp() {
     const [password, setPassword] = useState();
     const [passwordConfirm, setPasswordConfirm] = useState();
 
+    // Add: age, address, country, occupation
+    // Phone state, zip code, company, school
+
     return (
         <div className="Page">
             <Navbar/>

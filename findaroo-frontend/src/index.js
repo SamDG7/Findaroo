@@ -13,6 +13,7 @@ import Messages from "./Pages/Messages"
 import Search from "./Pages/Search"
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
+import EditProfile from "./Pages/EditProfile";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import ForgotPassword from "./Pages/ForgotPassword";
@@ -39,6 +40,11 @@ const router = createBrowserRouter(authenticated ? [
     {
         path: "/Profile",
         element: <Profile />,
+        errorElement: <Error />,
+    },
+    {
+        path: "/EditProfile",
+        element: <EditProfile />,
         errorElement: <Error />,
     },
     {
