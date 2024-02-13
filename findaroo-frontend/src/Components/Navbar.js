@@ -3,7 +3,7 @@ import logo from '../Findaroo.png';
 import "./Navbar.css"
 import {ButtonTransparent} from './Buttons';
 import {Link} from "react-router-dom";
-import GlobalVariables from "../Utils/GlovalVariables";
+import GlobalVariables from "../Utils/GlobalVariables";
 import {useNavigate} from "react-router-dom";
 
 const Navbar = () => {

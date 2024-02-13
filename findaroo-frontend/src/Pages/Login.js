@@ -6,7 +6,7 @@ import {ButtonImportant, ButtonTransparent} from "../Components/Buttons";
 import InputStandard, {InputPassword} from "../Components/InputFields";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import {Link, useNavigate} from "react-router-dom";
-import GlobalVariables from "../Utils/GlovalVariables";
+import GlobalVariables from "../Utils/GlobalVariables";
 
 export default function Login() {
     const [email, setEmail] = useState();
@@ -51,10 +51,7 @@ export default function Login() {
             GlobalVariables.authenticated = true;
             navigate("/");
          })
-        .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        });
+        .catch(error => console.error(error));
     }
 }
 
