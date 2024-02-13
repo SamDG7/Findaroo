@@ -6,6 +6,7 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
+import GlobalVariables from "./Utils/GlovalVariables";
 
 // All pages should be imported here:
 import Home from "./Pages/Home"
@@ -39,10 +40,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-const authenticated = false;
-
 // This is where the site layout is created
-const router = createBrowserRouter(authenticated ? [
+const router = createBrowserRouter(GlobalVariables.authenticated ? [
     {
         path: "/",
         element: <Home />,
