@@ -4,9 +4,8 @@ import logo from '../Findaroo.png';
 import React, {useState} from "react";
 import {ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputPassword} from "../Components/InputFields";
-import {Link, redirect} from "react-router-dom";
-
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function SignUp() {
     const [firstName, setFirstName] = useState();
@@ -15,6 +14,7 @@ export default function SignUp() {
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
     const [passwordConfirm, setPasswordConfirm] = useState();
+    const navigate = useNavigate();
 
     return (
         <div className="Page">
@@ -48,7 +48,7 @@ export default function SignUp() {
                 const user = userCredential.user;
                 console.log("User signed up: " + user.email);
                 // After everything is done, return to the login page
-                redirect("/");
+                navigate("/Login");
             }).catch((error) =>{    
                 const errorCode = error.code; 
                 const errorMessage = error.message; 
