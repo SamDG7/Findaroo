@@ -5,12 +5,13 @@ import React, {useState} from "react";
 import {ButtonImportant, ButtonTransparent} from "../Components/Buttons";
 import InputStandard, {InputPassword} from "../Components/InputFields";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import {Link, redirect, useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import GlobalVariables from "../Utils/GlovalVariables";
 
 export default function Login() {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    const navigate = useNavigate();
 
     return (
         <div className="Page">
@@ -44,7 +45,7 @@ export default function Login() {
             const user = userCredential.user;
             console.log("Logged in as " + user.email);
             GlobalVariables.authenticated = true;
-            redirect('/');
+            navigate("/");
          })
         .catch((error) => {
         const errorCode = error.code;

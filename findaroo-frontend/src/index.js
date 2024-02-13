@@ -6,7 +6,6 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
-import GlobalVariables from "./Utils/GlovalVariables";
 
 // All pages should be imported here:
 import Home from "./Pages/Home"
@@ -41,59 +40,42 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 // This is where the site layout is created
-const router = createBrowserRouter(GlobalVariables.authenticated ? [
-    {
-        path: "/",
-        element: <Home />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Messages",
-        element: <Messages />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Search",
-        element: <Search />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Profile",
-        element: <Profile />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Login",
-        element: <Login />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/SignUp",
-        element: <SignUp />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/ForgotPassword",
-        element: <ForgotPassword />,
-        errorElement: <Error />,
-    }
-] : [
-    // This makes it so if someone is not logged in, it refuses to load other pages and makes them login or sign up
-    {
-        path: "/",
-        element: <Login />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Login",
-        element: <Login />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/SignUp",
-        element: <SignUp />,
-        errorElement: <Error />,
-    },
+const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Home />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Messages",
+            element: <Messages />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Search",
+            element: <Search />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile",
+            element: <Profile />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Login",
+            element: <Login />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/SignUp",
+            element: <SignUp />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/ForgotPassword",
+            element: <ForgotPassword />,
+            errorElement: <Error />,
+        }
     ]
 );
 
