@@ -17,17 +17,7 @@
       <Version>8.*-*</Version>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\findaroo.client\findaroo.client.esproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Images\Profile\" />
-    <Folder Include="Images\Profile\a\" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
   </ItemGroup>
 
 </Project>

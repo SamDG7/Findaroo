@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Drawing;
+using System.IO;
 using System.Net;
 
 namespace Findaroo.Server.Controllers
@@ -11,7 +13,7 @@ namespace Findaroo.Server.Controllers
     public class ImageController : ControllerBase
     {
         [HttpGet]
-        public IFormFile getProfilePicture(String user_id)
+        public IActionResult getProfilePicture(String user_id)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), "Images\\Profile", user_id);
 
@@ -19,7 +21,7 @@ namespace Findaroo.Server.Controllers
             {
                 if (!Directory.Exists(path)) 
                 {
-                    Response.StatusCode = ((int)HttpStatusCode.NotFound);
+                    Response.StatusCode = (int)HttpStatusCode.NotFound;
                     return null;
                 }
 
@@ -33,14 +35,8 @@ namespace Findaroo.Server.Controllers
 
                 path = fileList[0];
 
-                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-                {
-                    return new FormFile(stream, 0, stream.Length, "inline", Path.GetFileName(stream.Name))
-                    {
-                        Headers = new HeaderDictionary(),
-                        ContentType = "image/" + Path.GetExtension(stream.Name)
-                    };
-                }
+                Byte[] b = System.IO.File.ReadAllBytes(path);
+                return File(b, "image/jpeg");
             }
             catch (Exception ex)
             {

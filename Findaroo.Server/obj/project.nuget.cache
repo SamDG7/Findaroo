@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jfdP4gfTD5FX2JWwLg726w8bhlGQPRKOV+/kELkWjwb9ZIkx23uROYUy/FN4upJtUPiPJbXIJ1okx8my3t93eA==",
+  "dgSpecHash": "ZtZELxkanX8fgYQOhc0y3sMGZxOTVPQX+s/3iv+avPmP4Sq/qooo1830dl3xsHOWyMtz1KO1mXJGHZpfK1W+sg==",
   "success": true,
   "projectFilePath": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
   "expectedPackageFiles": [
@@ -14,10 +14,12 @@
     "C:\\Users\\doann\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\2.0.0\\microsoft.extensions.logging.abstractions.2.0.0.nupkg.sha512",
     "C:\\Users\\doann\\.nuget\\packages\\microsoft.extensions.primitives\\2.0.0\\microsoft.extensions.primitives.2.0.0.nupkg.sha512",
     "C:\\Users\\doann\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\doann\\.nuget\\packages\\microsoft.win32.systemevents\\8.0.0\\microsoft.win32.systemevents.8.0.0.nupkg.sha512",
     "C:\\Users\\doann\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
     "C:\\Users\\doann\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
     "C:\\Users\\doann\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
     "C:\\Users\\doann\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512",
+    "C:\\Users\\doann\\.nuget\\packages\\system.drawing.common\\8.0.1\\system.drawing.common.8.0.1.nupkg.sha512",
     "C:\\Users\\doann\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.4.0\\system.runtime.compilerservices.unsafe.4.4.0.nupkg.sha512"
   ],
   "logs": []
