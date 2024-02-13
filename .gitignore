@@ -495,3 +495,5 @@ $RECYCLE.BIN/
 # Others
 .vs/Findaroo/v17/.suo
 Findaroo.Server/obj/Debug
+Findaroo.Server/appsettings.Development.json
+Findaroo.Server/appsettings.json
