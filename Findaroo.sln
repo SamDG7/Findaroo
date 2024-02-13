@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Findaroo.Server", "Findaroo.Server\Findaroo.Server.csproj", "{4DB31906-ED26-4E6B-B950-07A98EB04850}"
-EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "findaroo.client", "findaroo.client\findaroo.client.esproj", "{8D91DB7E-6AD6-4836-9C51-EA4BCACE7F74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Findaroo.Server", "Findaroo.Server\Findaroo.Server.csproj", "{4DB31906-ED26-4E6B-B950-07A98EB04850}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +15,6 @@ Global
 		{4DB31906-ED26-4E6B-B950-07A98EB04850}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DB31906-ED26-4E6B-B950-07A98EB04850}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DB31906-ED26-4E6B-B950-07A98EB04850}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8D91DB7E-6AD6-4836-9C51-EA4BCACE7F74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D91DB7E-6AD6-4836-9C51-EA4BCACE7F74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D91DB7E-6AD6-4836-9C51-EA4BCACE7F74}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{8D91DB7E-6AD6-4836-9C51-EA4BCACE7F74}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8D91DB7E-6AD6-4836-9C51-EA4BCACE7F74}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8D91DB7E-6AD6-4836-9C51-EA4BCACE7F74}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

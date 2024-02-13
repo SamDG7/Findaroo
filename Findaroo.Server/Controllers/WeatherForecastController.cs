@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Findaroo.Server.Model.TableModel;
 
 namespace Findaroo.Server.Controllers
 {
