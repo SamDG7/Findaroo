@@ -3,7 +3,7 @@ import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
 import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
-import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
+import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
 
 export default function Profile() {
     // This redirects to the login page if not logged in
@@ -47,8 +47,9 @@ export default function Profile() {
             <div className="Panel">
                 <div className="Column">
                     <div className="Row">
-                        // Profile Image
-                        <div className="Column">
+                        <img src="https://andysharpe.dev/wp-content/uploads/2024/02/MeGGJ.png"
+                             alt={tempData.first_name + " " +  tempData.last_name + "'s profile picture"}/>
+                        <div className="Column items-start">
                             <h1>
                                 {tempData.first_name + " " +  tempData.last_name}
                             </h1>
@@ -68,10 +69,11 @@ export default function Profile() {
                         </h1>
                     </div>
                     <div className="Row space-x-10">
-                        <ButtonImportant text="Settings"/>
+                    <ButtonImportant text="Settings"/>
                         <ButtonStandard text="Roomies"/>
                         <ButtonStandard text="Blocked Users"/>
                         <ButtonStandard text="My Reviews"/>
+                        <ButtonDelete text="Delete Account"/>
                     </div>
                     // Bio
                     // What they want in a roommate

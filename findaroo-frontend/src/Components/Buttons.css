@@ -18,6 +18,15 @@
     padding: 0.5vw;
 }
 
+/* Used for buttons that delete things */
+.ButtonDelete {
+    background-color: var(--default-red);
+    color: var(--default-black);
+    font-family: "Good Times", monospace;
+    font-size: 1.5vw;
+    padding: 0.5vw;
+}
+
 /* Used for buttons who do not have a background color */
 .ButtonTransparent {
     background-color: transparent;
