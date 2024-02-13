@@ -1,5 +1,5 @@
-using Amazon.Runtime.SharedInterfaces;
-using Amazon.S3;
+using Findaroo.Server.PostgreSQL;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +9,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAWSService<IAmazonS3>();
+builder.Services.AddDbContext<PostgresContext>(options => options.UseNpgsql(
+    builder.Configuration.GetConnectionString("psql"))
+);
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var app = builder.Build();
 

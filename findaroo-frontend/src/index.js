@@ -6,35 +6,78 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
+
+// All pages should be imported here:
 import Home from "./Pages/Home"
 import Messages from "./Pages/Messages"
 import Search from "./Pages/Search"
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
+import Login from "./Pages/Login";
+import SignUp from "./Pages/SignUp";
+import ForgotPassword from "./Pages/ForgotPassword";
 
-// This is where the
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyC02A6JRXCWfrfw63_S0cRz0uPBhmJlmOI",
+  authDomain: "findaroo-19063.firebaseapp.com",
+  projectId: "findaroo-19063",
+  storageBucket: "findaroo-19063.appspot.com",
+  messagingSenderId: "606372407306",
+  appId: "1:606372407306:web:d75f3e34a095d643df97f3",
+  measurementId: "G-L1K080NSWL"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+// This is where the site layout is created
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Home />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Messages",
-        element: <Messages />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Search",
-        element: <Search />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Profile",
-        element: <Profile />,
-        errorElement: <Error />,
-    }
-]);
+        {
+            path: "/",
+            element: <Home />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Messages",
+            element: <Messages />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Search",
+            element: <Search />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile",
+            element: <Profile />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Login",
+            element: <Login />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/SignUp",
+            element: <SignUp />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/ForgotPassword",
+            element: <ForgotPassword />,
+            errorElement: <Error />,
+        }
+    ]
+);
 
 // https://reactrouter.com/en/main/start/tutorial
 
