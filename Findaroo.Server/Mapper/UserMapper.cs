@@ -1,4 +1,4 @@
-﻿using Findaroo.Server.Model.RequestModel;
+﻿using Findaroo.Server.Model.RequestModel.User;
 using Findaroo.Server.Model.TableModel;
 
 namespace Findaroo.Server.Mapper

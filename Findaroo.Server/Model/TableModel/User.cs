@@ -1,4 +1,4 @@
-﻿using Findaroo.Server.Model.RequestModel;
+﻿using Findaroo.Server.Model.RequestModel.User;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
