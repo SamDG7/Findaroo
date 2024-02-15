@@ -2,11 +2,11 @@ import "./Page.css"
 import Navbar from "../Components/Navbar";
 import logo from '../Findaroo.png';
 import React, {useState} from "react";
-import {ButtonImportant, ButtonTransparent} from "../Components/Buttons";
+import {ButtonImportant, ButtonLink, ButtonTransparent} from "../Components/Buttons";
 import InputStandard, {InputPassword} from "../Components/InputFields";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
 import {Link, useNavigate} from "react-router-dom";
-import GlobalVariables from "../Utils/GlovalVariables";
+import GlobalVariables from "../Utils/GlobalVariables";
 
 export default function Login() {
     const [email, setEmail] = useState();
@@ -17,21 +17,25 @@ export default function Login() {
     return (
         <div className="Page">
             <Navbar/>
-            <div className="Panel">
+            <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <h1>Welcome To</h1>
-                <img src={logo} alt="Findaroo" align="left"/>
+                <img src={logo} alt="Findaroo" className="mx-auto pb-[4vh]"/>
                 <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
                 <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
-                <ButtonImportant text="Sign In" onClickFunction={LoginCall}/>
-                <Link to="/ForgotPassword">
-                    <ButtonTransparent text="Forgot password?"/>
-                </Link>
+                <ButtonLink text="Forgot password" onClickFunction={ForgotPassword}/>
+                <div className="Row my-[1vh]">
+                    <ButtonImportant text="Sign In" onClickFunction={LoginCall}/>
+                    <div className="p-[1vw]"/>
+                    <ButtonImportant text="Sign In With Google" onClickFunction={LogInWithGoogle}/>
+                </div>
                 <h3>
-                    Don't have an account?
+                    Don't have an account?&nbsp;&nbsp;
+                    <span className="TextLink">
+                        <Link to="/SignUp">
+                            Sign up
+                        </Link>
+                    </span>
                 </h3>
-                <Link to="/SignUp">
-                    <ButtonImportant text="Sign Up"/>
-                </Link>
             </div>
         </div>
     );
@@ -61,6 +65,7 @@ export default function Login() {
             const credential = GoogleAuthProvider.credentialFromResult(result);
             const user = result.user;
             console.log("Logged in as " + user.email);
+            GlobalVariables.authenticated = true;
             navigate("/");
         }).catch((error) => {
             const errorCode = error.code;

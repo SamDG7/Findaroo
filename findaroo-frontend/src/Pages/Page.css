@@ -19,6 +19,9 @@
     display : flex;
     flex-direction : row;
     padding: 0.5vw;
+    flex: auto;
+    justify-content: center;
+    align-items: center;
 }
 
 /* For divs with a background */
@@ -26,6 +29,32 @@
     display : flex;
     flex-direction : column;
     padding: 0.5vw;
+}
+
+.Centered {
+    flex: auto;
+    justify-items: center;
+    align-items: center;
+}
+
+.Top {
+    flex: auto;
+    align-items: start;
+}
+
+.Bottom {
+    flex: auto;
+    align-items: end;
+}
+
+.Left {
+    flex: auto;
+    justify-content: start;
+}
+
+.Right {
+    flex: auto;
+    justify-content: end;
 }
 
 /* For very large headings */
@@ -47,4 +76,8 @@ h3 {
     font-family: "Good Times", monospace;
     font-size: 1vw;
     padding: 0.5vw;
+}
+
+.TextLink {
+    color: var(--default-blue);
 }
