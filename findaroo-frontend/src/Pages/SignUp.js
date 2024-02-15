@@ -16,7 +16,6 @@ export default function SignUp() {
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
     const [email, setEmail] = useState();
-    const [username, setUsername] = useState();
     const [password, setPassword] = useState();
     const [passwordConfirm, setPasswordConfirm] = useState();
 
@@ -29,11 +28,12 @@ export default function SignUp() {
                 <InputStandard name="First Name: " onChangeFunction={(e) => setFirstName(e.target.value)}/>
                 <InputStandard name="Last Name: " onChangeFunction={(e) => setLastName(e.target.value)}/>
                 <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
-                <InputStandard name="Username: " onChangeFunction={(e) => setUsername(e.target.value)}/>
                 <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
                 <InputPassword name="Confirm Password: " onChangeFunction={(e) => setPasswordConfirm(e.target.value)}/>
-                <div className="mx-[12vw] my-[1vh]">
+                <div className="Row my-[1vh]">
                     <ButtonImportant text="Sign Up" onClickFunction={SignUpCall}/>
+                    <div className="p-[1vw]"/>
+                    <ButtonImportant text="Sign Up With Google" onClickFunction={SignUpWithGoogle}/>
                 </div>
                 <h3>
                     Already have an account?&nbsp;&nbsp;
@@ -50,7 +50,7 @@ export default function SignUp() {
     // TODO: This is called when the sign-up button is pressed
     function SignUpCall() {
         if (password === passwordConfirm) {
-            console.log("Signing up " + firstName + " " + lastName + " with email " + email + " as " + username + " with password " + password);
+            console.log("Signing up " + firstName + " " + lastName + " with email " + email + " and password " + password);
             const auth = getAuth();
             createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
                 const user = userCredential.user;
@@ -76,11 +76,20 @@ export default function SignUp() {
             const credential = GoogleAuthProvider.credentialFromResult(result);
             const token = credential.accessToken;
             const user = result.user;
-            
-            setEmail(user.email);
-            setUsername(user.displayName);
-            
-            navigate("/Login");
+
+            // TODO: I think we may have to change it so to sign up passwords are not
+            // TODO: required if a google account is used and probably make a field to
+            // TODO: track if that is the case - Andy
+            createUserWithEmailAndPassword(auth, user.email, null).then((userCredential) => {
+                const user = userCredential.user;
+                console.log("User signed up: " + user.email);
+                // After everything is done, return to the login page
+                navigate("/Login");
+            }).catch((error) =>{
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorCode + " " + errorMessage);
+            })
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;

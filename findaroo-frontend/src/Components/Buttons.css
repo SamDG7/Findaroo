@@ -7,6 +7,8 @@
     font-family: "Good Times", monospace;
     font-size: 1vw;
     padding: 0.5vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
 }
 
 /* Used for important buttons */
@@ -15,7 +17,7 @@
     color: var(--default-black);
     font-family: "Good Times", monospace;
     font-size: 1vw;
-    padding: 0.5vw;
+    padding: 1vh 2vw;
 }
 
 /* Used for buttons that appear as links */
@@ -33,7 +35,7 @@
     color: var(--default-black);
     font-family: "Good Times", monospace;
     font-size: 1vw;
-    padding: 0.5vw;
+    padding: 1vh 2vw;
 }
 
 /* Used for buttons who do not have a background color */
@@ -42,5 +44,5 @@
     color: var(--default-black);
     font-family: "Good Times", monospace;
     font-size: 1vw;
-    padding: 0.25vw 0.5vw;
+    padding: 1vh 2vw;
 }

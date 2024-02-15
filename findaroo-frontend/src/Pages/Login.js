@@ -23,8 +23,10 @@ export default function Login() {
                 <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
                 <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
                 <ButtonLink text="Forgot password" onClickFunction={ForgotPassword}/>
-                <div className="mx-[12vw] my-[1vh]">
+                <div className="Row my-[1vh]">
                     <ButtonImportant text="Sign In" onClickFunction={LoginCall}/>
+                    <div className="p-[1vw]"/>
+                    <ButtonImportant text="Sign In With Google" onClickFunction={LogInWithGoogle}/>
                 </div>
                 <h3>
                     Don't have an account?&nbsp;&nbsp;
@@ -63,6 +65,7 @@ export default function Login() {
             const credential = GoogleAuthProvider.credentialFromResult(result);
             const user = result.user;
             console.log("Logged in as " + user.email);
+            GlobalVariables.authenticated = true;
             navigate("/");
         }).catch((error) => {
             const errorCode = error.code;
