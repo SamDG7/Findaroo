@@ -61,6 +61,7 @@ export default function Login() {
             const credential = GoogleAuthProvider.credentialFromResult(result);
             const user = result.user;
             console.log("Logged in as " + user.email);
+            navigate("/");
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
