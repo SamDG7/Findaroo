@@ -8,36 +8,39 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function SignUp() {
+    const navigate = useNavigate();
+
+    // Basic account info
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
     const [email, setEmail] = useState();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
     const [passwordConfirm, setPasswordConfirm] = useState();
-    const navigate = useNavigate();
-
-    // Add: age, address, country, occupation
-    // Phone state, zip code, company, school
 
     return (
         <div className="Page">
             <Navbar/>
-            <div className="Panel">
+            <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <h1>Welcome To</h1>
-                <img src={logo} alt="Findaroo" align="left"/>
+                <img src={logo} alt="Findaroo" className="mx-auto pb-[2vh]"/>
                 <InputStandard name="First Name: " onChangeFunction={(e) => setFirstName(e.target.value)}/>
                 <InputStandard name="Last Name: " onChangeFunction={(e) => setLastName(e.target.value)}/>
                 <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
                 <InputStandard name="Username: " onChangeFunction={(e) => setUsername(e.target.value)}/>
                 <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
                 <InputPassword name="Confirm Password: " onChangeFunction={(e) => setPasswordConfirm(e.target.value)}/>
-                <ButtonImportant text="Sign Up" onClickFunction={SignUpCall}/>
+                <div className="mx-[12vw] my-[1vh]">
+                    <ButtonImportant text="Sign Up" onClickFunction={SignUpCall}/>
+                </div>
                 <h3>
-                    Already have an account?
+                    Already have an account?&nbsp;&nbsp;
+                    <span className="TextLink">
+                        <Link to="/Login">
+                            Login
+                        </Link>
+                    </span>
                 </h3>
-                <Link to="/Login">
-                    <ButtonImportant text="Login"/>
-                </Link>
             </div>
         </div>
     );

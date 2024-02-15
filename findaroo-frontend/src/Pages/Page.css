@@ -19,6 +19,9 @@
     display : flex;
     flex-direction : row;
     padding: 0.5vw;
+    flex: auto;
+    justify-content: center;
+    align-items: center;
 }
 
 /* For divs with a background */
@@ -26,6 +29,24 @@
     display : flex;
     flex-direction : column;
     padding: 0.5vw;
+}
+
+.Centered {
+    flex: auto;
+    justify-items: center;
+    align-items: center;
+}
+
+.Right {
+    flex: auto;
+    justify-items: start;
+    align-items: start;
+}
+
+.Left {
+    flex: auto;
+    justify-items: end;
+    align-items: end;
 }
 
 /* For very large headings */

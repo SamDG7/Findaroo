@@ -44,7 +44,7 @@ export default function Profile() {
     return (
         <div className="Page">
             <Navbar/>
-            <div className="Panel">
+            <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
                     <div className="Row">
                         <img src="https://andysharpe.dev/wp-content/uploads/2024/02/MeGGJ.png"
@@ -57,9 +57,12 @@ export default function Profile() {
                                 {(tempData.state ? tempData.state + ", " : "")  + tempData.country}
                             </h2>
                             <h2>
-                                {tempData.occupation === "Student"
-                                    ? tempData.occupation + " at " + tempData.school
-                                    : tempData.occupation + " at " + tempData.company
+                                {(!(tempData.school === null || tempData.school === "")
+                                    ? "Student" + " at " + tempData.school
+                                    : "") +
+                                    (!(tempData.company === null || tempData.company === "")
+                                        ? "Employee" + " at " + tempData.company
+                                        : "")
                                 }
                             </h2>
                             // Interests

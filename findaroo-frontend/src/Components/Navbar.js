@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import logo from '../Findaroo.png';
 import "./Navbar.css"
-import {ButtonTransparent} from './Buttons';
+import {ButtonImportant, ButtonTransparent} from './Buttons';
 import {Link} from "react-router-dom";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {useNavigate} from "react-router-dom";
@@ -10,7 +10,7 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     return (
-        <nav className="fixed w-full z-10 top-0">
+        <nav className="fixed w-full z-10 top-0 drop-shadow-xl">
             <ul style={{
                 'listStyleType': 'none',
                 margin: 0,
@@ -24,10 +24,17 @@ const Navbar = () => {
                     </Link>
                 </li>
                 <li style={{float: "right"}}>
-                    <ButtonTransparent text={"Log Out"} onClickFunction={() => {
-                        GlobalVariables.authenticated = false;
-                        navigate("/Login");
-                    }}/>
+                    {
+                        GlobalVariables.authenticated ?
+                        <ButtonTransparent text={"Log Out"} onClickFunction={() => {
+                            GlobalVariables.authenticated = false;
+                            navigate("/Login");
+                        }}/>
+                        :
+                        <ButtonImportant text={"Log In"} onClickFunction={() => {
+                            navigate("/Login");
+                        }}/>
+                    }
                 </li>
                 <li style={{float: "right"}}>
                     <Link to="/Profile">

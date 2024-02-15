@@ -5,7 +5,7 @@
     background-color: var(--default-grey);
     color: var(--default-black);
     font-family: "Good Times", monospace;
-    font-size: 1.5vw;
+    font-size: 1vw;
     padding: 0.5vw;
 }
 
@@ -14,7 +14,7 @@
     background-color: var(--default-yellow);
     color: var(--default-black);
     font-family: "Good Times", monospace;
-    font-size: 1.5vw;
+    font-size: 1vw;
     padding: 0.5vw;
 }
 
@@ -23,7 +23,7 @@
     background-color: var(--default-red);
     color: var(--default-black);
     font-family: "Good Times", monospace;
-    font-size: 1.5vw;
+    font-size: 1vw;
     padding: 0.5vw;
 }
 
@@ -32,6 +32,6 @@
     background-color: transparent;
     color: var(--default-black);
     font-family: "Good Times", monospace;
-    font-size: 1.5vw;
+    font-size: 1vw;
     padding: 0.25vw 0.5vw;
 }

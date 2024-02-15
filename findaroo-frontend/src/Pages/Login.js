@@ -16,9 +16,9 @@ export default function Login() {
     return (
         <div className="Page">
             <Navbar/>
-            <div className="Panel">
+            <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <h1>Welcome To</h1>
-                <img src={logo} alt="Findaroo" align="left"/>
+                <img src={logo} alt="Findaroo" className="mx-auto pb-[2vh]"/>
                 <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
                 <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
                 <Link to="/ForgotPassword">
@@ -26,15 +26,17 @@ export default function Login() {
                         Forgot password?
                     </h3>
                 </Link>
-                <ButtonImportant text="Sign In" onClickFunction={LoginCall}/>
+                <div  className="mx-[12vw] my-[1vh]">
+                    <ButtonImportant text="Sign In" onClickFunction={LoginCall}/>
+                </div>
                 <h3>
-                    Don't have an account?
+                    Don't have an account?&nbsp;&nbsp;
+                    <span className="TextLink">
+                        <Link to="/SignUp">
+                            Sign up
+                        </Link>
+                    </span>
                 </h3>
-                <Link to="/SignUp">
-                    <h3 className="TextLink">
-                        Sign up
-                    </h3>
-                </Link>
             </div>
         </div>
     );
