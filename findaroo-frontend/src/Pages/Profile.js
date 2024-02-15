@@ -77,6 +77,7 @@ export default function Profile() {
                         <ButtonStandard text="Blocked Users"/>
                         <ButtonStandard text="My Reviews"/>
                         <ButtonDelete text="Delete Account"/>
+                     <ButtonImportant text="Compatibility Questions"/>
                     </div>
                     // Bio
                     // What they want in a roommate
