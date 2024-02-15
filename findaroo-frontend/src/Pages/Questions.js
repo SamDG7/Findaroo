@@ -3,6 +3,25 @@ import Navbar from "../Components/Navbar";
 import { Form, Link } from "react-router-dom";
 import { ButtonImportant } from "../Components/Buttons";
 
+// Question answers
+var status = document.querySelector('input[name="status"]:checked')?.value ?? "Not specified";
+var smoke = document.getElementById("smoke")?.value ?? "Not specified";
+var roommateSmoke = document.getElementById("roommateSmoke")?.value ?? "Not specified";
+var visitors = document.getElementById("visitors")?.value ?? "Not specified";
+var roommateVisitors = document.getElementById("roommateVisitors")?.value ?? "Not specified";
+var pets = document.getElementById("pets")?.value ?? "Not specified";
+var roommatePets = document.getElementById("roommatePets")?.value ?? "Not specified";
+var focus = document.getElementById("focus")?.value ?? "Not specified";
+var gamingTime = document.getElementById("gamingTime")?.value ?? "Not specified";
+var tidiness = document.getElementById("tidiness")?.value ?? "Not specified";
+var cleaningFrequency = document.getElementById("cleaningFrequency")?.value ?? "Not specified";
+var noiseSensitivity = document.getElementById("noiseSensitivity")?.value ?? "Not specified";
+var socializingFrequency = document.getElementById("socializingFrequency")?.value ?? "Not specified";
+var alcoholConsumption = document.getElementById("alcoholConsumption")?.value ?? "Not specified";
+var drugUse = document.getElementById("drugUse")?.value ?? "Not specified";
+var borrowingFrequency = document.getElementById("borrowingFrequency")?.value ?? "Not specified";
+
+
 export default function Questions() {
     return (
         <div className="Page">
@@ -13,13 +32,15 @@ export default function Questions() {
 
             <Form>
                 <h3>I am currently:</h3>
-                <input type="radio" id="student" name="status" value="student" />
+                <input type="radio" id="student" name="status" value="student" class="radio-option" />
                 <label for="student">a Student</label>
 
-                <input type="radio" id="working" name="status" value="working" />
+
+
+                <input type="radio" id="working" name="status" value="working" class="radio-option" />
                 <label for="working">Working</label>
 
-                <input type="radio" id="other" name="status" value="other" />
+                <input type="radio" id="other" name="status" value="other" class="radio-option" />
                 <label for="other">Other</label>
 
                 <h3>Do you smoke/vape?</h3>
@@ -121,18 +142,79 @@ export default function Questions() {
                     <option value="regularly">Regularly</option>
                 </select>
 
-                <h3>How often do you borrow your friend's or sibling's personal items</h3>
+                <h3>How often do you borrow your friend's or sibling's personal items?</h3>
                 <select id="borrowingFrequency" name="borrowingFrequency">
                     <option value="never">Never</option>
                     <option value="occasionally">Occasionally</option>
                     <option value="frequently">Frequently</option>
                 </select>
 
-
-                <Link to="/Profile">
-                    <ButtonImportant>Submit</ButtonImportant>
-                </Link>
+                <ButtonImportant text="Submit" onClickFunction={submitQuestions} />
             </Form>
         </div>
     );
+}
+
+function storeAnswers() {
+    // Using the nullish coalescing operator (??) to provide default values
+    status = document.querySelector('input[name="status"]:checked')?.value ?? "Not specified";
+    smoke = document.getElementById("smoke")?.value ?? "Not specified";
+    roommateSmoke = document.getElementById("roommateSmoke")?.value ?? "Not specified";
+    visitors = document.getElementById("visitors")?.value ?? "Not specified";
+    roommateVisitors = document.getElementById("roommateVisitors")?.value ?? "Not specified";
+    pets = document.getElementById("pets")?.value ?? "Not specified";
+    roommatePets = document.getElementById("roommatePets")?.value ?? "Not specified";
+    focus = document.getElementById("focus")?.value ?? "Not specified";
+    gamingTime = document.getElementById("gamingTime")?.value ?? "Not specified";
+    tidiness = document.getElementById("tidiness")?.value ?? "Not specified";
+    cleaningFrequency = document.getElementById("cleaningFrequency")?.value ?? "Not specified";
+    noiseSensitivity = document.getElementById("noiseSensitivity")?.value ?? "Not specified";
+    socializingFrequency = document.getElementById("socializingFrequency")?.value ?? "Not specified";
+    alcoholConsumption = document.getElementById("alcoholConsumption")?.value ?? "Not specified";
+    drugUse = document.getElementById("drugUse")?.value ?? "Not specified";
+    borrowingFrequency = document.getElementById("borrowingFrequency")?.value ?? "Not specified";
+
+    // Log values to the console or store them as needed
+    console.log("Status:", status);
+    console.log("Smoke:", smoke);
+    console.log("Roommate Smoke:", roommateSmoke);
+    console.log("Visitors:", visitors);
+    console.log("Roommate Visitors:", roommateVisitors);
+    console.log("Pets:", pets);
+    console.log("Roommate Pets:", roommatePets);
+    console.log("Focus:", focus);
+    console.log("Gaming Time:", gamingTime);
+    console.log("Tidiness:", tidiness);
+    console.log("Cleaning Frequency:", cleaningFrequency);
+    console.log("Noise Sensitivity:", noiseSensitivity);
+    console.log("Socializing Frequency:", socializingFrequency);
+    console.log("Alcohol Consumption:", alcoholConsumption);
+    console.log("Drug Use:", drugUse);
+    console.log("Borrowing Frequency:", borrowingFrequency);
+}
+
+// Call storeAnswers function when appropriate, for example, after form submission
+
+
+function submitQuestions() {
+    storeAnswers();
+    console.log("Submitting questions");
+    console.log("Status: " + status);
+    console.log("Smoke: " + smoke);
+    console.log("Roommate Smoke: " + roommateSmoke);
+    console.log("Visitors: " + visitors);
+    console.log("Roommate Visitors: " + roommateVisitors);
+    console.log("Pets: " + pets);
+    console.log("Roommate Pets: " + roommatePets);
+    console.log("Focus: " + focus);
+    console.log("Gaming Time: " + gamingTime);
+    console.log("Tidiness: " + tidiness);
+    console.log("Cleaning Frequency: " + cleaningFrequency);
+    console.log("Noise Sensitivity: " + noiseSensitivity);
+    console.log("Socializing Frequency: " + socializingFrequency);
+    console.log("Alcohol Consumption: " + alcoholConsumption);
+    console.log("Drug Use: " + drugUse);
+    console.log("Borrowing Frequency: " + borrowingFrequency);
+
+    //Backend call to submit questions
 }

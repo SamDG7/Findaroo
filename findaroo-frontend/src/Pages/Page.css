@@ -1,4 +1,8 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
 @import "../Utils/Colors.css";
+
 
 /* For the background and setup of a page */
 .Page {
@@ -16,8 +20,8 @@
 
 /* For divs with a background */
 .Row {
-    display : flex;
-    flex-direction : row;
+    display: flex;
+    flex-direction: row;
     padding: 0.5vw;
     flex: auto;
     justify-content: center;
@@ -26,8 +30,8 @@
 
 /* For divs with a background */
 .Column {
-    display : flex;
-    flex-direction : column;
+    display: flex;
+    flex-direction: column;
     padding: 0.5vw;
 }
 
@@ -80,4 +84,11 @@ h3 {
 
 .TextLink {
     color: var(--default-blue);
+}
+
+
+.radio-option {
+    margin-left: 20px;
+    margin-right: 5px;
+    /* @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus: ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 */
 }
