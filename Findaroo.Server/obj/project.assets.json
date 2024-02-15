@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "Microsoft.AspNetCore.SpaProxy/8.0.1": {
+      "Microsoft.AspNetCore.SpaProxy/8.0.2": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.AspNetCore.SpaProxy.dll": {}
@@ -375,10 +375,10 @@
     }
   },
   "libraries": {
-    "Microsoft.AspNetCore.SpaProxy/8.0.1": {
-      "sha512": "Cr90fgPoG1Esw/pKTD/sdIHkjPcnbVoaoSrblSPsaPk6vCzpHtiS254gNfeNkiV2rm4Igu2S2XseNidXBemL/A==",
+    "Microsoft.AspNetCore.SpaProxy/8.0.2": {
+      "sha512": "AJO5WO1A7WsyxxjVbcHlvAu3dCJOchP7zgjmcLTJum3wqIgCxVWUL+X+bB24eat91jtPXAJRdH1imwZg/1BeQw==",
       "type": "package",
-      "path": "microsoft.aspnetcore.spaproxy/8.0.1",
+      "path": "microsoft.aspnetcore.spaproxy/8.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -386,7 +386,7 @@
         "THIRD-PARTY-NOTICES.TXT",
         "build/Microsoft.AspNetCore.SpaProxy.targets",
         "lib/net8.0/Microsoft.AspNetCore.SpaProxy.dll",
-        "microsoft.aspnetcore.spaproxy.8.0.1.nupkg.sha512",
+        "microsoft.aspnetcore.spaproxy.8.0.2.nupkg.sha512",
         "microsoft.aspnetcore.spaproxy.nuspec"
       ]
     },
@@ -1169,26 +1169,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\doann\\.nuget\\packages\\": {}
+    "C:\\Users\\samde\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
+      "projectUniqueName": "C:\\Users\\samde\\OneDrive\\Desktop\\New folder\\Findaroo Github\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
       "projectName": "Findaroo.Server",
-      "projectPath": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
-      "packagesPath": "C:\\Users\\doann\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\obj\\",
+      "projectPath": "C:\\Users\\samde\\OneDrive\\Desktop\\New folder\\Findaroo Github\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
+      "packagesPath": "C:\\Users\\samde\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\samde\\OneDrive\\Desktop\\New folder\\Findaroo Github\\Findaroo\\Findaroo.Server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\doann\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\samde\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

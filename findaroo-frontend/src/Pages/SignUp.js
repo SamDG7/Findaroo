@@ -6,9 +6,11 @@ import {ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputPassword} from "../Components/InputFields";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 export default function SignUp() {
     const navigate = useNavigate();
+    const provider = new GoogleAuthProvider();
 
     // Basic account info
     const [firstName, setFirstName] = useState();
@@ -66,5 +68,25 @@ export default function SignUp() {
             console.log("Passwords are different");
             // This will probably make a popup or change the UI, so I can help with this later - Andy
         }
+    }
+
+    function SignUpWithGoogle() {
+        const auth = getAuth();
+        signInWithPopup(auth, provider).then((result) => {
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            const user = result.user;
+            
+            setEmail(user.email);
+            setUsername(user.displayName);
+            
+            navigate("/Login");
+        }).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const email = error.customData.email;
+
+            console.log(errorCode + " " + errorMessage + " " + email);
+        });
     }
 }
