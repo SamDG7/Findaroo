@@ -13,9 +13,9 @@ import Messages from "./Pages/Messages"
 import Search from "./Pages/Search"
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
+import EditProfile from "./Pages/EditProfile";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
-import ForgotPassword from "./Pages/ForgotPassword";
 import Questions from "./Pages/Questions";
 
 // Import the functions you need from the SDKs you need
@@ -70,11 +70,6 @@ const router = createBrowserRouter([
     {
         path: "/SignUp",
         element: <SignUp />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/ForgotPassword",
-        element: <ForgotPassword />,
         errorElement: <Error />,
     },
     {
