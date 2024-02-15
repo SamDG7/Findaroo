@@ -28,7 +28,7 @@ export default function EditProfile() {
     // Preferences
 
     return (
-        <div className="Page">
+        <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
             <Navbar/>
             <h1>
                 Edit Profile page!
