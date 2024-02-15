@@ -41,43 +41,49 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 // This is where the site layout is created
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Home />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Messages",
-        element: <Messages />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Search",
-        element: <Search />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Profile",
-        element: <Profile />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Login",
-        element: <Login />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/SignUp",
-        element: <SignUp />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Questions",
-        element: <Questions />,
-        errorElement: <Error />,
-    }
-]
+const router = createBrowserRouter(
+    [
+        {
+            path: "/",
+            element: <Home />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Messages",
+            element: <Messages />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Search",
+            element: <Search />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile",
+            element: <Profile />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/Edit",
+            element: <EditProfile />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Login",
+            element: <Login />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/SignUp",
+            element: <SignUp />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Questions",
+            element: <Questions />,
+            errorElement: <Error />,
+        }
+    ]
 );
 
 // https://reactrouter.com/en/main/start/tutorial

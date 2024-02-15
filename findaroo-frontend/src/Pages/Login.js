@@ -14,6 +14,8 @@ export default function Login() {
     const navigate = useNavigate();
     const provider = new GoogleAuthProvider();
 
+    const [message, setMessage] = useState("");
+
     return (
         <div className="Page">
             <Navbar/>
@@ -23,6 +25,11 @@ export default function Login() {
                 <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
                 <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
                 <ButtonLink text="Forgot password" onClickFunction={ForgotPassword}/>
+                { message !== "" ?
+                <h4 className="TextError p-0 m-0">
+                    {message}
+                </h4> : ""
+                }
                 <div className="Row my-[1vh]">
                     <ButtonImportant text="Sign In" onClickFunction={LoginCall}/>
                     <div className="p-[1vw]"/>
@@ -56,6 +63,7 @@ export default function Login() {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorCode + ": " + errorMessage);
+            setMessage("Incorrect Login Credentials");
         });
     }
 
@@ -73,6 +81,7 @@ export default function Login() {
             const email = error.customData.email;
 
             console.log(errorCode + " " + errorMessage + " " + email);
+            setMessage("Failed to login with Google account");
         });
     }
 
@@ -80,7 +89,8 @@ export default function Login() {
         const auth = getAuth();
 
         sendPasswordResetEmail(auth, email).then(() => {
-            console.log("Password reset email sent.");
+            console.log("Password reset email sent to" + email);
+            setMessage("Password reset email sent to " + email);
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
