@@ -4,7 +4,7 @@ import logo from '../Findaroo.png';
 import React, {useState} from "react";
 import {ButtonImportant, ButtonTransparent} from "../Components/Buttons";
 import InputStandard, {InputPassword} from "../Components/InputFields";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {Link, useNavigate} from "react-router-dom";
 import GlobalVariables from "../Utils/GlovalVariables";
 
@@ -12,6 +12,7 @@ export default function Login() {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const navigate = useNavigate();
+    const provider = new GoogleAuthProvider();
 
     return (
         <div className="Page">
@@ -48,8 +49,24 @@ export default function Login() {
             navigate("/");
          })
         .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode + ": " + errorMessage);
+        });
+    }
+
+    function LogInWithGoogle() {
+        const auth = getAuth();
+        signInWithPopup(auth, provider).then((result) => {
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const user = result.user;
+            console.log("Logged in as " + user.email);
+        }).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const email = error.customData.email;
+
+            console.log(errorCode + " " + errorMessage + " " + email);
         });
     }
 }
