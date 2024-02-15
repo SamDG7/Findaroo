@@ -4,7 +4,7 @@ import logo from '../Findaroo.png';
 import React, {useState} from "react";
 import {ButtonImportant, ButtonTransparent} from "../Components/Buttons";
 import InputStandard, {InputPassword} from "../Components/InputFields";
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
 import {Link, useNavigate} from "react-router-dom";
 import GlobalVariables from "../Utils/GlovalVariables";
 
@@ -68,6 +68,19 @@ export default function Login() {
             const email = error.customData.email;
 
             console.log(errorCode + " " + errorMessage + " " + email);
+        });
+    }
+
+    function ForgotPassword() {
+        const auth = getAuth();
+
+        sendPasswordResetEmail(auth, email).then(() => {
+            console.log("Password reset email sent.");
+        }).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            console.log(errorCode + ": " + errorMessage);
         });
     }
 }

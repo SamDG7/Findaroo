@@ -70,6 +70,10 @@ export default function SignUp() {
             const credential = GoogleAuthProvider.credentialFromResult(result);
             const token = credential.accessToken;
             const user = result.user;
+            
+            setEmail(user.email);
+            setUsername(user.displayName);
+            
             navigate("/Login");
         }).catch((error) => {
             const errorCode = error.code;
