@@ -46,7 +46,7 @@ export default function Profile() {
             <Navbar/>
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
-                    <div className="Row">
+                    <div className="Row Top Left">
                         <img src="https://andysharpe.dev/wp-content/uploads/2024/02/MeGGJ.png"
                              alt={tempData.first_name + " " +  tempData.last_name + "'s profile picture"}/>
                         <div className="Column items-start">
@@ -67,7 +67,7 @@ export default function Profile() {
                             </h2>
                             // Interests
                         </div>
-                        <h1>
+                        <h1 className="Right">
                             {tempData.rating + "/5"}
                         </h1>
                     </div>

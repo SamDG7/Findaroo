@@ -25,7 +25,7 @@ export default function SignUp() {
             <Navbar/>
             <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <h1>Welcome To</h1>
-                <img src={logo} alt="Findaroo" className="mx-auto pb-[2vh]"/>
+                <img src={logo} alt="Findaroo" className="mx-auto pb-[4vh]"/>
                 <InputStandard name="First Name: " onChangeFunction={(e) => setFirstName(e.target.value)}/>
                 <InputStandard name="Last Name: " onChangeFunction={(e) => setLastName(e.target.value)}/>
                 <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>

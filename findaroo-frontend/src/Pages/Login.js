@@ -2,7 +2,7 @@ import "./Page.css"
 import Navbar from "../Components/Navbar";
 import logo from '../Findaroo.png';
 import React, {useState} from "react";
-import {ButtonImportant, ButtonTransparent} from "../Components/Buttons";
+import {ButtonImportant, ButtonLink, ButtonTransparent} from "../Components/Buttons";
 import InputStandard, {InputPassword} from "../Components/InputFields";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
 import {Link, useNavigate} from "react-router-dom";
@@ -19,15 +19,11 @@ export default function Login() {
             <Navbar/>
             <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <h1>Welcome To</h1>
-                <img src={logo} alt="Findaroo" className="mx-auto pb-[2vh]"/>
+                <img src={logo} alt="Findaroo" className="mx-auto pb-[4vh]"/>
                 <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
                 <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
-                <Link to="/ForgotPassword">
-                    <h3 className="TextLink">
-                        Forgot password?
-                    </h3>
-                </Link>
-                <div  className="mx-[12vw] my-[1vh]">
+                <ButtonLink text="Forgot password" onClickFunction={ForgotPassword}/>
+                <div className="mx-[12vw] my-[1vh]">
                     <ButtonImportant text="Sign In" onClickFunction={LoginCall}/>
                 </div>
                 <h3>

@@ -37,16 +37,24 @@
     align-items: center;
 }
 
-.Right {
+.Top {
     flex: auto;
-    justify-items: start;
     align-items: start;
+}
+
+.Bottom {
+    flex: auto;
+    align-items: end;
 }
 
 .Left {
     flex: auto;
-    justify-items: end;
-    align-items: end;
+    justify-content: start;
+}
+
+.Right {
+    flex: auto;
+    justify-content: end;
 }
 
 /* For very large headings */

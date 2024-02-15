@@ -18,6 +18,15 @@
     padding: 0.5vw;
 }
 
+/* Used for buttons that appear as links */
+.ButtonLink {
+    background: none;
+    color: var(--default-blue);
+    font-family: "Good Times", monospace;
+    font-size: 1vw;
+    padding: 0.5vw;
+}
+
 /* Used for buttons that delete things */
 .ButtonDelete {
     background-color: var(--default-red);

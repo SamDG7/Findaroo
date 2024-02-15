@@ -33,6 +33,22 @@ export function ButtonImportant({text, onClickFunction}) {
     }
 }
 
+export function ButtonLink({text, onClickFunction}) {
+    if (onClickFunction) {
+        return (
+            <div className="ButtonLink">
+                <button onClick={onClickFunction}>{text}</button>
+            </div>
+        );
+    } else {
+        return (
+            <div className="ButtonLink">
+                <button>{text}</button>
+            </div>
+        );
+    }
+}
+
 export function ButtonDelete({text, onClickFunction}) {
     if (onClickFunction) {
         return (

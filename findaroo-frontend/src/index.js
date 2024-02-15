@@ -16,7 +16,6 @@ import Profile from "./Pages/Profile";
 import EditProfile from "./Pages/EditProfile";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
-import ForgotPassword from "./Pages/ForgotPassword";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -72,11 +71,6 @@ const router = createBrowserRouter([
             element: <SignUp />,
             errorElement: <Error />,
         },
-        {
-            path: "/ForgotPassword",
-            element: <ForgotPassword />,
-            errorElement: <Error />,
-        }
     ]
 );
 
