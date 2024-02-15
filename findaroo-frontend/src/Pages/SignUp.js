@@ -60,8 +60,10 @@ export default function SignUp() {
             createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
                 const user = userCredential.user;
                 console.log("User signed up: " + user.email);
-                // After everything is done, return to the login page
-                navigate("/Login");
+                //TODO: Add notification of email verification sent
+                userCredential.user.sendEmailVerification().then(() => {
+                    navigate("/Login");
+                });
             }).catch((error) =>{    
                 const errorCode = error.code; 
                 const errorMessage = error.message; 

@@ -78,6 +78,7 @@ export default function Profile() {
                         <ButtonStandard text="Roomies"/>
                         <ButtonStandard text="Blocked Users"/>
                         <ButtonStandard text="My Reviews"/>
+                        <ButtonImportant text="Compatibility Questions"/>
                         <ButtonDelete text="Delete Account" onClickFunction={DeleteAccountCall}/>
                     </div>
                     // Bio
