@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\samde\\OneDrive\\Desktop\\New folder\\Findaroo Github\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj": {}
+    "C:\\Users\\bluec\\Documents\\college\\cs407stuff\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\samde\\OneDrive\\Desktop\\New folder\\Findaroo Github\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj": {
+    "C:\\Users\\bluec\\Documents\\college\\cs407stuff\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\samde\\OneDrive\\Desktop\\New folder\\Findaroo Github\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
+        "projectUniqueName": "C:\\Users\\bluec\\Documents\\college\\cs407stuff\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
         "projectName": "Findaroo.Server",
-        "projectPath": "C:\\Users\\samde\\OneDrive\\Desktop\\New folder\\Findaroo Github\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
-        "packagesPath": "C:\\Users\\samde\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\samde\\OneDrive\\Desktop\\New folder\\Findaroo Github\\Findaroo\\Findaroo.Server\\obj\\",
+        "projectPath": "C:\\Users\\bluec\\Documents\\college\\cs407stuff\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
+        "packagesPath": "C:\\Users\\bluec\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bluec\\Documents\\college\\cs407stuff\\Findaroo\\Findaroo.Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\samde\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\bluec\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -74,7 +79,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
