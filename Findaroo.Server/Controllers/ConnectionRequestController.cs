@@ -1,8 +1,9 @@
-﻿using Findaroo.Server.Model.RequestModel.ConnectionRequest;
-using Findaroo.Server.Model.TableModel;
+﻿using Findaroo.Server.Model.TableModel;
 using Findaroo.Server.PostgreSQL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Findaroo.Server.Controllers
 {
@@ -17,22 +18,33 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpGet]
-        public ConnectionRequest[] getMySentConnectionRequests(String user_id)
+        public IEnumerable<ConnectionRequest> getMySentConnectionRequests(String user_id)
         {
-            return null;
+            return _psql.connection_requests
+                .FromSql($"select * from connection_request where connection_request.sender_id = {user_id}")
+                .ToList();
         }
 
         [HttpGet]
-        public ConnectionRequest[] getMyReceivedConnectionRequests(String user_id)
+        public IEnumerable<ConnectionRequest> getMyReceivedConnectionRequests(String user_id)
         {
-            return null;
+            return _psql.connection_requests
+                .FromSql($"select * from connection_request where connection_request.receiver_id = {user_id}")
+                .ToList();
         }
 
         [HttpPost]
         public void sendConnectionRequests([FromBody] ConnectionRequest sendConnectionRequest)
         {
-            _psql.connection_requests.Add(sendConnectionRequest);
-            _psql.SaveChanges();
+            try
+            {
+                _psql.connection_requests.Add(sendConnectionRequest);
+                _psql.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
         }
 
         [HttpPost]
@@ -42,14 +54,29 @@ namespace Findaroo.Server.Controllers
             newConnection.user_1_id = acceptConnectionRequest.sender_id;
             newConnection.user_2_id = acceptConnectionRequest.receiver_id;
 
-            _psql.connections.Add(newConnection);
-            _psql.SaveChanges();
+            try
+            {
+                _psql.connections.Add(newConnection);
+                _psql.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
         }
 
         [HttpDelete]
         public void deleteConnectionRequests([FromBody] ConnectionRequest deleteConnectionRequest)
         {
-
+            try 
+            {
+                _psql.connection_requests.Remove(deleteConnectionRequest);
+                _psql.SaveChanges();
+            }
+            catch (Exception e) 
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
         }
     }
 }
