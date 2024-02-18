@@ -14,6 +14,7 @@ import Search from "./Pages/Search"
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
 import EditProfile from "./Pages/EditProfile";
+import EditPreferences from "./Pages/EditPreferences";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import Questions from "./Pages/Questions";
@@ -69,6 +70,16 @@ const router = createBrowserRouter(
             errorElement: <Error />,
         },
         {
+            path: "/Profile/Preferences",
+            element: <EditPreferences />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/Questions",
+            element: <Questions />,
+            errorElement: <Error />,
+        },
+        {
             path: "/Login",
             element: <Login />,
             errorElement: <Error />,
@@ -76,11 +87,6 @@ const router = createBrowserRouter(
         {
             path: "/SignUp",
             element: <SignUp />,
-            errorElement: <Error />,
-        },
-        {
-            path: "/Questions",
-            element: <Questions />,
             errorElement: <Error />,
         }
     ]

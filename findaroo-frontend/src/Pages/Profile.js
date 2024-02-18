@@ -71,23 +71,39 @@ export default function Profile() {
                             {tempData.rating + "/5"}
                         </h1>
                     </div>
-                    <div className="Row space-x-10">
-                        <Link to="/Profile/Edit">
-                            <ButtonImportant text="Edit Profile"/>
-                        </Link>
-                        <ButtonStandard text="Roomies"/>
-                        <ButtonStandard text="Blocked Users"/>
-                        <ButtonStandard text="My Reviews"/>
-                        <ButtonImportant text="Compatibility Questions"/>
-                        <ButtonDelete text="Delete Account" onClickFunction={DeleteAccountCall}/>
+                    <div className="Column Start">
+                        <div className="Row space-x-[2vw]">
+                            <Link to="/Profile/Edit">
+                                <ButtonImportant text="Edit Profile"/>
+                            </Link>
+                            <Link to="/Profile/Preferences">
+                                <ButtonImportant text="Edit Preferences"/>
+                            </Link>
+                            <Link to="/Profile/Questions">
+                                <ButtonImportant text="Compatibility Questions"/>
+                            </Link>
+                        </div>
+                        <div className="Row space-x-[2vw]">
+                            <ButtonStandard text="View Roomies"/>
+                            <ButtonStandard text="Blocked Users"/>
+                            <ButtonStandard text="My Reviews"/>
+                        </div>
+                        <div className="Row space-x-[2vw]">
+                            <ButtonDelete text="Disable Account" onClickFunction={DisableAccountCall}/>
+                            <ButtonDelete text="Delete Account" onClickFunction={DeleteAccountCall}/>
+                        </div>
+                        // Bio
+                        // What they want in a roommate
+                        // TODO: Put reviews below
                     </div>
-                    // Bio
-                    // What they want in a roommate
-                    // TODO: Put reviews below
                 </div>
             </div>
         </div>
     );
+
+    function DisableAccountCall(userId) {
+
+    }
 
     function DeleteAccountCall(userId) {
 
