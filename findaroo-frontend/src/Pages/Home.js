@@ -17,9 +17,9 @@ export default function Home() {
     return (
         <div className="Page">
             <Navbar/>
-            <h1>
-                Home page!
-            </h1>
+            <h3>
+                This is the home page! Click on the buttons on the Navbar to move to a different page!
+            </h3>
         </div>
     );
 }

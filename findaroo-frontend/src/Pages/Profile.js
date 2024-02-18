@@ -1,7 +1,7 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
 
@@ -46,10 +46,10 @@ export default function Profile() {
             <Navbar/>
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
-                    <div className="Row Top Left">
+                    <div className="Row Start">
                         <img src="https://andysharpe.dev/wp-content/uploads/2024/02/MeGGJ.png"
                              alt={tempData.first_name + " " +  tempData.last_name + "'s profile picture"}/>
-                        <div className="Column items-start">
+                        <div className="Column Start">
                             <h1>
                                 {tempData.first_name + " " +  tempData.last_name}
                             </h1>
@@ -67,25 +67,47 @@ export default function Profile() {
                             </h2>
                             // Interests
                         </div>
-                        <h1 className="Right">
+                        <h1 className="End">
                             {tempData.rating + "/5"}
                         </h1>
                     </div>
-                    <div className="Row space-x-10">
-                    <ButtonImportant text="Settings"/>
-                        <ButtonStandard text="Roomies"/>
-                        <ButtonStandard text="Blocked Users"/>
-                        <ButtonStandard text="My Reviews"/>
-                        <ButtonDelete text="Delete Account"/>
-                     <ButtonImportant text="Compatibility Questions"/>
+                    <div className="Column Start">
+                        <div className="Row space-x-[2vw]">
+                            <Link to="/Profile/Edit">
+                                <ButtonImportant text="Edit Profile"/>
+                            </Link>
+                            <Link to="/Profile/Preferences">
+                                <ButtonImportant text="Edit Preferences"/>
+                            </Link>
+                            <Link to="/Profile/Questions">
+                                <ButtonImportant text="Compatibility Questions"/>
+                            </Link>
+                        </div>
+                        <div className="Row space-x-[2vw]">
+                            <ButtonStandard text="View Roomies"/>
+                            <ButtonStandard text="Blocked Users"/>
+                            <ButtonStandard text="My Reviews"/>
+                        </div>
+                        <div className="Row space-x-[2vw]">
+                            <ButtonDelete text="Disable Account" onClickFunction={DisableAccountCall}/>
+                            <ButtonDelete text="Delete Account" onClickFunction={DeleteAccountCall}/>
+                        </div>
+                        // Bio
+                        // What they want in a roommate
+                        // TODO: Put reviews below
                     </div>
-                    // Bio
-                    // What they want in a roommate
-                    // TODO: Put reviews below
                 </div>
             </div>
         </div>
     );
+
+    function DisableAccountCall(userId) {
+
+    }
+
+    function DeleteAccountCall(userId) {
+
+    }
 
     /*
     async function UserCall(userId) {

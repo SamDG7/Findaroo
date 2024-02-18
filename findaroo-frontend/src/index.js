@@ -14,6 +14,7 @@ import Search from "./Pages/Search"
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
 import EditProfile from "./Pages/EditProfile";
+import EditPreferences from "./Pages/EditPreferences";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import Questions from "./Pages/Questions";
@@ -41,43 +42,54 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 // This is where the site layout is created
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Home />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Messages",
-        element: <Messages />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Search",
-        element: <Search />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Profile",
-        element: <Profile />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Login",
-        element: <Login />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/SignUp",
-        element: <SignUp />,
-        errorElement: <Error />,
-    },
-    {
-        path: "/Questions",
-        element: <Questions />,
-        errorElement: <Error />,
-    }
-]
+const router = createBrowserRouter(
+    [
+        {
+            path: "/",
+            element: <Home />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Messages",
+            element: <Messages />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Search",
+            element: <Search />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile",
+            element: <Profile />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/Edit",
+            element: <EditProfile />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/Preferences",
+            element: <EditPreferences />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/Questions",
+            element: <Questions />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Login",
+            element: <Login />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/SignUp",
+            element: <SignUp />,
+            errorElement: <Error />,
+        }
+    ]
 );
 
 // https://reactrouter.com/en/main/start/tutorial
