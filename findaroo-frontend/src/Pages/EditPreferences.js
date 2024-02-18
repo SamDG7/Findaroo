@@ -22,8 +22,8 @@ export default function EditPreferences() {
                     <div className="Column Start">
                         <h2>Preferences</h2>
                         <div className="Row Start">
-                            <InputStandard name="Min Price" onChangeFunction={(e) => setPriceLow(e.target.value)}/>
-                            <InputStandard name="Max Price" onChangeFunction={(e) => setPriceHigh(e.target.value)}/>
+                            <InputStandard name="Min Price" defaultValue={priceLow} onChangeFunction={(e) => setPriceLow(e.target.value)}/>
+                            <InputStandard name="Max Price" defaultValue={priceHigh} onChangeFunction={(e) => setPriceHigh(e.target.value)}/>
                         </div>
                     </div>
                     <div className="Column End">
