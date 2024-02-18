@@ -7,6 +7,7 @@ import InputStandard, {InputPassword} from "../Components/InputFields";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import Popup from "../Components/Popup";
 
 export default function SignUp() {
     const navigate = useNavigate();
@@ -19,9 +20,25 @@ export default function SignUp() {
     const [password, setPassword] = useState();
     const [passwordConfirm, setPasswordConfirm] = useState();
 
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    const togglePopup = () => {
+        setIsPopupOpen(!isPopupOpen);
+    };
+
     return (
         <div className="Page">
             <Navbar/>
+
+            <Popup isOpen={isPopupOpen} closePopup={togglePopup}>
+                <h2>Answer Lifestyle Questions?</h2>
+                <p>Answering these questions will help us personalize your experience to find you the most compatible roommates!</p>
+                <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                    <button style={{ background: '#007AFF', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={answerQuestions}>Yes</button>
+                    <button style={{ background: '#808080', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={() => navigate("/Login")}>Skip For Now</button>
+                </div>
+            </Popup>
+
             <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <h1>Welcome To</h1>
                 <img src={logo} alt="Findaroo" className="mx-auto pb-[4vh]"/>
@@ -50,12 +67,16 @@ export default function SignUp() {
     // TODO: This is called when the sign-up button is pressed
     function SignUpCall() {
         if (password === passwordConfirm) {
+            // TODO: Move this to after account creation later
+            togglePopup();
             console.log("Signing up " + firstName + " " + lastName + " with email " + email + " and password " + password);
             const auth = getAuth();
             createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
                 const user = userCredential.user;
                 console.log("User signed up: " + user.email);
                 // After everything is done, return to the login page
+
+                //TODO: Replace this with the toggle popup
                 navigate("/Login");
             }).catch((error) =>{    
                 const errorCode = error.code; 
@@ -97,5 +118,9 @@ export default function SignUp() {
 
             console.log(errorCode + " " + errorMessage + " " + email);
         });
+    }
+
+    function answerQuestions() {
+        navigate("/Questions");
     }
 }
