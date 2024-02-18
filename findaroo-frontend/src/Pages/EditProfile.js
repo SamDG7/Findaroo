@@ -32,24 +32,24 @@ export default function EditProfile() {
                 <div className="Row Start">
                     <div className="Column Start">
                         <h2>Personal Information</h2>
-                        <InputStandard name="First Name" onChangeFunction={(e) => setFirstName(e.target.value)}/>
-                        <InputStandard name="Last Name" onChangeFunction={(e) => setLastName(e.target.value)}/>
-                        <InputStandard name="Age" onChangeFunction={(e) => setAge(e.target.value)}/>
-                        <InputStandard name="Phone Number" onChangeFunction={(e) => setPhone(e.target.value)}/>
-                        <h2>About Me</h2>
-                        <InputBox name="Interests" onChangeFunction={(e) => setInterests(e.target.value)}/>
-                        <InputBox name="Biography" onChangeFunction={(e) => setBiography(e.target.value)}/>
+                        <InputStandard name="First Name" defaultValue={firstName} onChangeFunction={(e) => setFirstName(e.target.value)}/>
+                        <InputStandard name="Last Name" defaultValue={lastName} onChangeFunction={(e) => setLastName(e.target.value)}/>
+                        <InputStandard name="Age" defaultValue={age} onChangeFunction={(e) => setAge(e.target.value)}/>
+                        <InputStandard name="Phone Number" defaultValue={phone} onChangeFunction={(e) => setPhone(e.target.value)}/>
+                        <h2 className="pt-[4vh]">About Me</h2>
+                        <InputBox name="Interests" defaultValue={interests} onChangeFunction={(e) => setInterests(e.target.value)}/>
+                        <InputBox name="Biography" defaultValue={biography} onChangeFunction={(e) => setBiography(e.target.value)}/>
                     </div>
                     <div className="Column Start">
                         <h2>Work/School</h2>
-                        <InputStandard name="School" onChangeFunction={(e) => setSchool(e.target.value)}/>
-                        <InputStandard name="Occupation" onChangeFunction={(e) => setOccupation(e.target.value)}/>
-                        <InputStandard name="Company" onChangeFunction={(e) => setCompany(e.target.value)}/>
-                        <h2>Location</h2>
-                        <InputStandard name="Country" onChangeFunction={(e) => setCountry(e.target.value)}/>
-                        <InputStandard name="State" onChangeFunction={(e) => setState(e.target.value)}/>
-                        <InputStandard name="Address" onChangeFunction={(e) => setAddress(e.target.value)}/>
-                        <InputStandard name="Zip Code" onChangeFunction={(e) => setZip(e.target.value)}/>
+                        <InputStandard name="School" defaultValue={school} onChangeFunction={(e) => setSchool(e.target.value)}/>
+                        <InputStandard name="Occupation" defaultValue={occupation} onChangeFunction={(e) => setOccupation(e.target.value)}/>
+                        <InputStandard name="Company" defaultValue={company} onChangeFunction={(e) => setCompany(e.target.value)}/>
+                        <h2 className="pt-[4vh]">Location</h2>
+                        <InputStandard name="Country" defaultValue={country} onChangeFunction={(e) => setCountry(e.target.value)}/>
+                        <InputStandard name="State" defaultValue={state} onChangeFunction={(e) => setState(e.target.value)}/>
+                        <InputStandard name="Address" defaultValue={address} onChangeFunction={(e) => setAddress(e.target.value)}/>
+                        <InputStandard name="Zip Code" defaultValue={zip} onChangeFunction={(e) => setZip(e.target.value)}/>
                     </div>
                     <div className="Column End">
                         <ButtonImportant text="Save" onClickFunction={SaveInfoCall}/>

@@ -22,8 +22,10 @@ export default function Login() {
             <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <h1>Welcome To</h1>
                 <img src={logo} alt="Findaroo" className="mx-auto pb-[4vh]"/>
-                <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
-                <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
+                <div className="Column End">
+                    <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
+                    <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
+                </div>
                 <ButtonLink text="Forgot password" onClickFunction={ForgotPassword}/>
                 { message !== "" ?
                 <h4 className="TextError p-0 m-0">

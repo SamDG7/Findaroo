@@ -10,7 +10,7 @@ export default function InputStandard({name, defaultValue, onChangeFunction}) {
             <input className="InputStandard" name={name} value={defaultValue} onChange={onChangeFunction}
                    placeholder="..."/>
         </div>
-            );
+    );
 }
 
 export function InputPassword({name, defaultValue, onChangeFunction}) {
@@ -20,7 +20,7 @@ export function InputPassword({name, defaultValue, onChangeFunction}) {
                 {name}
             </h3>
             <input className="InputStandard" name={name} type="password" value={defaultValue}
-                   onChange={onChangeFunction}/>
+                   onChange={onChangeFunction} placeholder="..."/>
         </div>
     );
 }
