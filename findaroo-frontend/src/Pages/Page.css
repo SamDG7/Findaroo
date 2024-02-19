@@ -19,6 +19,9 @@
     display : flex;
     flex-direction : row;
     padding: 0.5vw;
+    flex: auto;
+    justify-content: center;
+    align-items: center;
 }
 
 /* For divs with a background */
@@ -26,6 +29,27 @@
     display : flex;
     flex-direction : column;
     padding: 0.5vw;
+}
+
+/* Moves items to the center of the container */
+.Centered {
+    flex: auto;
+    justify-items: center;
+    align-items: center;
+}
+
+/* Moves items to the start of the container */
+.Start {
+    flex: auto;
+    align-items: start;
+    justify-items: start;
+}
+
+/* Moves items to the end of the container */
+.End {
+    flex: auto;
+    align-items: end;
+    justify-items: end;
 }
 
 /* For very large headings */
@@ -47,4 +71,19 @@ h3 {
     font-family: "Good Times", monospace;
     font-size: 1vw;
     padding: 0.5vw;
+}
+
+/* For small headings */
+h4 {
+    font-family: "Good Times", monospace;
+    font-size: 0.75vw;
+    padding: 0.5vw;
+}
+
+.TextLink {
+    color: var(--default-blue);
+}
+
+.TextError {
+    color: var(--default-red);
 }

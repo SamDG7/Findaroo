@@ -1169,19 +1169,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\doann\\.nuget\\packages\\": {}
+    "C:\\Users\\ajsus\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
+      "projectUniqueName": "C:\\Users\\ajsus\\Documents\\GitHub\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
       "projectName": "Findaroo.Server",
-      "projectPath": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
-      "packagesPath": "C:\\Users\\doann\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\obj\\",
+      "projectPath": "C:\\Users\\ajsus\\Documents\\GitHub\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
+      "packagesPath": "C:\\Users\\ajsus\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ajsus\\Documents\\GitHub\\Findaroo\\Findaroo.Server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\doann\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ajsus\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1246,13 +1246,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }

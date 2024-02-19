@@ -1,6 +1,6 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
-import GlobalVariables from "../Utils/GlovalVariables";
+import GlobalVariables from "../Utils/GlobalVariables";
 import { useNavigate } from "react-router-dom";
 import {useEffect} from "react";
 

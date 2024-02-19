@@ -13,9 +13,11 @@ import Messages from "./Pages/Messages"
 import Search from "./Pages/Search"
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
+import EditProfile from "./Pages/EditProfile";
+import EditPreferences from "./Pages/EditPreferences";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
-import ForgotPassword from "./Pages/ForgotPassword";
+import Questions from "./Pages/Questions";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -26,13 +28,13 @@ import { getAnalytics } from "firebase/analytics";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC02A6JRXCWfrfw63_S0cRz0uPBhmJlmOI",
-  authDomain: "findaroo-19063.firebaseapp.com",
-  projectId: "findaroo-19063",
-  storageBucket: "findaroo-19063.appspot.com",
-  messagingSenderId: "606372407306",
-  appId: "1:606372407306:web:d75f3e34a095d643df97f3",
-  measurementId: "G-L1K080NSWL"
+    apiKey: "AIzaSyC02A6JRXCWfrfw63_S0cRz0uPBhmJlmOI",
+    authDomain: "findaroo-19063.firebaseapp.com",
+    projectId: "findaroo-19063",
+    storageBucket: "findaroo-19063.appspot.com",
+    messagingSenderId: "606372407306",
+    appId: "1:606372407306:web:d75f3e34a095d643df97f3",
+    measurementId: "G-L1K080NSWL"
 };
 
 // Initialize Firebase
@@ -40,7 +42,8 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 // This is where the site layout is created
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+    [
         {
             path: "/",
             element: <Home />,
@@ -62,6 +65,21 @@ const router = createBrowserRouter([
             errorElement: <Error />,
         },
         {
+            path: "/Profile/Edit",
+            element: <EditProfile />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/Preferences",
+            element: <EditPreferences />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/Questions",
+            element: <Questions />,
+            errorElement: <Error />,
+        },
+        {
             path: "/Login",
             element: <Login />,
             errorElement: <Error />,
@@ -69,11 +87,6 @@ const router = createBrowserRouter([
         {
             path: "/SignUp",
             element: <SignUp />,
-            errorElement: <Error />,
-        },
-        {
-            path: "/ForgotPassword",
-            element: <ForgotPassword />,
             errorElement: <Error />,
         }
     ]

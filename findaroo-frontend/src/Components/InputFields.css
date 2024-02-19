@@ -17,3 +17,12 @@
     font-size: 1vw;
     padding: 0.5vw;
 }
+
+/* Used for large inputs */
+.InputBox {
+    background-color: var(--default-grey);
+    color: var(--default-black);
+    font-family: "Good Times", monospace;
+    font-size: 1vw;
+    padding: 0.5vw;
+}
