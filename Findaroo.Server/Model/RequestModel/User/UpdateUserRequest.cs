@@ -1,8 +1,8 @@
 ﻿using Findaroo.Server.Model.TableModel;
 
-namespace Findaroo.Server.Model.RequestModel
+namespace Findaroo.Server.Model.RequestModel.User
 {
-    public class UpdateUserRequest : User
+    public class UpdateUserRequest
     {
         public string user_id { get; set; }
         public string? first_name { get; set; }

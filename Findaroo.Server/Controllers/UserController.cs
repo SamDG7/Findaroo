@@ -1,5 +1,5 @@
 ﻿using Findaroo.Server.Mapper;
-using Findaroo.Server.Model.RequestModel;
+using Findaroo.Server.Model.RequestModel.User;
 using Findaroo.Server.Model.TableModel;
 using Findaroo.Server.PostgreSQL;
 using Microsoft.AspNetCore.Http;

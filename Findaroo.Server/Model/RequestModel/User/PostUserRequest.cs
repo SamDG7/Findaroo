@@ -1,4 +1,4 @@
-﻿namespace Findaroo.Server.Model.RequestModel
+﻿namespace Findaroo.Server.Model.RequestModel.User
 {
     public class PostUserRequest
     {
