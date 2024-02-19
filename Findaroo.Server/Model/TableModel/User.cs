@@ -22,9 +22,11 @@ namespace Findaroo.Server.Model.TableModel
         public string? company { get; set; }
         public string? school { get; set; }
         public int rating { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime date_created { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime date_modified { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public bool status { get; set; }
 
         public User() { }
@@ -51,9 +53,6 @@ namespace Findaroo.Server.Model.TableModel
             this.company = pur.company;
             this.school = pur.school;
             this.rating = 0;
-            this.date_created = DateTime.UtcNow;
-            this.date_modified = DateTime.UtcNow;
-            this.status = true;
         }
     }
 }

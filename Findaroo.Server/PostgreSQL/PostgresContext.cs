@@ -8,8 +8,8 @@ namespace Findaroo.Server.PostgreSQL
         protected readonly IConfiguration _configuration;
         public PostgresContext(DbContextOptions<PostgresContext> options) : base(options) {}
         public DbSet<User> user { get; set; }
-        public DbSet<Connection> connections { get; set; }
-        public DbSet<ConnectionRequest> connection_requests { get; set; }
+        public DbSet<Connection> connection { get; set; }
+        public DbSet<ConnectionRequest> connection_request { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
