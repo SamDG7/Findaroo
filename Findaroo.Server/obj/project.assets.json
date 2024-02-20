@@ -1169,19 +1169,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ajsus\\.nuget\\packages\\": {}
+    "C:\\Users\\doann\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ajsus\\Documents\\GitHub\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
+      "projectUniqueName": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
       "projectName": "Findaroo.Server",
-      "projectPath": "C:\\Users\\ajsus\\Documents\\GitHub\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
-      "packagesPath": "C:\\Users\\ajsus\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ajsus\\Documents\\GitHub\\Findaroo\\Findaroo.Server\\obj\\",
+      "projectPath": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
+      "packagesPath": "C:\\Users\\doann\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ajsus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\doann\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

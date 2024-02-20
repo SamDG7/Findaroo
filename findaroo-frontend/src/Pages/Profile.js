@@ -85,6 +85,8 @@ export default function Profile() {
                         </div>
                         <div className="Row space-x-[2vw]">
                             <ButtonStandard text="View Roomies"/>
+                            <ButtonStandard text="My Connections" onClickFunction={() => {navigate("/Profile/MyConnections");}}/>
+                            <ButtonStandard text="Connection Requests" onClickFunction={() => {navigate("/ConnectionRequests");}}/>
                             <ButtonStandard text="Blocked Users"/>
                             <ButtonStandard text="My Reviews"/>
                         </div>
@@ -105,8 +107,17 @@ export default function Profile() {
 
     }
 
-    function DeleteAccountCall(userId) {
-
+    async function DeleteAccountCall(userId) {
+        userId = "abs";
+        const response = await fetch(GlobalVariables.backendURL + "/User", {
+            mode: 'cors',
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(userId)
+        }).then(response => setUserData(response.json()))
+            .catch(error => console.error(error));
     }
 
     /*
