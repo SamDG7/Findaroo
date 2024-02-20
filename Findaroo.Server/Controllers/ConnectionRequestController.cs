@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using Microsoft.Extensions.Primitives;
+using Findaroo.Server.Authentication;
 
 namespace Findaroo.Server.Controllers
 {
@@ -13,15 +15,29 @@ namespace Findaroo.Server.Controllers
     public class ConnectionRequestController : ControllerBase
     {
         PostgresContext _psql;
-        public ConnectionRequestController(PostgresContext psql)
+        IAuthenticationService _authenticationService;
+        public ConnectionRequestController(PostgresContext psql, IAuthenticationService authenticationService)
         {
             _psql = psql;
+            _authenticationService = authenticationService;
         }
 
         [HttpGet]
         [Route("sent")]
-        public IEnumerable<ConnectionRequest> getMySentConnectionRequests(String user_id)
+        public IEnumerable<ConnectionRequest> getMySentConnectionRequests()
         {
+            String user_id = null;
+            try
+            {
+                if (!Request.Headers.TryGetValue("idToken", out StringValues idToken)) throw new Exception();
+                user_id = _authenticationService.Authenticate(idToken).Result;
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return null;
+            }
+
             IEnumerable<ConnectionRequest> e = _psql.connection_request
                 .FromSql($"select * from connection_request cr where cr.sender_id = {user_id}")
                 .ToList();
@@ -39,11 +55,23 @@ namespace Findaroo.Server.Controllers
 
         [HttpPost]
         [Route("send")]
-        public void sendConnectionRequests([FromBody] ConnectionRequestRequest sendConnectionRequest)
+        public void sendConnectionRequests([FromBody] String other_user_id)
         {
+            String user_id = null;
+            try
+            {
+                if (!Request.Headers.TryGetValue("idToken", out StringValues idToken)) throw new Exception();
+                user_id = _authenticationService.Authenticate(idToken).Result;
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+
             ConnectionRequest newConnectionRequest = new ConnectionRequest();
-            newConnectionRequest.sender_id = sendConnectionRequest.sender_id;
-            newConnectionRequest.receiver_id = sendConnectionRequest.receiver_id;
+            newConnectionRequest.sender_id = user_id;
+            newConnectionRequest.receiver_id = other_user_id;
 
             try
             {
@@ -58,11 +86,25 @@ namespace Findaroo.Server.Controllers
 
         [HttpPost]
         [Route("accept")]
-        public void acceptConnectionRequests([FromBody] ConnectionRequestRequest acceptConnectionRequest)
+        public void acceptConnectionRequests([FromBody] String other_user_id)
         {
+            String user_id = null;
+            try
+            {
+                if (!Request.Headers.TryGetValue("idToken", out StringValues idToken)) throw new Exception();
+                user_id = _authenticationService.Authenticate(idToken).Result;
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+
+            //TODO: check that connection request exists
+
             Connection newConnection = new Connection();
-            newConnection.user_1_id = acceptConnectionRequest.sender_id;
-            newConnection.user_2_id = acceptConnectionRequest.receiver_id;
+            newConnection.user_1_id = user_id;
+            newConnection.user_2_id = other_user_id;
         
             try
             {
@@ -76,13 +118,25 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpDelete]
-        public void deleteConnectionRequests([FromBody] ConnectionRequestRequest deleteConnectionRequest)
+        public void deleteConnectionRequests([FromBody] String other_user_id)
         {
+            String user_id = null;
+            try
+            {
+                if (!Request.Headers.TryGetValue("idToken", out StringValues idToken)) throw new Exception();
+                user_id = _authenticationService.Authenticate(idToken).Result;
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+
             try 
             {
                 //Kinda scuffed but using "delete from" in fromsql doesn't work for some reason
                 List<ConnectionRequest> cr = _psql.connection_request
-                    .FromSql($"select * from connection_request cr WHERE cr.sender_id = {deleteConnectionRequest.sender_id} AND cr.receiver_id = {deleteConnectionRequest.receiver_id}")
+                    .FromSql($"select * from connection_request cr WHERE cr.sender_id = {user_id} AND cr.receiver_id = {other_user_id}")
                     .ToList();
                 _psql.connection_request.Remove(cr[0]);
                 _psql.SaveChanges();
