@@ -31,6 +31,13 @@
     padding: 0.5vw;
 }
 
+/* For divs with a grid of items */
+.Grid {
+    display : grid;
+    row-gap: 4vh;
+    column-gap: 1vw;
+}
+
 /* Moves items to the center of the container */
 .Centered {
     flex: auto;
