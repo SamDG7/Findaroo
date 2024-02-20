@@ -6,11 +6,10 @@ namespace Findaroo.Server.PostgreSQL
     public class PostgresContext : DbContext
     {
         protected readonly IConfiguration _configuration;
-
         public PostgresContext(DbContextOptions<PostgresContext> options) : base(options) {}
-
         public DbSet<User> user { get; set; }
-
+        public DbSet<Connection> connection { get; set; }
+        public DbSet<ConnectionRequest> connection_request { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()

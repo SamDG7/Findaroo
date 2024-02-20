@@ -1,4 +1,4 @@
-﻿using Findaroo.Server.Model.RequestModel;
+﻿using Findaroo.Server.Model.RequestModel.User;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,10 +21,14 @@ namespace Findaroo.Server.Model.TableModel
         public string occupation { get; set; }
         public string? company { get; set; }
         public string? school { get; set; }
+        public int? min_price { get; set; }
+        public int? max_price { get; set; }
         public int rating { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime date_created { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime date_modified { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public bool status { get; set; }
 
         public User() { }
@@ -51,9 +55,7 @@ namespace Findaroo.Server.Model.TableModel
             this.company = pur.company;
             this.school = pur.school;
             this.rating = 0;
-            this.date_created = DateTime.UtcNow;
-            this.date_modified = DateTime.UtcNow;
-            this.status = true;
+            this.min_price = pur.min_price;
         }
     }
 }

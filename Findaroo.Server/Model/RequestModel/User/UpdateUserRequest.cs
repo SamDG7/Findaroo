@@ -1,8 +1,8 @@
 ﻿using Findaroo.Server.Model.TableModel;
 
-namespace Findaroo.Server.Model.RequestModel
+namespace Findaroo.Server.Model.RequestModel.User
 {
-    public class UpdateUserRequest : User
+    public class UpdateUserRequest
     {
         public string user_id { get; set; }
         public string? first_name { get; set; }
@@ -18,5 +18,7 @@ namespace Findaroo.Server.Model.RequestModel
         public string? company { get; set; }
         public string? school { get; set; }
         public int? rating { get; set; }
+        public int? min_price { get; set; }
+        public int? max_price { get; set; }
     }
 }

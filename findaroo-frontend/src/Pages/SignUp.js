@@ -7,6 +7,7 @@ import InputStandard, {InputPassword} from "../Components/InputFields";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import GlobalVariables from "../Utils/GlobalVariables";
 
 export default function SignUp() {
     const navigate = useNavigate();
@@ -88,8 +89,8 @@ export default function SignUp() {
                 console.log("Signing up " + email + " with password " + password);
                 const auth = getAuth();
                 createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-                    const user = userCredential.user;
-                    console.log("User signed up: " + user.email);
+                    GlobalVariables.userCredential = userCredential.user;
+                    console.log("User signed up: " + GlobalVariables.userCredential.email);
                     //TODO: Add notification of email verification sent
                     userCredential.user.sendEmailVerification().then(() => {
                         navigate("/Login");
@@ -121,8 +122,8 @@ export default function SignUp() {
             // TODO: required if a google account is used and probably make a field to
             // TODO: track if that is the case - Andy
             createUserWithEmailAndPassword(auth, user.email, null).then((userCredential) => {
-                const createdUser = userCredential.user;
-                console.log("User signed up: " + createdUser.email);
+                GlobalVariables.userCredential = userCredential.user;
+                console.log("User signed up: " + GlobalVariables.userCredential.email);
                 // After everything is done, return to the login page
                 navigate("/Login");
             }).catch((error) =>{

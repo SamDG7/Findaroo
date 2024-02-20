@@ -1,4 +1,4 @@
-﻿using Findaroo.Server.Model.RequestModel;
+﻿using Findaroo.Server.Model.RequestModel.User;
 using Findaroo.Server.Model.TableModel;
 
 namespace Findaroo.Server.Mapper
@@ -23,6 +23,8 @@ namespace Findaroo.Server.Mapper
             if (updateUserRequest.company != null) user.company = updateUserRequest.company;
             if (updateUserRequest.school != null) user.school = updateUserRequest.school;
             if (updateUserRequest.rating != null) user.rating = updateUserRequest.rating.Value;
+            if (updateUserRequest.min_price != null) user.min_price = updateUserRequest.min_price;
+            if (updateUserRequest.max_price != null) user.max_price = updateUserRequest.max_price;
         }
     }
 }
