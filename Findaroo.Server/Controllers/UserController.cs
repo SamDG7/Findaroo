@@ -6,6 +6,8 @@ using Findaroo.Server.PostgreSQL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
+using System.Net;
 
 namespace Findaroo.Server.Controllers
 {
@@ -41,6 +43,38 @@ namespace Findaroo.Server.Controllers
             return user;
         }
 
+        [HttpGet]
+        [Route("me")]
+        public User getThisUser()
+        {
+            String user_id = null;
+            try
+            {
+                if (!Request.Headers.TryGetValue("idToken", out StringValues idToken)) throw new Exception();
+                user_id = _authenticationService.Authenticate(idToken).Result;
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return null;
+            }
+
+            if (user_id == null)
+            {
+                Response.StatusCode = 404;
+                return new User();
+            }
+            User user = _psql.user.Find(user_id);
+
+            if (user == null)
+            {
+                Response.StatusCode = 404;
+                return new User();
+            }
+
+            return user;
+        }
+
         [HttpPost]
         public string postUser([FromBody] PostUserRequest postUserRequest)
         {
@@ -54,13 +88,25 @@ namespace Findaroo.Server.Controllers
         [HttpPut]
         public void updateUser([FromBody] UpdateUserRequest updateUserRequest)
         {
-            if (updateUserRequest.user_id == null)
+            String user_id = null;
+            try 
+            {
+                if (!Request.Headers.TryGetValue("idToken", out StringValues idToken)) throw new Exception();
+                user_id = _authenticationService.Authenticate(idToken).Result;
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+            
+            if (user_id == null)
             {
                 Response.StatusCode = 404;
                 return;
             }
 
-            User user = _psql.user.Find(updateUserRequest.user_id);
+            User user = _psql.user.Find(user_id);
 
             UserMapper.update(user, updateUserRequest);
 
@@ -71,6 +117,18 @@ namespace Findaroo.Server.Controllers
         [HttpDelete]
         public void removeUser([FromBody] DeleteUserRequest deleteUserRequest)
         {
+            String user_id = null;
+            try
+            {
+                if (!Request.Headers.TryGetValue("idToken", out StringValues idToken)) throw new Exception();
+                _authenticationService.Authenticate(idToken);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+
             if (deleteUserRequest.user_id == null)
             {
                 Response.StatusCode = 404;
