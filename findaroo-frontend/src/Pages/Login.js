@@ -56,8 +56,8 @@ export default function Login() {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
             // Signed in 
-            const user = userCredential.user;
-            console.log("Logged in as " + user.email);
+            GlobalVariables.userCredential = userCredential.user;
+            console.log("Logged in as " + GlobalVariables.userCredential.email);
             GlobalVariables.authenticated = true;
             navigate("/");
          })
@@ -73,8 +73,8 @@ export default function Login() {
         const auth = getAuth();
         signInWithPopup(auth, provider).then((result) => {
             const credential = GoogleAuthProvider.credentialFromResult(result);
-            const user = result.user;
-            console.log("Logged in as " + user.email);
+            GlobalVariables.userCredential = result.user;
+            console.log("Logged in as " + GlobalVariables.userCredential.email);
             GlobalVariables.authenticated = true;
             navigate("/");
         }).catch((error) => {

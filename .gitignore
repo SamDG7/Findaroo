@@ -497,3 +497,4 @@ $RECYCLE.BIN/
 Findaroo.Server/obj/Debug
 Findaroo.Server/appsettings.Development.json
 Findaroo.Server/appsettings.json
+Findaroo.Server/firebase.json
