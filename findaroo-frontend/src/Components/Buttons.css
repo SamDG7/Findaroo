@@ -4,7 +4,6 @@
 .ButtonStandard {
     background-color: var(--default-grey);
     color: var(--default-black);
-    font-family: "Good Times", monospace;
     font-size: 1vw;
     padding: 0.5vw;
     padding-left: 2vw;
@@ -15,7 +14,6 @@
 .ButtonImportant {
     background-color: var(--default-yellow);
     color: var(--default-black);
-    font-family: "Good Times", monospace;
     font-size: 1vw;
     padding: 1vh 2vw;
 }
@@ -24,7 +22,6 @@
 .ButtonLink {
     background: none;
     color: var(--default-blue);
-    font-family: "Good Times", monospace;
     font-size: 1vw;
     padding: 0.5vw;
 }
@@ -33,7 +30,6 @@
 .ButtonDelete {
     background-color: var(--default-red);
     color: var(--default-black);
-    font-family: "Good Times", monospace;
     font-size: 1vw;
     padding: 1vh 2vw;
 }
@@ -42,7 +38,6 @@
 .ButtonTransparent {
     background-color: transparent;
     color: var(--default-black);
-    font-family: "Good Times", monospace;
     font-size: 1vw;
     padding: 1vh 2vw;
 }

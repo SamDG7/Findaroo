@@ -18,6 +18,9 @@ import EditPreferences from "./Pages/EditPreferences";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import Questions from "./Pages/Questions";
+import AccountSetup from "./Pages/AccountSetup";
+import AccountSetupOptional from "./Pages/AccountSetupOptional";
+import EditPhoto from "./Pages/EditPhoto";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -50,6 +53,16 @@ const router = createBrowserRouter(
             errorElement: <Error />,
         },
         {
+            path: "/AccountSetup",
+            element: <AccountSetup />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/AccountSetupOptional",
+            element: <AccountSetupOptional />,
+            errorElement: <Error />,
+        },
+        {
             path: "/Messages",
             element: <Messages />,
             errorElement: <Error />,
@@ -67,6 +80,11 @@ const router = createBrowserRouter(
         {
             path: "/Profile/Edit",
             element: <EditProfile />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/Photo",
+            element: <EditPhoto />,
             errorElement: <Error />,
         },
         {

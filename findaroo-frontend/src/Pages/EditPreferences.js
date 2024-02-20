@@ -1,12 +1,20 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
+import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputBox} from "../Components/InputFields";
+import GlobalVariables from "../Utils/GlobalVariables";
 
 export default function EditPreferences() {
+    // This redirects to the login page if not logged in
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!GlobalVariables.authenticated) {
+            navigate("/Login");
+        }
+    }, []);
 
     // Personal Info
     const [priceLow, setPriceLow] = useState();
