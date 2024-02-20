@@ -40,6 +40,7 @@ namespace Findaroo.Server.Model.TableModel
 
         public User(PostUserRequest pur)
         {
+            this.user_id = pur.user_id;
             this.first_name = pur.first_name;
             this.last_name = pur.last_name;
             this.email = pur.email;

@@ -1,4 +1,5 @@
-﻿using Findaroo.Server.Mapper;
+﻿using Findaroo.Server.Authentication;
+using Findaroo.Server.Mapper;
 using Findaroo.Server.Model.RequestModel.User;
 using Findaroo.Server.Model.TableModel;
 using Findaroo.Server.PostgreSQL;
@@ -13,10 +14,12 @@ namespace Findaroo.Server.Controllers
     public class UserController : ControllerBase
     {
         PostgresContext _psql;
+        IAuthenticationService _authenticationService;
 
-        public UserController(PostgresContext psql) 
+        public UserController(PostgresContext psql, IAuthenticationService authenticationService) 
         {
             _psql = psql;
+            _authenticationService = authenticationService;
         }
 
         [HttpGet]

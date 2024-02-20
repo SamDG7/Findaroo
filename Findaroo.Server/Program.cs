@@ -1,4 +1,7 @@
+using Findaroo.Server.Authentication;
 using Findaroo.Server.PostgreSQL;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +15,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PostgresContext>(options => options.UseNpgsql(
     builder.Configuration.GetConnectionString("psql"))
 );
+FirebaseApp.Create(new AppOptions
+{
+    Credential = GoogleCredential.FromFile("firebase.json")
+});
+builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var app = builder.Build();
