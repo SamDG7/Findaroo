@@ -1,11 +1,11 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
 import {useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {ButtonImportant} from "../Components/Buttons";
+import {Link, useNavigate} from "react-router-dom";
+import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
 import InputStandard from "../Components/InputFields";
 
-export default function AccountSetup() {
+export default function AccountSetupOptional() {
     const navigate = useNavigate();
 
     // Personal Info
@@ -41,15 +41,18 @@ export default function AccountSetup() {
                         <InputStandard name="Company"
                                        onChangeFunction={(e) => setCompany(e.target.value)}/>
                     </div>
-                    <ButtonImportant text="Save" onClickFunction={AccountSetupCall}/>
+                    <Link to="/AccountSetup">
+                        <ButtonStandard text="Back"/>
+                    </Link>
+                    <ButtonImportant text="Save" onClickFunction={AccountSetupOptionalCall}/>
                 </div>
             </div>
         </div>
     );
 
     //TODO: Save the preferences
-    function AccountSetupCall() {
+    function AccountSetupOptionalCall() {
 
-        navigate("/AccountSetupOptional");
+        navigate("/Login");
     }
 }
