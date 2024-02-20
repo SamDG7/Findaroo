@@ -1,9 +1,10 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputBox} from "../Components/InputFields";
+import GlobalVariables from "../Utils/GlobalVariables";
 
 export default function EditProfile() {
     const navigate = useNavigate();
@@ -22,6 +23,12 @@ export default function EditProfile() {
     const [school, setSchool] = useState();
     const [interests, setInterests] = useState();
     const [biography, setBiography] = useState();
+
+    useEffect(() => {
+        if (!GlobalVariables.authenticated) {
+            navigate("/Login");
+        }
+    }, []);
 
     // Preferences
 

@@ -1,16 +1,25 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
+import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputBox} from "../Components/InputFields";
+import GlobalVariables from "../Utils/GlobalVariables";
 
 export default function EditPreferences() {
+    // This redirects to the login page if not logged in
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!GlobalVariables.authenticated) {
+            navigate("/Login");
+        }
+    }, []);
 
     // Personal Info
     const [priceLow, setPriceLow] = useState();
     const [priceHigh, setPriceHigh] = useState();
+    const [roommatePreferences, setRoomatePreferences] = useState()
 
     // Preferences
 
@@ -24,6 +33,10 @@ export default function EditPreferences() {
                         <div className="Row Start">
                             <InputStandard name="Min Price" defaultValue={priceLow} onChangeFunction={(e) => setPriceLow(e.target.value)}/>
                             <InputStandard name="Max Price" defaultValue={priceHigh} onChangeFunction={(e) => setPriceHigh(e.target.value)}/>
+                        </div>
+                        <h2>Roomate Preferences</h2>
+                        <div className="Row Start">
+                            <InputBox name="Roomate Preference" defaultValue={roommatePreferences} onChangeFunction={(e) => setRoomatePreferences(e.target.value)}/>
                         </div>
                     </div>
                     <div className="Column End">

@@ -51,16 +51,19 @@ export default function Profile() {
                              alt={tempData.first_name + " " +  tempData.last_name + "'s profile picture"}/>
                         <div className="Column Start">
                             <h1>
-                                {tempData.first_name + " " +  tempData.last_name}
+                                {tempData.first_name + " " + tempData.last_name}
                             </h1>
                             <h2>
-                                {(tempData.state ? tempData.state + ", " : "")  + tempData.country}
+                                {(tempData.state ? tempData.state + ", " : "") + tempData.country}
                             </h2>
                             <h2>
                                 {(!(tempData.school === null || tempData.school === "")
-                                    ? "Student" + " at " + tempData.school
-                                    : "") +
-                                    (!(tempData.company === null || tempData.company === "")
+                                        ? "Student" + " at " + tempData.school
+                                        : "")
+                                }
+                            </h2>
+                            <h2>
+                                {(!(tempData.company === null || tempData.company === "")
                                         ? "Employee" + " at " + tempData.company
                                         : "")
                                 }
@@ -76,8 +79,11 @@ export default function Profile() {
                             <Link to="/Profile/Edit">
                                 <ButtonImportant text="Edit Profile"/>
                             </Link>
+                            <Link to="/Profile/Photo">
+                                <ButtonImportant text="Change Photo"/>
+                            </Link>
                             <Link to="/Profile/Preferences">
-                                <ButtonImportant text="Edit Preferences"/>
+                            <ButtonImportant text="Edit Preferences"/>
                             </Link>
                             <Link to="/Profile/Questions">
                                 <ButtonImportant text="Compatibility Questions"/>
