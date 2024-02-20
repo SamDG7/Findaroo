@@ -14,5 +14,7 @@
         public string occupation { get; set; }
         public string? company { get; set; }
         public string? school { get; set; }
+        public int? min_price { get; set; }
+        public int? max_price { get; set; }
     }
 }
