@@ -115,7 +115,7 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpDelete]
-        public void removeUser([FromBody] DeleteUserRequest deleteUserRequest)
+        public void removeUser()
         {
             String user_id = null;
             try
@@ -129,13 +129,13 @@ namespace Findaroo.Server.Controllers
                 return;
             }
 
-            if (deleteUserRequest.user_id == null)
+            if (user_id == null)
             {
                 Response.StatusCode = 404;
                 return;
             }
 
-            User toBeDeleted = _psql.user.Find(deleteUserRequest.user_id);
+            User toBeDeleted = _psql.user.Find(user_id);
 
             if (toBeDeleted == null)
             {
