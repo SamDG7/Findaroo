@@ -4,6 +4,7 @@ import GlobalVariables from "../Utils/GlobalVariables";
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
+import PersonInfo from "../Components/PersonInfo";
 
 export default function Profile() {
     // This redirects to the login page if not logged in
@@ -46,34 +47,7 @@ export default function Profile() {
             <Navbar/>
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
-                    <div className="Row Start">
-                        <img src="https://andysharpe.dev/wp-content/uploads/2024/02/MeGGJ.png"
-                             alt={tempData.first_name + " " +  tempData.last_name + "'s profile picture"}/>
-                        <div className="Column Start">
-                            <h1>
-                                {tempData.first_name + " " + tempData.last_name}
-                            </h1>
-                            <h2>
-                                {(tempData.state ? tempData.state + ", " : "") + tempData.country}
-                            </h2>
-                            <h2>
-                                {(!(tempData.school === null || tempData.school === "")
-                                        ? "Student" + " at " + tempData.school
-                                        : "")
-                                }
-                            </h2>
-                            <h2>
-                                {(!(tempData.company === null || tempData.company === "")
-                                        ? "Employee" + " at " + tempData.company
-                                        : "")
-                                }
-                            </h2>
-                            // Interests
-                        </div>
-                        <h1 className="End">
-                            {tempData.rating + "/5"}
-                        </h1>
-                    </div>
+                    <PersonInfo personDict={tempData}/>
                     <div className="Column Start">
                         <div className="Row space-x-[2vw]">
                             <Link to="/Profile/Edit">
