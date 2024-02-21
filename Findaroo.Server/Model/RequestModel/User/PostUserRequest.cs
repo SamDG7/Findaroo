@@ -16,5 +16,6 @@
         public string? school { get; set; }
         public int? min_price { get; set; }
         public int? max_price { get; set; }
-    }
+        public string? preferences { get; set; }
+}
 }
