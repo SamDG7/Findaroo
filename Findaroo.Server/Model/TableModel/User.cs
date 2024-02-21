@@ -31,6 +31,8 @@ namespace Findaroo.Server.Model.TableModel
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public bool status { get; set; }
 
+        public int[]? answers { get; set; }
+
         public User() { }
 
         public User(string first_name, string last_name, string email)
@@ -56,6 +58,8 @@ namespace Findaroo.Server.Model.TableModel
             this.school = pur.school;
             this.rating = 0;
             this.min_price = pur.min_price;
+            this.max_price = pur.max_price;
+            this.answers = pur.lifestyle_answers;
         }
     }
 }

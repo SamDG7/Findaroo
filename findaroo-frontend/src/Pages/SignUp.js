@@ -23,24 +23,10 @@ export default function SignUp() {
 
     const [message, setMessage] = useState("");
 
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-    const togglePopup = () => {
-        setIsPopupOpen(!isPopupOpen);
-    };
 
     return (
         <div className="Page">
             <Navbar/>
-
-            <Popup isOpen={isPopupOpen} closePopup={togglePopup}>
-                <h2>Answer Lifestyle Questions?</h2>
-                <p>Answering these questions will help us personalize your experience to find you the most compatible roommates!</p>
-                <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
-                    <button style={{ background: '#007AFF', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={answerQuestions}>Yes</button>
-                    <button style={{ background: '#808080', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={() => navigate("/Login")}>Skip For Now</button>
-                </div>
-            </Popup>
 
             <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column Centered">
@@ -106,7 +92,6 @@ export default function SignUp() {
         if (password === passwordConfirm) {
             if (PasswordStrength(password)[0] === 5) {
                 // TODO: Move this to after account creation later
-            togglePopup();
             console.log("Signing up " + email + " with password " + password);
                 const auth = getAuth();
                 createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
@@ -163,7 +148,4 @@ export default function SignUp() {
         });
     }
 
-    function answerQuestions() {
-        navigate("/Questions");
-    }
 }
