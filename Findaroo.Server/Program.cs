@@ -23,15 +23,6 @@ builder.Services.AddDbContext<PostgresContext>(options => options.UseNpgsql(
 );
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-builder.Services.AddCors(options => {
-    options.AddDefaultPolicy(
-        policy => {
-            policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000").AllowCredentials();
-
-        }
-    );
-});
-
 var app = builder.Build();
 
 app.UseDefaultFiles();

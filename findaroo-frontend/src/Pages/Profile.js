@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { getAuth, deleteUser } from "firebase/auth";
 
 export default function Profile() {
     // This redirects to the login page if not logged in
@@ -115,19 +116,27 @@ export default function Profile() {
 
     }
 
-    async function DeleteAccountCall(userId) {
+    async function DeleteAccountCall() {
         let answer = window.confirm("Your record will be removed from Findaroo. Are you sure?");
         if (!answer) return;
-        const response = await fetch(GlobalVariables.backendURL + "/User", {
+        const auth = getAuth();
+        var toBeDeleted = auth.currentUser;
+        var user_id = auth.currentUser.uid;
+
+        deleteUser(toBeDeleted).catch((error) => {
+            console.log(error)
+        })
+
+        await fetch(GlobalVariables.backendURL + "/User", {
             mode: 'cors',
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
                 'Access-Control-Allow-Origin': 'http://localhost:3000'
             },
-            body: JSON.stringify({"user_id": userId})
-        }).then(response => setUserData(response.json()))
-            .catch(error => console.error(error));
+            body: JSON.stringify({"user_id": user_id})
+        })
+        .catch(error => console.error(error));
 
         GlobalVariables.authenticated = false;
         navigate("/Login");
