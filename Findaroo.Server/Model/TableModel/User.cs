@@ -23,6 +23,7 @@ namespace Findaroo.Server.Model.TableModel
         public string? school { get; set; }
         public int? min_price { get; set; }
         public int? max_price { get; set; }
+        public string? preferences { get; set; }
         public int rating { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime date_created { get; set; }
@@ -56,6 +57,8 @@ namespace Findaroo.Server.Model.TableModel
             this.school = pur.school;
             this.rating = 0;
             this.min_price = pur.min_price;
+            this.max_price = pur.max_price;
+            this.preferences = pur.preferences;
         }
     }
 }
