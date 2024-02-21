@@ -8,7 +8,9 @@
 .Page {
     background-color: var(--default-grey);
     color: var(--default-black);
-    font-family: "Good Times", monospace;
+    font-family: "Poppins", sans-serif;
+    font-style: normal;
+    font-weight: bold;
     text-align: center;
     padding-top: 4vw;
 }
@@ -35,6 +37,13 @@
     padding: 0.5vw;
 }
 
+/* For divs with a grid of items */
+.Grid {
+    display : grid;
+    row-gap: 4vh;
+    column-gap: 1vw;
+}
+
 /* Moves items to the center of the container */
 .Centered {
     flex: auto;
@@ -58,28 +67,24 @@
 
 /* For very large headings */
 h1 {
-    font-family: "Good Times", monospace;
     font-size: 2vw;
     padding: 0.5vw;
 }
 
 /* For normal headings */
 h2 {
-    font-family: "Good Times", monospace;
     font-size: 1.5vw;
     padding: 0.5vw;
 }
 
 /* For normal headings */
 h3 {
-    font-family: "Good Times", monospace;
     font-size: 1vw;
     padding: 0.5vw;
 }
 
 /* For small headings */
 h4 {
-    font-family: "Good Times", monospace;
     font-size: 0.75vw;
     padding: 0.5vw;
 }

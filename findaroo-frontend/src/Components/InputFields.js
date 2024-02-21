@@ -51,7 +51,7 @@ export function InputPassword({name, defaultValue, onChangeFunction}) {
                 placeholder="..."
             />
             <span class="flex justify-around items-center" onClick={togglePasswordVisibility}>
-                <Icon class="absolute mr-10" icon={icon} size={25}/>
+                <Icon class="absolute mr-10" icon={icon} size="1.5vw"/>
             </span>
         </div>
     );
@@ -77,6 +77,14 @@ export function InputBox({name, defaultValue, onChangeFunction}) {
             </h3>
             <textarea className="InputBox" name={name} value={defaultValue} onChange={onChangeFunction}
                     placeholder="..."/>
+        </div>
+    );
+}
+
+export function InputImage({onChangeFunction}){
+    return (
+        <div className="Row Start">
+            <input className="InputStandard" type="file" onChange={onChangeFunction}/>
         </div>
     );
 }

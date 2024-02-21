@@ -19,32 +19,34 @@ export default function Login() {
     return (
         <div className="Page">
             <Navbar/>
-            <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
-                <h1>Welcome To</h1>
-                <img src={logo} alt="Findaroo" className="mx-auto pb-[4vh]"/>
-                <div className="Column End">
-                    <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
-                    <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
+            <div className="Panel mx-[34vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
+                <div className="Column Centered">
+                    <h1>Welcome To</h1>
+                    <img src={logo} alt="Findaroo" className="mx-auto pb-[4vh]"/>
+                    <div className="Column End">
+                        <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
+                        <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
+                    </div>
+                    <ButtonLink text="Forgot password" onClickFunction={ForgotPassword}/>
+                    { message !== "" ?
+                    <h4 className="TextError p-0 m-0">
+                        {message}
+                    </h4> : ""
+                    }
+                    <div className="Row my-[1vh]">
+                        <ButtonImportant text="Sign In" onClickFunction={LoginCall}/>
+                        <div className="p-[1vw]"/>
+                        <ButtonImportant text="Sign In With Google" onClickFunction={LogInWithGoogle}/>
+                    </div>
+                    <h3>
+                        Don't have an account?&nbsp;&nbsp;
+                        <span className="TextLink">
+                            <Link to="/SignUp">
+                                Sign up
+                            </Link>
+                        </span>
+                    </h3>
                 </div>
-                <ButtonLink text="Forgot password" onClickFunction={ForgotPassword}/>
-                { message !== "" ?
-                <h4 className="TextError p-0 m-0">
-                    {message}
-                </h4> : ""
-                }
-                <div className="Row my-[1vh]">
-                    <ButtonImportant text="Sign In" onClickFunction={LoginCall}/>
-                    <div className="p-[1vw]"/>
-                    <ButtonImportant text="Sign In With Google" onClickFunction={LogInWithGoogle}/>
-                </div>
-                <h3>
-                    Don't have an account?&nbsp;&nbsp;
-                    <span className="TextLink">
-                        <Link to="/SignUp">
-                            Sign up
-                        </Link>
-                    </span>
-                </h3>
             </div>
         </div>
     );
@@ -56,8 +58,8 @@ export default function Login() {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
             // Signed in 
-            const user = userCredential.user;
-            console.log("Logged in as " + user.email);
+            GlobalVariables.userCredential = userCredential.user;
+            console.log("Logged in as " + GlobalVariables.userCredential.email);
             GlobalVariables.authenticated = true;
             navigate("/");
          })
@@ -73,8 +75,8 @@ export default function Login() {
         const auth = getAuth();
         signInWithPopup(auth, provider).then((result) => {
             const credential = GoogleAuthProvider.credentialFromResult(result);
-            const user = result.user;
-            console.log("Logged in as " + user.email);
+            GlobalVariables.userCredential = result.user;
+            console.log("Logged in as " + GlobalVariables.userCredential.email);
             GlobalVariables.authenticated = true;
             navigate("/");
         }).catch((error) => {

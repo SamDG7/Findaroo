@@ -7,6 +7,7 @@ import InputStandard, {InputPassword} from "../Components/InputFields";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import GlobalVariables from "../Utils/GlobalVariables";
 import Popup from "../Components/Popup";
 
 export default function SignUp() {
@@ -42,42 +43,44 @@ export default function SignUp() {
             </Popup>
 
             <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
-                <h1>Welcome To</h1>
-                <img src={logo} alt="Findaroo" className="mx-auto pb-[4vh]"/>
-                <div className="Column Start">
-                    <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
-                    <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
+                <div className="Column Centered">
+                    <h1>Welcome To</h1>
+                    <img src={logo} alt="Findaroo" className="mx-auto pb-[4vh]"/>
+                    <div className="Column End">
+                        <InputStandard name="Email: " onChangeFunction={(e) => setEmail(e.target.value)}/>
+                        <InputPassword name="Password: " onChangeFunction={(e) => setPassword(e.target.value)}/>
+                    </div>
+                    <h4>
+                        Password Strength: {PasswordStrengthTextSwitch(PasswordStrength(password)[0])}
+                    </h4>
+                    {PasswordStrength(password)[1] !== "" ?
+                        <h4 className="TextError p-0 m-0">
+                            {PasswordStrength(password)[1]}
+                        </h4> : ""
+                    }
+                    <div className="Column End">
+                        <InputPassword name="Confirm Password: "
+                                       onChangeFunction={(e) => setPasswordConfirm(e.target.value)}/>
+                    </div>
+                    {message !== "" ?
+                        <h4 className="TextError p-0 m-0">
+                            {message}
+                        </h4> : ""
+                    }
+                    <div className="Row my-[1vh]">
+                        <ButtonImportant text="Sign Up" onClickFunction={SignUpCall}/>
+                        <div className="p-[1vw]"/>
+                        <ButtonImportant text="Sign Up With Google" onClickFunction={SignUpWithGoogle}/>
+                    </div>
+                    <h3>
+                        Already have an account?&nbsp;&nbsp;
+                        <span className="TextLink">
+                            <Link to="/Login">
+                                Login
+                            </Link>
+                        </span>
+                    </h3>
                 </div>
-                <h4>
-                    Password Strength: {PasswordStrengthTextSwitch(PasswordStrength(password)[0])}
-                </h4>
-                {PasswordStrength(password)[1] !== "" ?
-                    <h4 className="TextError p-0 m-0">
-                        {PasswordStrength(password)[1]}
-                    </h4> : ""
-                }
-                <div className="Column Start">
-                    <InputPassword name="Confirm Password: "
-                                   onChangeFunction={(e) => setPasswordConfirm(e.target.value)}/>
-                </div>
-                {message !== "" ?
-                    <h4 className="TextError p-0 m-0">
-                        {message}
-                    </h4> : ""
-                }
-                <div className="Row my-[1vh]">
-                    <ButtonImportant text="Sign Up" onClickFunction={SignUpCall}/>
-                    <div className="p-[1vw]"/>
-                    <ButtonImportant text="Sign Up With Google" onClickFunction={SignUpWithGoogle}/>
-                </div>
-                <h3>
-                    Already have an account?&nbsp;&nbsp;
-                    <span className="TextLink">
-                        <Link to="/Login">
-                            Login
-                        </Link>
-                    </span>
-                </h3>
             </div>
         </div>
     );
@@ -92,7 +95,7 @@ export default function SignUp() {
     // Strength is out of 5 for matching all criteria.
     // Should return an array containing the strength and text to explain it. (EX: Password is not 8 characters long)
     function PasswordStrength(testPassword) {
-        const strength = 0;
+        const strength = 5;
         const outMessage = '';
         // TODO: Write this function
         return [strength, outMessage];
@@ -107,13 +110,11 @@ export default function SignUp() {
             console.log("Signing up " + email + " with password " + password);
                 const auth = getAuth();
                 createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-                    const user = userCredential.user;
-                    console.log("User signed up: " + user.email);
-                    //TODO: Add notification of email verification sent
+                    GlobalVariables.userCredential = userCredential.user;
+                    //TODO: This seems to be giving an error, not sure why - Andy
                     userCredential.user.sendEmailVerification().then(() => {
-        
-                //TODO: Replace this with the toggle popup
-                navigate("/Login");
+                        console.log("User signed up: " + GlobalVariables.userCredential.email);
+                        navigate("/AccountSetup");
                     });
                 }).catch((error) => {
                     const errorCode = error.code;
@@ -142,10 +143,10 @@ export default function SignUp() {
             // TODO: required if a google account is used and probably make a field to
             // TODO: track if that is the case - Andy
             createUserWithEmailAndPassword(auth, user.email, null).then((userCredential) => {
-                const createdUser = userCredential.user;
-                console.log("User signed up: " + createdUser.email);
+                GlobalVariables.userCredential = userCredential.user;
+                console.log("User signed up: " + GlobalVariables.userCredential.email);
                 // After everything is done, return to the login page
-                navigate("/Login");
+                navigate("/AccountSetup");
             }).catch((error) =>{
                 const errorCode = error.code;
                 const errorMessage = error.message;

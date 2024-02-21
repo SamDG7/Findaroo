@@ -1,7 +1,9 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useNavigate } from "react-router-dom";
 import { ButtonImportant } from "../Components/Buttons";
+import {useEffect} from "react";
+import GlobalVariables from "../Utils/GlobalVariables";
 import Popup from "../Components/Popup";
 import { useState } from "react";
 
@@ -25,6 +27,15 @@ var borrowingFrequency = document.getElementById("borrowingFrequency")?.value ??
 
 
 export default function Questions() {
+    // This redirects to the login page if not logged in
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!GlobalVariables.authenticated) {
+            navigate("/Login");
+        }
+    }, []);
+
 
     // const [isPopupOpen, setIsPopupOpen] = useState(false);
 
