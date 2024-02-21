@@ -1,8 +1,9 @@
 import "./Page.css"
+import 'react-image-crop/dist/ReactCrop.css'
 import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {Link, useNavigate} from "react-router-dom";
-import ReactCrop, {} from 'react-image-crop'
+import ReactCrop from 'react-image-crop'
 import {useEffect, useState} from "react";
 import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputImage} from "../Components/InputFields";
@@ -34,18 +35,22 @@ export default function EditPhoto() {
                         )}
                         <InputImage onChangeFunction={(e) => setImage(e.target.files[0])}/>
                     </div>
-                    <div className="Column Start">
+                    {image && (<div className="Column Start">
+                            <h3>
+                                Crop Photo
+                            </h3>
+                            <ReactCrop crop={crop} aspect={1} onChange={(crop, percentCrop) => setCrop(crop)}>
+                                <img src={URL.createObjectURL(image)} alt="Profile Photo"/>
+                            </ReactCrop>
+                    </div>)}
+                    {image && (<div className="Column Start">
                         <h3>
-                            Crop Photo
+                            Final Photo
                         </h3>
-                        {image && (
+                        <ReactCrop crop={crop} aspect={1} onChange={(crop, percentCrop) => setCrop(crop)}>
                             <img src={URL.createObjectURL(image)} alt="Profile Photo"/>
-                        )}
-                        <InputStandard name="Crop Left" defaultValue={0}/>
-                        <InputStandard name="Crop Right" defaultValue={0}/>
-                        <InputStandard name="Crop Top" defaultValue={0}/>
-                        <InputStandard name="Crop Bottom" defaultValue={0}/>
-                    </div>
+                        </ReactCrop>
+                    </div>)}
                     <div className="Column End">
                         <ButtonImportant text="Save" onClickFunction={SavePhotoCall}/>
                         <div className="p-[1vh]"/>
