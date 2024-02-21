@@ -4,10 +4,12 @@ import logo from '../Findaroo.png';
 import React, {useState} from "react";
 import {ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputPassword} from "../Components/InputFields";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import GlobalVariables from "../Utils/GlobalVariables";
+import { initializeApp } from "firebase/app";
+import Popup from "../Components/Popup";
 
 export default function SignUp() {
     const navigate = useNavigate();
@@ -22,9 +24,24 @@ export default function SignUp() {
 
     const [message, setMessage] = useState("");
 
+    const firebaseConfig = {
+        apiKey: "AIzaSyC02A6JRXCWfrfw63_S0cRz0uPBhmJlmOI",
+        authDomain: "findaroo-19063.firebaseapp.com",
+        projectId: "findaroo-19063",
+        storageBucket: "findaroo-19063.appspot.com",
+        messagingSenderId: "606372407306",
+        appId: "1:606372407306:web:d75f3e34a095d643df97f3",
+        measurementId: "G-L1K080NSWL"
+    };
+    
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
     return (
         <div className="Page">
             <Navbar/>
+
             <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column Centered">
                     <h1>Welcome To</h1>
@@ -73,6 +90,19 @@ export default function SignUp() {
         return strengthDict[passwordStrengthNum] + " (" + passwordStrengthNum + "/5)";
     }
 
+    // function EmailVerification() {
+    //     return new Promise((resolve) => {
+    //         const IntervalId = setInterval(() => {
+    //             console.log("Awaiting Email Verification");
+    //            if (GlobalVariables.userCredential.auth.emailVerified) {
+    //             clearInterval(IntervalId);
+    //             console.log("Email Verified");
+    //             resolve(true);
+    //            } 
+    //         }, 300);
+    //     });
+    // }
+
     // Decides how strong a password is
     // Want total length >= 8, as well as >= 1 for lowercase, uppercase, numbers, and symbols
     // Strength is out of 5 for matching all criteria.
@@ -85,24 +115,44 @@ export default function SignUp() {
     }
 
     // TODO: This is called when the sign-up button is pressed
-    function SignUpCall() {
+    async function SignUpCall() {
         if (password === passwordConfirm) {
             if (PasswordStrength(password)[0] === 5) {
                 console.log("Signing up " + email + " with password " + password);
-                const auth = getAuth();
+                
                 createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
                     GlobalVariables.userCredential = userCredential.user;
-                    //TODO: This seems to be giving an error, not sure why - Andy
-                    userCredential.user.sendEmailVerification().then(() => {
-                        console.log("User signed up: " + GlobalVariables.userCredential.email);
-                        navigate("/AccountSetup");
-                    });
+
+                    //TODO: This seems to be giving an error
+                    sendEmailVerification(auth.currentUser);
+                    setMessage("Sent Verification Email to "+ email);
+                    const checkEmailVerified = setInterval(() => {
+                        // Reload the user's latest status
+                        auth.currentUser.reload().then(() => {
+                          if (auth.currentUser.emailVerified) {
+                            // Email is verified, clear the interval and navigate to a new page
+                            clearInterval(checkEmailVerified);
+                            
+                            console.log("User signed up: " + GlobalVariables.userCredential.email);
+                            GlobalVariables.authenticated = true;
+                            navigate("/AccountSetup");
+                          } else {
+                            // Email not verified yet, continue checking
+                            console.log('Email not verified yet.');
+                          }
+                        });
+                      }, 5000); // Check every 5000 milliseconds (5 seconds)
+
+                    
+                        
                 }).catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     console.log(errorCode + " " + errorMessage);
                     setMessage("Unable to sign up as " + email);
-                })
+                });
+                
+
             } else {
                 console.log("Password is not strong enough");
                 setMessage("Password is not strong enough");
@@ -143,4 +193,5 @@ export default function SignUp() {
             setMessage("Unable to sign up with Google");
         });
     }
+
 }

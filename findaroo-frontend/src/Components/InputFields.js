@@ -84,7 +84,7 @@ export function InputBox({name, defaultValue, onChangeFunction}) {
 export function InputImage({onChangeFunction}){
     return (
         <div className="Row Start">
-            <input className="InputStandard" type="file" onChange={onChangeFunction}/>
+            <input className="InputStandard" type="file" accept='image/*' onChange={onChangeFunction}/>
         </div>
     );
 }

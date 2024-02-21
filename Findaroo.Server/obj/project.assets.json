@@ -1169,11 +1169,16 @@
     ]
   },
   "packageFolders": {
+<<<<<<< HEAD
     "C:\\Users\\doann\\.nuget\\packages\\": {}
+=======
+    "/Users/sgirap/.nuget/packages/": {}
+>>>>>>> main
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
       "projectName": "Findaroo.Server",
       "projectPath": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
@@ -1183,12 +1188,21 @@
       "configFilePaths": [
         "C:\\Users\\doann\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+=======
+      "projectUniqueName": "/Users/sgirap/Desktop/Findaroo/Findaroo.Server/Findaroo.Server.csproj",
+      "projectName": "Findaroo.Server",
+      "projectPath": "/Users/sgirap/Desktop/Findaroo/Findaroo.Server/Findaroo.Server.csproj",
+      "packagesPath": "/Users/sgirap/.nuget/packages/",
+      "outputPath": "/Users/sgirap/Desktop/Findaroo/Findaroo.Server/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/Users/sgirap/.nuget/NuGet/NuGet.Config"
+>>>>>>> main
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1243,7 +1257,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

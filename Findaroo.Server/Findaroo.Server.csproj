@@ -5,8 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <SpaRoot>..\findaroo.client</SpaRoot>
-    <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
+    <SpaRoot>..\findaroo-frontend</SpaRoot>
+    <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
   </PropertyGroup>
 

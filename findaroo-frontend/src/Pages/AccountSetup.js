@@ -4,6 +4,7 @@ import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {ButtonImportant} from "../Components/Buttons";
 import InputStandard from "../Components/InputFields";
+import Popup from "../Components/Popup";
 
 export default function AccountSetup() {
     const navigate = useNavigate();
@@ -17,11 +18,27 @@ export default function AccountSetup() {
     const [occupation, setOccupation] = useState();
     const [company, setCompany] = useState();
 
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    const togglePopup = () => {
+        setIsPopupOpen(!isPopupOpen);
+    };
+
     // Preferences
 
     return (
         <div className="Page">
             <Navbar/>
+
+            <Popup isOpen={isPopupOpen} closePopup={togglePopup}>
+                <h2>Answer Lifestyle Questions?</h2>
+                <p>Answering these questions will help us personalize your experience to find you the most compatible roommates!</p>
+                <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                    <button style={{ background: '#007AFF', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={() => navigate("/Profile/Questions")}>Yes</button>
+                    <button style={{ background: '#808080', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={() => navigate("/Profile")}>Skip For Now</button>
+                </div>
+            </Popup>
+
             <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column Centered">
                     <h2>Account Setup</h2>
@@ -47,9 +64,11 @@ export default function AccountSetup() {
         </div>
     );
 
-    //TODO: Save the preferences
     function AccountSetupCall() {
+        togglePopup();
 
-        navigate("/AccountSetupOptional");
+        //TODO: Save the preferences
+
     }
+
 }

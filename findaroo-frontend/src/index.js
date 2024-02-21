@@ -20,7 +20,6 @@ import SignUp from "./Pages/SignUp";
 import Questions from "./Pages/Questions";
 import MyConnections from './Pages/MyConnections';
 import AccountSetup from "./Pages/AccountSetup";
-import AccountSetupOptional from "./Pages/AccountSetupOptional";
 import EditPhoto from "./Pages/EditPhoto";
 
 // Import the functions you need from the SDKs you need
@@ -56,11 +55,6 @@ const router = createBrowserRouter(
         {
             path: "/AccountSetup",
             element: <AccountSetup />,
-            errorElement: <Error />,
-        },
-        {
-            path: "/AccountSetupOptional",
-            element: <AccountSetupOptional />,
             errorElement: <Error />,
         },
         {

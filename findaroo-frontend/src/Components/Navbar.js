@@ -5,6 +5,8 @@ import {ButtonImportant, ButtonTransparent} from './Buttons';
 import {Link} from "react-router-dom";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {useNavigate} from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -28,6 +30,8 @@ const Navbar = () => {
                         GlobalVariables.authenticated ?
                         <ButtonTransparent text={"Log Out"} onClickFunction={() => {
                             GlobalVariables.authenticated = false;
+                            const auth = getAuth();
+                            signOut(auth);
                             navigate("/Login");
                         }}/>
                         :
