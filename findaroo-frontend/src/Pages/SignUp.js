@@ -9,6 +9,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import GlobalVariables from "../Utils/GlobalVariables";
 import { initializeApp } from "firebase/app";
+import Popup from "../Components/Popup";
 
 export default function SignUp() {
     const navigate = useNavigate();
@@ -40,6 +41,7 @@ export default function SignUp() {
     return (
         <div className="Page">
             <Navbar/>
+
             <div className="Panel mx-[32vw] my-[4vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column Centered">
                     <h1>Welcome To</h1>
@@ -191,4 +193,5 @@ export default function SignUp() {
             setMessage("Unable to sign up with Google");
         });
     }
+
 }

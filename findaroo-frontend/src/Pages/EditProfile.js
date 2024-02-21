@@ -5,6 +5,7 @@ import {Link, useNavigate} from "react-router-dom";
 import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputBox} from "../Components/InputFields";
 import GlobalVariables from "../Utils/GlobalVariables";
+import SchoolLookup from "../Components/SchoolLookup";
 
 export default function EditProfile() {
     const navigate = useNavigate();
@@ -49,7 +50,7 @@ export default function EditProfile() {
                     </div>
                     <div className="Column Start">
                         <h2>Work/School</h2>
-                        <InputStandard name="School" defaultValue={school} onChangeFunction={(e) => setSchool(e.target.value)}/>
+                        <SchoolLookup name="School" onChangeFunction={setSchool} />
                         <InputStandard name="Occupation" defaultValue={occupation} onChangeFunction={(e) => setOccupation(e.target.value)}/>
                         <InputStandard name="Company" defaultValue={company} onChangeFunction={(e) => setCompany(e.target.value)}/>
                         <h2 className="pt-[4vh]">Location</h2>

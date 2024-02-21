@@ -1,4 +1,8 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
 @import "../Utils/Colors.css";
+
 
 /* For the background and setup of a page */
 .Page {
@@ -18,8 +22,8 @@
 
 /* For divs with a background */
 .Row {
-    display : flex;
-    flex-direction : row;
+    display: flex;
+    flex-direction: row;
     padding: 0.5vw;
     flex: auto;
     justify-content: center;
@@ -28,8 +32,8 @@
 
 /* For divs with a background */
 .Column {
-    display : flex;
-    flex-direction : column;
+    display: flex;
+    flex-direction: column;
     padding: 0.5vw;
 }
 
@@ -91,4 +95,24 @@ h4 {
 
 .TextError {
     color: var(--default-red);
+}
+
+
+.radio-option {
+    margin-left: 20px;
+    margin-right: 5px;
+    /* @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus: ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 */
+}
+
+.school-option {
+    background-color: #f0f0f0;
+    /* Light grey background */
+    padding: 10px;
+    /* Add some padding around the list items */
+    border: 1px solid #e0e0e0;
+}
+
+.school-option:hover {
+    background-color: #e0e0e0;
+    /* Darken the background a bit for the hover state */
 }
