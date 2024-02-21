@@ -22,6 +22,11 @@ export default function MyConnections() {
     return (
         <div className="Page">
             <Navbar/>
+            <div class="Row space-x-[2vw]">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"></img>
+                <h2>Name</h2>
+                <ButtonStandard text={"Unfriend"}></ButtonStandard>
+            </div>
         </div>
     );
 
@@ -36,7 +41,6 @@ export default function MyConnections() {
             } else {
                 idList.push(element['user_1_id'])
             }
-            console.log(idList)
         });
 
         var imageList = [];
@@ -49,11 +53,15 @@ export default function MyConnections() {
                 imageList.push(img);
             });
         })
-        console.log(imageList);
 
         var nameList = await fetch(GlobalVariables.backendURL + "/User/idsFromNames", {
             method: 'POST',
-            body: JSON.stringify({"ids": idList})
-        });
+            body: JSON.stringify({"ids": idList}),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }).then(response => response.json());
+
+        console.log(nameList);
     }
 }

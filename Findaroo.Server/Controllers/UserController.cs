@@ -39,7 +39,7 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpPost("idsFromNames")]
-        public List<String> idsToNames([FromBody] IdsToNames idsToNames)
+        public List<String> idsToNames([FromBody] IdsToNamesRequest idsToNames)
         {
             List<String> ids = idsToNames.ids;
             return _psql.user
