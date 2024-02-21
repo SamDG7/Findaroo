@@ -44,7 +44,7 @@ const SchoolLookup = ({onChangeFunction}) => {
                         border: '1px solid #ccc',
                         borderRadius: '4px',
                         backgroundColor: '#fff',
-                        maxHeight: '200px', // Adjust this value as needed
+                        maxHeight: '400px', // Adjust this value as needed
                         overflowY: 'auto',
                         maxWidth: '300px',
                         zIndex: 1000,
