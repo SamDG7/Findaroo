@@ -3,10 +3,10 @@ import 'react-image-crop/dist/ReactCrop.css'
 import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {Link, useNavigate} from "react-router-dom";
-import ReactCrop from 'react-image-crop'
-import {useEffect, useState} from "react";
-import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
-import InputStandard, {InputImage} from "../Components/InputFields";
+import { useState, useEffect } from "react";
+import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
+import {InputImage} from "../Components/InputFields";
+import ImageCropper from "../Components/ImageCropper";
 
 export default function EditPhoto() {
     // This redirects to the login page if not logged in
@@ -18,8 +18,22 @@ export default function EditPhoto() {
         }
     }, []);
 
-    const [image, setImage] = useState(null);
-    const [crop, setCrop] = useState();
+    const [imageToCrop, setImageToCrop] = useState(undefined);
+    const [croppedImage, setCroppedImage] = useState(undefined);
+
+    const onUploadFile = (event) => {
+        if (event.target.files && event.target.files.length > 0) {
+            const reader = new FileReader();
+
+            reader.addEventListener("load", () => {
+                const image = reader.result;
+
+                setImageToCrop(image);
+            });
+
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    };
 
     return (
         <div className="Page">
@@ -30,26 +44,25 @@ export default function EditPhoto() {
                         <h3>
                             Upload Photo
                         </h3>
-                        {image && (
-                            <img src={URL.createObjectURL(image)} alt="Profile Photo"/>
-                        )}
-                        <InputImage onChangeFunction={(e) => setImage(e.target.files[0])}/>
+                        <InputImage onChangeFunction={onUploadFile}/>
                     </div>
-                    {image && (<div className="Column Start">
+                    {imageToCrop && (<div className="Column Start">
                             <h3>
                                 Crop Photo
                             </h3>
-                            <ReactCrop crop={crop} aspect={1} onChange={(crop, percentCrop) => setCrop(crop)}>
-                                <img src={URL.createObjectURL(image)} alt="Profile Photo"/>
-                            </ReactCrop>
+                            <ImageCropper
+                                imageToCrop={imageToCrop}
+                                onImageCropped={(croppedImage) => setCroppedImage(croppedImage)}
+                            />
                     </div>)}
-                    {image && (<div className="Column Start">
+                    {croppedImage  && (<div className="Column Start">
                         <h3>
                             Final Photo
                         </h3>
-                        <ReactCrop crop={crop} aspect={1} onChange={(crop, percentCrop) => setCrop(crop)}>
-                            <img src={URL.createObjectURL(image)} alt="Profile Photo"/>
-                        </ReactCrop>
+                        <img
+                            alt="Cropped Image"
+                            src={croppedImage}
+                        />
                     </div>)}
                     <div className="Column End">
                         <ButtonImportant text="Save" onClickFunction={SavePhotoCall}/>
@@ -63,16 +76,10 @@ export default function EditPhoto() {
         </div>
     );
 
-    // I still need to work on this - Andy
-    function OpenImage(file) {
-        var input = file.target;
-        var reader = new FileReader();
-        reader.onload = function () {
-            setImage(reader.result);
-        };
-    };
-
+    // I think you should just be able to just send the croppedImage as a file, but if
+    // not let me know and I can take a look at it - Andy
     function SavePhotoCall(userId) {
 
+        navigate('/Profile');
     }
 }
