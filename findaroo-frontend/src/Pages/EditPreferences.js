@@ -19,14 +19,14 @@ export default function EditPreferences() {
     // Personal Info
     const [priceLow, setPriceLow] = useState();
     const [priceHigh, setPriceHigh] = useState();
-    const [roommatePreferences, setRoomatePreferences] = useState()
+    const [roommatePreferences, setRoommatePreferences] = useState()
 
     useEffect(() => {
         //REPLACE THIS WITH USER_ID
         console.log("GET Call")
         fetch('http://localhost:5019/User?user_id=6f3aa8f5-f149-4c5c-8c87-99fb046868fe')
         .then(response => response.json())
-        .then(data => {console.log(data); setPriceLow(data.min_price); setPriceHigh(data.max_price); setRoomatePreferences(data.preferences)})
+        .then(data => {console.log(data); setPriceLow(data.min_price); setPriceHigh(data.max_price); setRoommatePreferences(data.preferences)})
         .catch(error => console.error(error));
         
     }, []);
@@ -67,9 +67,9 @@ export default function EditPreferences() {
                             <InputStandard name="Min Price" defaultValue={priceLow} onChangeFunction={(e) => setPriceLow(e.target.value)}/>
                             <InputStandard name="Max Price" defaultValue={priceHigh} onChangeFunction={(e) => setPriceHigh(e.target.value)}/>
                         </div>
-                        <h2>Roomate Preferences</h2>
+                        <h2>Roommate Preferences</h2>
                         <div className="Row Start">
-                            <InputBox name="Roomate Preference" defaultValue={roommatePreferences} onChangeFunction={(e) => setRoomatePreferences(e.target.value)}/>
+                            <InputBox name="Roommate Preference" defaultValue={roommatePreferences} onChangeFunction={(e) => setRoommatePreferences(e.target.value)}/>
                         </div>
                     </div>
                     <div className="Column End">
