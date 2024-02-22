@@ -6,6 +6,7 @@ import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Butto
 import InputStandard, {InputBox} from "../Components/InputFields";
 import GlobalVariables from "../Utils/GlobalVariables";
 import SchoolLookup from "../Components/SchoolLookup";
+import schoolLookup from "../Components/SchoolLookup";
 
 export default function EditProfile() {
     const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function EditProfile() {
     const [occupation, setOccupation] = useState();
     const [company, setCompany] = useState();
     const [school, setSchool] = useState();
+    // These two are not stored on the user right now
     const [interests, setInterests] = useState();
     const [biography, setBiography] = useState();
 
@@ -31,7 +33,57 @@ export default function EditProfile() {
         }
     }, []);
 
-    // Preferences
+    useEffect(() => {
+        //REPLACE THIS WITH USER_ID
+        console.log("GET Call")
+        fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.first_name) setFirstName(data.first_name);
+                if (data.last_name) setLastName(data.last_name);
+                if (data.age) setAge(data.age);
+                if (data.country) setCountry(data.country);
+                if (data.state) setState(data.state);
+                if (data.address) setAddress(data.address);
+                if (data.zip_code) setZip(data.zip_code);
+                if (data.phone) setPhone(data.phone);
+                if (data.occupation) setOccupation(data.occupation);
+                if (data.company) setCompany(data.company);
+                if (data.school) setSchool(data.school);
+            }).catch(error => console.error(error));
+
+    }, []);
+
+    const SaveInfoCall = async () => {
+        console.log("PUT Call")
+        try {
+            const form = {
+                user_id: GlobalVariables.userCredential.uid,
+                first_name: firstName,
+                last_name: lastName,
+                country: country,
+                state: state,
+                address: address,
+                zip_code: zip,
+                phone: phone,
+                occupation: occupation,
+                company: company,
+                school: school
+            }
+            await fetch('http://localhost:5019/User', {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(form)
+            }).then(response => {
+                return response.text()
+            });
+        }catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
         <div className="Page">
@@ -50,7 +102,7 @@ export default function EditProfile() {
                     </div>
                     <div className="Column Start">
                         <h2>Work/School</h2>
-                        <SchoolLookup name="School" onChangeFunction={setSchool} />
+                        <SchoolLookup name="School" defaultValue={school} onChangeFunction={setSchool} />
                         <InputStandard name="Occupation" defaultValue={occupation} onChangeFunction={(e) => setOccupation(e.target.value)}/>
                         <InputStandard name="Company" defaultValue={company} onChangeFunction={(e) => setCompany(e.target.value)}/>
                         <h2 className="pt-[4vh]">Location</h2>
@@ -71,8 +123,4 @@ export default function EditProfile() {
         </div>
     );
 
-    //TODO: Save the personal information
-    function SaveInfoCall(){
-
-    }
 }

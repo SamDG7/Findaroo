@@ -64,6 +64,7 @@ namespace Findaroo.Server.Model.TableModel
             this.lifestyle_answers = pur.lifestyle_answers;
             this.preferences = pur.preferences;
             this.room_type = pur.room_type;
+            this.user_id = pur.user_id;
         }
     }
 }

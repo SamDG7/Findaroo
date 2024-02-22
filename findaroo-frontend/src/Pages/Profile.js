@@ -18,6 +18,8 @@ export default function Profile() {
 
     const [userData, setUserData] = useState();
 
+    const [] = useState();
+
     // TODO: I'm not sure how to actually get the user's userID, so we will have to do that later
     // UserCall(10);
 

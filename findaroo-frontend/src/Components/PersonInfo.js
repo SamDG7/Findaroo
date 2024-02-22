@@ -25,7 +25,6 @@ export default function PersonInfo({personDict}) {
                         : "")
                     }
                 </h2>
-                // Interests
             </div>
             <h1 className="Column End">
                 {personDict.rating + "/5"}
@@ -57,7 +56,6 @@ export function PersonInfoSmall({personDict}) {
                             : "")
                     }
                 </h4>
-                // Interests
             </div>
             <h3 className="Column End">
                 {personDict.rating + "/5"}
