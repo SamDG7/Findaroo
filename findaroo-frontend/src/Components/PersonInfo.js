@@ -46,13 +46,15 @@ export function PersonInfoSmall({personDict}) {
                 <h4>
                     {(!(personDict.school === null || personDict.school === "")
                         ? "Student" + " at " + personDict.school
-                        : "")
-                    }
-                </h4>
-                <h4>
-                    {(!(personDict.company === null || personDict.company === "")
-                        ? "Employee" + " at " + personDict.company
-                        : "")
+                        : "") +
+                        (!(personDict.company === null || personDict.company === "") &&
+                        !(personDict.school === null || personDict.school === "")
+                            ? " and "
+                            : "")
+                        +
+                        (!(personDict.company === null || personDict.company === "")
+                            ? "Employee" + " at " + personDict.company
+                            : "")
                     }
                 </h4>
                 // Interests
