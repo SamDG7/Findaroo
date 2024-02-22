@@ -1,7 +1,6 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< HEAD
     "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj": {}
   },
   "projects": {
@@ -17,27 +16,12 @@
         "configFilePaths": [
           "C:\\Users\\doann\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-=======
-    "/Users/sgirap/Desktop/Findaroo/Findaroo.Server/Findaroo.Server.csproj": {}
-  },
-  "projects": {
-    "/Users/sgirap/Desktop/Findaroo/Findaroo.Server/Findaroo.Server.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "/Users/sgirap/Desktop/Findaroo/Findaroo.Server/Findaroo.Server.csproj",
-        "projectName": "Findaroo.Server",
-        "projectPath": "/Users/sgirap/Desktop/Findaroo/Findaroo.Server/Findaroo.Server.csproj",
-        "packagesPath": "/Users/sgirap/.nuget/packages/",
-        "outputPath": "/Users/sgirap/Desktop/Findaroo/Findaroo.Server/obj/",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "/Users/sgirap/.nuget/NuGet/NuGet.Config"
->>>>>>> main
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -62,7 +46,7 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.1, )"
+              "version": "[8.0.2, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
@@ -92,7 +76,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

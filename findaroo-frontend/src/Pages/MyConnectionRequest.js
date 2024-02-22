@@ -17,6 +17,9 @@ export default function MyConnections() {
         if (!GlobalVariables.authenticated || auth.currentUser == null) {
             navigate("/Login");
         }
+    }, []);
+
+    useEffect(() => {
         getConnections();
     }, []);
 
@@ -35,7 +38,7 @@ export default function MyConnections() {
         </div>
     );
 
-    async function getConnections() {
+    async function getConnectionRequests() {
         const response = await fetch(GlobalVariables.backendURL + "/Connection?user_id=" + auth.currentUser.uid);
         const connections = await response.json();
 
@@ -69,7 +72,7 @@ export default function MyConnections() {
             }
         }).then(response => response.json());
 
-        var nameImageList = nameList.map((name, i) => ({'name':name, 'image':imageList[i]}));
+        var nameImageList = nameList.map((name, i) => ({'name':name, 'image':imageList[i], 'user_id':idList[i]}));
         console.log(nameImageList)
         setData(nameImageList);
     }
