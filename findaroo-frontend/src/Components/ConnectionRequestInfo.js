@@ -2,9 +2,12 @@ import React from "react";
 import './PersonInfo.css';
 import { ButtonImportant } from "./Buttons";
 import {useState} from "react";
+import GlobalVariables from "../Utils/GlobalVariables";
+import getAuth from 'firebase';
 
 export function ConnectionRequestInfo({connectionDict}) {
     const [on, setData] = useState(true);
+    const auth = getAuth();
 
     if (connectionDict == null){
         return;
@@ -37,10 +40,18 @@ export function ConnectionRequestInfo({connectionDict}) {
     
 
     async function accept() {
+        await fetch(GlobalVariables.backendURL + "/ConnectionRequest", {
+            mode: 'POST',
+            body: JSON.stringify({'sender_id': connectionDict.user_id, 'receiver_id': auth.user_id})
+        }).catch(error => console.log(error));
         setData(false);
     }
 
     async function decline() {
+        await fetch(GlobalVariables.backendURL + "/ConnectionRequest", {
+            mode: 'DELETE',
+            body: JSON.stringify({'sender_id': connectionDict.user_id, 'receiver_id': auth.user_id})
+        }).catch(error => console.log(error));
         setData(false);
     }
 }
