@@ -32,7 +32,8 @@ namespace Findaroo.Server.Model.TableModel
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public bool status { get; set; }
 
-        public int[]? answers { get; set; }
+        public int[]? lifestyle_answers { get; set; }
+        public string? room_type { get; set; }
 
         public User() { }
 
@@ -60,8 +61,10 @@ namespace Findaroo.Server.Model.TableModel
             this.rating = 0;
             this.min_price = pur.min_price;
             this.max_price = pur.max_price;
-            this.answers = pur.lifestyle_answers;
+            this.lifestyle_answers = pur.lifestyle_answers;
             this.preferences = pur.preferences;
+            this.room_type = pur.room_type;
+            this.user_id = pur.user_id;
         }
     }
 }
