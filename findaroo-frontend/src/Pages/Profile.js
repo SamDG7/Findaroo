@@ -9,7 +9,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { getAuth, deleteUser } from "firebase/auth";
 import PersonInfo from "../Components/PersonInfo";
 import Popup from "../Components/Popup";
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 
 export default function Profile() {
     // This redirects to the login page if not logged in
