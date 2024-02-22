@@ -23,5 +23,6 @@ namespace Findaroo.Server.Model.RequestModel.User
         public int[]? lifestyle_answers { get; set; }
 
         public string? preferences { get; set; }
+        public string? room_type { get; set; }
     }
 }

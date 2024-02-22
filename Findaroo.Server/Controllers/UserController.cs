@@ -47,6 +47,17 @@ namespace Findaroo.Server.Controllers
                 .Select(u => u.first_name + " " + u.last_name)
                 .ToList();
         }
+        
+        [Route("all")]
+        [HttpGet]
+        public User[] GetAllUsers()
+        {
+            User[] users = _psql.user.Select(row => row).ToArray();
+
+            return users;
+
+        }
+        
 
         [HttpPost]
         public string postUser([FromBody] PostUserRequest postUserRequest)

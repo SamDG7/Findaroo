@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {ButtonImportant} from "../Components/Buttons";
 import InputStandard from "../Components/InputFields";
 import Popup from "../Components/Popup";
+import GlobalVariables from "../Utils/GlobalVariables";
 
 export default function AccountSetup() {
     const navigate = useNavigate();
@@ -25,6 +26,37 @@ export default function AccountSetup() {
     };
 
     // Preferences
+
+    const AccountSetupCall = async () => {
+        console.log("POST Call")
+        try {
+            const form = {
+                user_id: GlobalVariables.userCredential.uid,
+                email: GlobalVariables.email,
+                first_name: firstName,
+                last_name: lastName,
+                age: age,
+                address: address,
+                country: country,
+                occupation: occupation,
+                company: company
+            }
+            await fetch('http://localhost:5019/User', {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(form)
+			}).then(response => {
+				return response.text()
+			  });
+        }catch (err) {
+            console.log(err)
+        }
+        
+
+        togglePopup();
+    }
 
     return (
         <div className="Page">
@@ -63,12 +95,5 @@ export default function AccountSetup() {
             </div>
         </div>
     );
-
-    function AccountSetupCall() {
-        togglePopup();
-
-        //TODO: Save the preferences
-
-    }
 
 }

@@ -50,8 +50,8 @@ export function InputPassword({name, defaultValue, onChangeFunction}) {
                 onChange={onChangeFunction}
                 placeholder="..."
             />
-            <span class="flex justify-around items-center" onClick={togglePasswordVisibility}>
-                <Icon class="absolute mr-10" icon={icon} size="1.5vw"/>
+            <span className="flex justify-around items-center" onClick={togglePasswordVisibility}>
+                <Icon className="absolute mr-10" icon={icon} size="1.5vw"/>
             </span>
         </div>
     );

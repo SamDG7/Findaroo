@@ -10,6 +10,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import GlobalVariables from "../Utils/GlobalVariables";
 import { initializeApp } from "firebase/app";
 import Popup from "../Components/Popup";
+import zxcvbn from "zxcvbn";
 
 export default function SignUp() {
     const navigate = useNavigate();
@@ -86,7 +87,7 @@ export default function SignUp() {
     );
 
     function PasswordStrengthTextSwitch(passwordStrengthNum) {
-        var strengthDict = {0: "Vulnerable", 1: "Susceptible", 2: "Weak", 3: "Moderate", 4: "Intermediate", 5: "Strong"}
+        var strengthDict = {1: "Very Weak", 2: "Weak", 3: "Moderate", 4: "Strong", 5: "Very Strong"}
         return strengthDict[passwordStrengthNum] + " (" + passwordStrengthNum + "/5)";
     }
 
@@ -108,19 +109,28 @@ export default function SignUp() {
     // Strength is out of 5 for matching all criteria.
     // Should return an array containing the strength and text to explain it. (EX: Password is not 8 characters long)
     function PasswordStrength(testPassword) {
-        const strength = 5;
+
+        var strength = 1;
+        try {
+            strength = zxcvbn(testPassword).score + 1;
+        } catch (e) {
+            strength = 1;
+        }
+
         const outMessage = '';
-        // TODO: Write this function
+
         return [strength, outMessage];
     }
 
     // TODO: This is called when the sign-up button is pressed
     async function SignUpCall() {
         if (password === passwordConfirm) {
-            if (PasswordStrength(password)[0] === 5) {
+            if (PasswordStrength(password)[0] >= 3) {
                 console.log("Signing up " + email + " with password " + password);
                 
                 createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+                    console.log(userCredential)
+                    GlobalVariables.email = email;
                     GlobalVariables.userCredential = userCredential.user;
 
                     //TODO: This seems to be giving an error
@@ -154,8 +164,8 @@ export default function SignUp() {
                 
 
             } else {
-                console.log("Password is not strong enough");
-                setMessage("Password is not strong enough");
+                console.log("Password not strong enough (Requires score of 3 or more)");
+                setMessage("Password is not strong enough (Requires score of 3 or more)");
             }
         } else {
             console.log("Passwords are different");
@@ -174,6 +184,7 @@ export default function SignUp() {
             // TODO: required if a google account is used and probably make a field to
             // TODO: track if that is the case - Andy
             createUserWithEmailAndPassword(auth, user.email, null).then((userCredential) => {
+                GlobalVariables.email = user.email;
                 GlobalVariables.userCredential = userCredential.user;
                 console.log("User signed up: " + GlobalVariables.userCredential.email);
                 // After everything is done, return to the login page

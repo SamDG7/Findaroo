@@ -25,7 +25,6 @@ export default function PersonInfo({personDict}) {
                         : "")
                     }
                 </h2>
-                // Interests
             </div>
             <h1 className="Column End">
                 {personDict.rating + "/5"}
@@ -46,16 +45,17 @@ export function PersonInfoSmall({personDict}) {
                 <h4>
                     {(!(personDict.school === null || personDict.school === "")
                         ? "Student" + " at " + personDict.school
-                        : "")
+                        : "") +
+                        (!(personDict.company === null || personDict.company === "") &&
+                        !(personDict.school === null || personDict.school === "")
+                            ? " and "
+                            : "")
+                        +
+                        (!(personDict.company === null || personDict.company === "")
+                            ? "Employee" + " at " + personDict.company
+                            : "")
                     }
                 </h4>
-                <h4>
-                    {(!(personDict.company === null || personDict.company === "")
-                        ? "Employee" + " at " + personDict.company
-                        : "")
-                    }
-                </h4>
-                // Interests
             </div>
             <h3 className="Column End">
                 {personDict.rating + "/5"}

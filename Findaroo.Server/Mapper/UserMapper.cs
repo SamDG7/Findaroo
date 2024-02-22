@@ -26,6 +26,7 @@ namespace Findaroo.Server.Mapper
             if (updateUserRequest.min_price != null) user.min_price = updateUserRequest.min_price;
             if (updateUserRequest.max_price != null) user.max_price = updateUserRequest.max_price;
             if (updateUserRequest.preferences != null) user.preferences = updateUserRequest.preferences;
+            if (updateUserRequest.room_type != null) user.room_type = updateUserRequest.room_type;
         }
     }
 }

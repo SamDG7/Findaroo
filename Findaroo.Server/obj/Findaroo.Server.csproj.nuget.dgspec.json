@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj": {}
+    "C:\\Users\\bluec\\Documents\\college\\cs407stuff\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj": {
+    "C:\\Users\\bluec\\Documents\\college\\cs407stuff\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
+        "projectUniqueName": "C:\\Users\\bluec\\Documents\\college\\cs407stuff\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
         "projectName": "Findaroo.Server",
-        "projectPath": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
-        "packagesPath": "C:\\Users\\doann\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\doann\\Documents\\Findaroo\\Findaroo.Server\\obj\\",
+        "projectPath": "C:\\Users\\bluec\\Documents\\college\\cs407stuff\\Findaroo\\Findaroo.Server\\Findaroo.Server.csproj",
+        "packagesPath": "C:\\Users\\bluec\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bluec\\Documents\\college\\cs407stuff\\Findaroo\\Findaroo.Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\doann\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\bluec\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -34,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -46,7 +49,7 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.2, )"
+              "version": "[8.0.1, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
@@ -76,7 +79,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

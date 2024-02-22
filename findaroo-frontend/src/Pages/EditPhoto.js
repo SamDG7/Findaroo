@@ -36,6 +36,37 @@ export default function EditPhoto() {
         }
     };
 
+    const SavePhotoCall = async () => {
+        console.log("PUT Call");
+        try {
+            let imageBlob = await fetch(croppedImage).then(r => r.blob());
+            const imageFile = new File([imageBlob], "Profile.png", { type: imageBlob.type })
+            var reader = new FileReader();
+
+            reader.onload = async function(event) {
+                const imageBinary = event.target.result
+                console.log(imageBinary);
+                const form = {
+                    user_id: GlobalVariables.userCredential.uid,
+                    image_name: "Profile",
+                    form_file: imageBinary
+                }
+                await fetch('http://localhost:5019/Image', {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(form)
+                }).then(response => {
+                    return response.text()
+                });
+            };
+            reader.readAsArrayBuffer(imageBlob);
+        }catch (err) {
+            console.log(err)
+        }
+    }
+
     return (
         <div className="Page">
             <Navbar/>
@@ -76,11 +107,4 @@ export default function EditPhoto() {
             </div>
         </div>
     );
-
-    // I think you should just be able to just send the croppedImage as a file, but if
-    // not let me know and I can take a look at it - Andy
-    function SavePhotoCall(userId) {
-
-        navigate('/Profile');
-    }
 }
