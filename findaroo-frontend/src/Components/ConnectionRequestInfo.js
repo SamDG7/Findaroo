@@ -3,11 +3,16 @@ import './PersonInfo.css';
 import { ButtonImportant } from "./Buttons";
 import {useState} from "react";
 import GlobalVariables from "../Utils/GlobalVariables";
-import getAuth from 'firebase';
+import {getAuth} from 'firebase/auth';
 
 export function ConnectionRequestInfo({connectionDict}) {
     const [on, setData] = useState(true);
     const auth = getAuth();
+    const requestBody = {'sender_id': connectionDict.user_id, 
+        'receiver_id': auth.currentUser.uid
+    }
+
+    console.log(requestBody)
 
     if (connectionDict == null){
         return;
@@ -40,17 +45,23 @@ export function ConnectionRequestInfo({connectionDict}) {
     
 
     async function accept() {
-        await fetch(GlobalVariables.backendURL + "/ConnectionRequest", {
-            mode: 'POST',
-            body: JSON.stringify({'sender_id': connectionDict.user_id, 'receiver_id': auth.user_id})
+        await fetch(GlobalVariables.backendURL + "/ConnectionRequest/accept", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(requestBody)
         }).catch(error => console.log(error));
         setData(false);
     }
 
     async function decline() {
         await fetch(GlobalVariables.backendURL + "/ConnectionRequest", {
-            mode: 'DELETE',
-            body: JSON.stringify({'sender_id': connectionDict.user_id, 'receiver_id': auth.user_id})
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(requestBody)
         }).catch(error => console.log(error));
         setData(false);
     }
