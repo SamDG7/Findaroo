@@ -57,7 +57,7 @@ export default function Login() {
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-            // Signed in 
+            // Signed in
             GlobalVariables.userCredential = userCredential.user;
             console.log("Logged in as " + GlobalVariables.userCredential.email);
             GlobalVariables.authenticated = true;
@@ -69,6 +69,8 @@ export default function Login() {
             console.log(errorCode + ": " + errorMessage);
             setMessage("Incorrect Login Credentials");
         });
+        //TODO: Check for user status in PSQL
+        //if (true) isActivated = true;
     }
 
     function LogInWithGoogle() {

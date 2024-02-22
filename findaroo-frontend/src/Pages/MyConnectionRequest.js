@@ -5,9 +5,9 @@ import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
 import { getAuth} from "firebase/auth";
-import {ConnectionInfo} from "../Components/ConnectionInfo";
+import {ConnectionRequestInfo} from "../Components/ConnectionRequestInfo";
 
-export default function MyConnections() {
+export default function MyConnectionRequests() {
     // This redirects to the login page if not logged in
     const navigate = useNavigate();
     const auth = getAuth();
@@ -30,7 +30,7 @@ export default function MyConnections() {
                 <div className="Grid">
                     {
                         data && data.map((data, index) => (
-                            <ConnectionInfo connectionDict={data}/>
+                            <ConnectionRequestInfo connectionDict={data}/>
                         ))
                     }
                 </div>
@@ -49,11 +49,7 @@ export default function MyConnections() {
 
         var idList = [];
         connections.forEach(element => {
-            if (element['user_1_id'] == auth.currentUser.uid) {
-                idList.push(element['user_2_id'])
-            } else {
-                idList.push(element['user_1_id'])
-            }
+            idList.push(element["sender_id"])
         });
 
         var imageList = [];
@@ -68,7 +64,7 @@ export default function MyConnections() {
             method: 'POST',
             body: JSON.stringify({"ids": idList}),
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json"
             }
         }).then(response => response.json());
 

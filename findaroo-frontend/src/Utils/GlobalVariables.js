@@ -7,4 +7,5 @@ export default class GlobalVariables {
     static backendURL = "http://localhost:5019"
     static userCredential;
     static email;
+    static isActivated;
 }

@@ -21,7 +21,6 @@ namespace Findaroo.Server.Model.RequestModel.User
         public int? min_price { get; set; }
         public int? max_price { get; set; }
         public int[]? lifestyle_answers { get; set; }
-
         public string? preferences { get; set; }
         public string? room_type { get; set; }
     }

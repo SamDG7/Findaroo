@@ -58,7 +58,7 @@ export default function MyConnections() {
         for (const id of idList) {
             var imageResponse = await fetch(GlobalVariables.backendURL + "/Image?user_id=" + id);
             var blob = await imageResponse.blob();
-            imageList.push(URL.createObjectURL(blob))
+            imageList.push(URL.createObjectURL(blob));
         }
 
         var nameList = await fetch(GlobalVariables.backendURL + "/User/idsFromNames", {

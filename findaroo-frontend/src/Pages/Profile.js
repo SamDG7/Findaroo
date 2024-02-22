@@ -71,7 +71,7 @@ export default function Profile() {
                         <div className="Row space-x-[2vw]">
                             <ButtonStandard text="View Roomies"/>
                             <ButtonStandard text="My Connections" onClickFunction={() => {navigate("/Profile/MyConnections");}}/>
-                            <ButtonStandard text="Connection Requests" onClickFunction={() => {navigate("/ConnectionRequests");}}/>
+                            <ButtonStandard text="Connection Requests" onClickFunction={() => {navigate("/Profile/MyConnectionRequests");}}/>
                             <ButtonStandard text="Blocked Users"/>
                             <ButtonStandard text="My Reviews"/>
                         </div>

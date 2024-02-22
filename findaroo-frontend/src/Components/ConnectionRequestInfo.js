@@ -1,33 +1,46 @@
 import React from "react";
 import './PersonInfo.css';
 import { ButtonImportant } from "./Buttons";
+import {useState} from "react";
 
-export function ConnectionInfo({connectionDict}) {
+export function ConnectionRequestInfo({connectionDict}) {
+    const [on, setData] = useState(true);
+
     if (connectionDict == null){
         return;
     }
-    
-    return (
-        <div className="Row Start">
-            <img className="ProfileImageSmall" src={connectionDict.image}
-                 alt={connectionDict.name + "'s profile picture"}/>
-            <div className="Column Start">
-                <h3>
-                    {connectionDict.name}
-                </h3>
+
+    if (on) {
+        return (
+            <div className="Row Start">
+                <img className="ProfileImageSmall" src={connectionDict.image}
+                     alt={connectionDict.name + "'s profile picture"}/>
+                <div className="Column Start">
+                    <h3>
+                        {connectionDict.name}
+                    </h3>
+                </div>
+                <div className="Column End">
+                    <div className="Row">
+                        <ButtonImportant text={"Accept"} onClickFunction={accept}></ButtonImportant>
+                        <div className="p-[1vw]"/>
+                        <ButtonImportant text={"Decline"} onClickFunction={decline}></ButtonImportant>
+                    </div>
+                </div>
             </div>
-            <h3 className="Column End">
-                <ButtonImportant text={"Accept"} onClickFunction={accept}></ButtonImportant>
-                <ButtonImportant text={"Decline"} onClickFunction={decline}></ButtonImportant>
-            </h3>
-        </div>
-    )
+        );
+    }
+    else 
+    {
+        return;
+    }
+    
 
     async function accept() {
-
+        setData(false);
     }
 
     async function decline() {
-
+        setData(false);
     }
 }
