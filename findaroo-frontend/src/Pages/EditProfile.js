@@ -72,7 +72,7 @@ export default function EditProfile() {
     );
 
     //TODO: Save the personal information
-    function SaveInfoCall(){
+    // function SaveInfoCall(){
 
-    }
+    // }
 }
