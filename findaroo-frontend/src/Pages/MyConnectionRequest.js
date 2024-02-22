@@ -20,7 +20,7 @@ export default function MyConnections() {
     }, []);
 
     useEffect(() => {
-        getConnections();
+        getReceivedConnectionRequests();
     }, []);
 
     return (
@@ -38,8 +38,8 @@ export default function MyConnections() {
         </div>
     );
 
-    async function getConnectionRequests() {
-        const response = await fetch(GlobalVariables.backendURL + "/Connection?user_id=" + auth.currentUser.uid);
+    async function getReceivedConnectionRequests() {
+        const response = await fetch(GlobalVariables.backendURL + "/ConnectionRequest/received?user_id=" + auth.currentUser.uid);
         const connections = await response.json();
 
         if (connections.length == 0) {
