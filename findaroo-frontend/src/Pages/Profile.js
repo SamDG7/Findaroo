@@ -24,7 +24,7 @@ export default function Profile() {
         fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 setUserData(data);
             }).catch(error => console.error(error));
 

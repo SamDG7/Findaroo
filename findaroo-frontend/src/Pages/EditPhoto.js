@@ -47,7 +47,7 @@ export default function EditPhoto() {
 
             const form = {
                 user_id: GlobalVariables.userCredential.uid,
-                image_name: "Profile",
+                image_name: "Profile.png",
                 form_file: imageFile
             }
 

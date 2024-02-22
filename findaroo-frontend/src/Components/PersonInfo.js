@@ -6,10 +6,17 @@ export default function PersonInfo({personDict}) {
     const [image, setImage] = useState();
 
     useEffect(() => {
-        if (personDict != null && personDict.user_id != null) {
-            GetImage(personDict.user_id).then((val) => setImage(val));
+        if (personDict != null) {
+            GetImage(personDict);
         }
     }, [personDict]);
+
+    const GetImage = async function() {
+        const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + personDict.user_id);
+        const blob = await imageResponse.blob();
+        const source = URL.createObjectURL(blob);
+        setImage(source);
+    }
 
     if (!personDict) {
         return;
@@ -48,25 +55,29 @@ export default function PersonInfo({personDict}) {
     );
 }
 
-async function GetImage({uid}) {
-    const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + uid);
-    console.log(imageResponse)
-    const blob = await imageResponse.blob();
-    return URL.createObjectURL(blob);
-}
+
 
 export function PersonInfoSmall({personDict}) {
     const [image, setImage] = useState();
 
-    if (personDict != null && personDict.user_id != null) {
-        GetImage(personDict.user_id).then((val) => setImage(val));
+    useEffect(() => {
+        if (personDict != null) {
+            GetImage(personDict);
+        }
+    }, [personDict]);
+
+    const GetImage = async function() {
+        const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + personDict.user_id);
+        const blob = await imageResponse.blob();
+        const source = URL.createObjectURL(blob);
+        setImage(source);
     }
 
     if (!personDict) {
         return;
     }
     return (
-        <div className="Row Start">
+        <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]">
             <img className="ProfileImageSmall" src={image}
                  alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"}/>
             <div className="Column Start">

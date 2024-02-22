@@ -101,7 +101,7 @@ export default function Login() {
                 GlobalVariables.authenticated = true;
                 // Get status
                 fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid).then(response => response.json()).then((userData) => {
-                    console.log(userData)
+                    //console.log(userData)
                     if (!userData.status) {
                         togglePopup();
                     } else {
