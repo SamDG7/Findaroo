@@ -121,6 +121,8 @@ export default function SignUp() {
                 console.log("Signing up " + email + " with password " + password);
                 
                 createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+                    console.log(userCredential)
+                    GlobalVariables.email = email;
                     GlobalVariables.userCredential = userCredential.user;
 
                     //TODO: This seems to be giving an error
@@ -174,6 +176,7 @@ export default function SignUp() {
             // TODO: required if a google account is used and probably make a field to
             // TODO: track if that is the case - Andy
             createUserWithEmailAndPassword(auth, user.email, null).then((userCredential) => {
+                GlobalVariables.email = user.email;
                 GlobalVariables.userCredential = userCredential.user;
                 console.log("User signed up: " + GlobalVariables.userCredential.email);
                 // After everything is done, return to the login page
