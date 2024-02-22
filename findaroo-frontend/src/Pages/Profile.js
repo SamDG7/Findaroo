@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
 import PersonInfo from "../Components/PersonInfo";
 import Popup from "../Components/Popup";
+import { getAuth, signOut } from "firebase/auth";
 
 export default function Profile() {
     // This redirects to the login page if not logged in
@@ -18,16 +19,15 @@ export default function Profile() {
     };
 
 
-    useEffect(() => {
-        if (!GlobalVariables.authenticated) {
-            navigate("/Login");
-        }
-    }, []);
-
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        //REPLACE THIS WITH USER_ID
+
+        if (!GlobalVariables.authenticated || GlobalVariables.userCredential.uid === undefined) {
+            navigate("/Login");
+            return;
+        }
+
         console.log("GET Call")
         fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
             .then(response => response.json())
@@ -38,7 +38,7 @@ export default function Profile() {
 
     }, []);
 
-    const deactivateAccount = async () => {
+    const deactivateAccount = () => {
         console.log("PUT Call")
         try {
             const form = {
@@ -46,7 +46,7 @@ export default function Profile() {
                 status: false
             }
             console.log(form);
-            await fetch('http://localhost:5019/User', {
+            fetch('http://localhost:5019/User', {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -58,6 +58,9 @@ export default function Profile() {
         } catch (err) {
             console.log(err)
         } finally {
+            GlobalVariables.authenticated = false;
+            const auth = getAuth();
+            signOut(auth);
             navigate("/Login");
         }
     }
