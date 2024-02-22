@@ -1,7 +1,11 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import './PersonInfo.css';
+import GlobalVariables from "../Utils/GlobalVariables";
 
 export default function PersonInfo({personDict}) {
+    if (!personDict) {
+        return;
+    }
     return (
         <div className="Row Start">
             <img className="ProfileImage" src="https://andysharpe.dev/wp-content/uploads/2024/02/MeGGJ.png"
@@ -25,18 +29,26 @@ export default function PersonInfo({personDict}) {
                         : "")
                     }
                 </h2>
+                <h2>
+                    {personDict.preferences}
+                </h2>
             </div>
             <h1 className="Column End">
-                {personDict.rating + "/5"}
+                {personDict.rating >= 0 ? personDict.rating + "/5" : "Unrated"}
             </h1>
         </div>
     );
 }
 
 export function PersonInfoSmall({personDict}) {
+    const [image, setImage] = useState(undefined);
+
+    if (!personDict) {
+        return;
+    }
     return (
         <div className="Row Start">
-            <img className="ProfileImageSmall" src="https://andysharpe.dev/wp-content/uploads/2024/02/MeGGJ.png"
+            <img className="ProfileImageSmall" src={image}
                  alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"}/>
             <div className="Column Start">
                 <h3>
@@ -56,9 +68,12 @@ export function PersonInfoSmall({personDict}) {
                             : "")
                     }
                 </h4>
+                <h4>
+                    {personDict.preferences}
+                </h4>
             </div>
             <h3 className="Column End">
-                {personDict.rating + "/5"}
+                {personDict.rating >= 0 ? personDict.rating + "/5" : "Unrated"}
             </h3>
         </div>
     );

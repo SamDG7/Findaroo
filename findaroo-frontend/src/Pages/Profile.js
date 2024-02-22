@@ -16,40 +16,26 @@ export default function Profile() {
         }
     }, []);
 
-    const [userData, setUserData] = useState();
+    const [userData, setUserData] = useState(null);
 
-    const [] = useState();
+    useEffect(() => {
+        //REPLACE THIS WITH USER_ID
+        console.log("GET Call")
+        fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setUserData(data);
+            }).catch(error => console.error(error));
 
-    // TODO: I'm not sure how to actually get the user's userID, so we will have to do that later
-    // UserCall(10);
-
-    // TODO: For now this data is hardcoded, but this is what should be returned by the get call
-    const tempData = {
-        user_id: "IDK",
-        first_name: "Andy",
-        last_name: "Sharpe",
-        email: "ajsusa1@gmail.com",
-        phone: "1234567890",
-        age: 22,
-        address: "1407 My Road",
-        state: "Indiana",
-        country: "USA",
-        zip_code: "22182",
-        occupation: "Student",
-        company: "Telos",
-        school: "Purdue University",
-        rating: 4.5,
-        date_created: "2024-02-13T19:09:02.274Z",
-        date_modified: "2024-02-13T19:09:02.274Z",
-        status: true
-    };
+    }, []);
 
     return (
         <div className="Page">
             <Navbar/>
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
-                    <PersonInfo personDict={tempData}/>
+                    <PersonInfo personDict={userData}/>
                     <div className="Column Start">
                         <div className="Row space-x-[2vw]">
                             <Link to="/Profile/Edit">
@@ -74,9 +60,6 @@ export default function Profile() {
                             <ButtonDelete text="Disable Account" onClickFunction={DisableAccountCall}/>
                             <ButtonDelete text="Delete Account" onClickFunction={DeleteAccountCall}/>
                         </div>
-                        // Bio
-                        // What they want in a roommate
-                        // TODO: Put reviews below
                     </div>
                 </div>
             </div>
