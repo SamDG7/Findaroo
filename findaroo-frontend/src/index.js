@@ -18,8 +18,10 @@ import EditPreferences from "./Pages/EditPreferences";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import Questions from "./Pages/Questions";
+import MyConnections from './Pages/MyConnections';
 import AccountSetup from "./Pages/AccountSetup";
 import EditPhoto from "./Pages/EditPhoto";
+import MyConnectionRequests from './Pages/MyConnectionRequest';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -100,6 +102,16 @@ const router = createBrowserRouter(
             path: "/SignUp",
             element: <SignUp />,
             errorElement: <Error />,
+        },
+        {
+            path: "/Profile/MyConnections",
+            element: <MyConnections />,
+            errorElement: <Error/>,
+        },
+        {
+            path: "/Profile/MyConnectionRequests",
+            element: <MyConnectionRequests />,
+            errorElement: <Error/>,
         }
     ]
 );

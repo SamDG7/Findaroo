@@ -3,9 +3,10 @@ import 'react-image-crop/dist/ReactCrop.css'
 import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {Link, useNavigate} from "react-router-dom";
-import { useState, useEffect } from "react";
-import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
-import {InputImage} from "../Components/InputFields";
+import ReactCrop, {} from 'react-image-crop';
+import {useEffect, useState} from "react";
+import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
+import InputStandard, {InputImage} from "../Components/InputFields";
 import ImageCropper from "../Components/ImageCropper";
 
 export default function EditPhoto() {

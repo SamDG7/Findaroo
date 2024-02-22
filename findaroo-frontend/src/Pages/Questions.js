@@ -46,6 +46,9 @@ export default function Questions() {
     useEffect(() => {
         //REPLACE THIS WITH USER_ID
         console.log("GET Call")
+        if (GlobalVariables.userCredential.uid === undefined) {
+            navigate("/Login");
+        }
         fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
             .then(response => response.json())
             .then(data => {

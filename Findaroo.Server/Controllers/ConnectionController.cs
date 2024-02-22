@@ -18,7 +18,7 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Connection> getMyConnections(String user_id)
+        public List<Connection> getMyConnections(String user_id)
         {
             return _psql.connection
                 .FromSql($"SELECT * from connection where user_1_id = {user_id} or user_2_id = {user_id}")
