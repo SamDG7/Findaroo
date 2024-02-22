@@ -55,7 +55,7 @@ export default function EditPreferences() {
 			}).then(response => {
 				return response.text()
 			  });
-        }catch (err) {
+        } catch (err) {
             console.log(err)
         }
     }
