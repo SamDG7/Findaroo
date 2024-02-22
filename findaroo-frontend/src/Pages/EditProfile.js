@@ -31,7 +31,6 @@ export default function EditProfile() {
         }
     }, []);
 
-    // Preferences
 
     return (
         <div className="Page">
