@@ -31,7 +31,6 @@ namespace Findaroo.Server.Model.TableModel
         public DateTime date_modified { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public bool status { get; set; }
-
         public int[]? lifestyle_answers { get; set; }
         public string? room_type { get; set; }
 

@@ -14,7 +14,7 @@ namespace Findaroo.Server.Controllers
     {
         PostgresContext _psql;
 
-        public UserController(PostgresContext psql) 
+        public UserController(PostgresContext psql)
         {
             _psql = psql;
         }

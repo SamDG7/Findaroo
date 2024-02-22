@@ -1,4 +1,5 @@
 const schools = [
+    "None",
     "Abilene Christian University",
     "Academy of Art College",
     "Adams State College",

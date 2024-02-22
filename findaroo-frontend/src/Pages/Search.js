@@ -13,6 +13,7 @@ export default function Search() {
     const navigate = useNavigate();
 
     const [sortType, setSortType] = useState("Default");
+    const [allUsers, setAllUsers] = useState([]);
 
     useEffect(() => {
         if (!GlobalVariables.authenticated) {
@@ -20,44 +21,14 @@ export default function Search() {
         }
     }, []);
 
-    // TODO: For now this data is hardcoded, but this is what should be returned by the get call
-    const tempData = [{
-        user_id: "IDK",
-        first_name: "Andy",
-        last_name: "Sharpe",
-        email: "ajsusa1@gmail.com",
-        phone: "1234567890",
-        age: 22,
-        address: "1407 My Road",
-        state: "Indiana",
-        country: "USA",
-        zip_code: "22182",
-        occupation: "Student",
-        company: "Telos",
-        school: "Purdue University",
-        rating: 4.5,
-        date_created: "2024-02-13T19:09:02.274Z",
-        date_modified: "2024-02-13T19:09:02.274Z",
-        status: true
-    }, {
-        user_id: "IDK",
-        first_name: "Zandy",
-        last_name: "Zarp",
-        email: "ajsusa2@gmail.com",
-        phone: "1234567890",
-        age: 22,
-        address: "1407 My Road",
-        state: "Indiana",
-        country: "USA",
-        zip_code: "22182",
-        occupation: "Student",
-        company: "Dovel",
-        school: "Indiana University",
-        rating: 4.0,
-        date_created: "2024-02-13T19:09:02.274Z",
-        date_modified: "2024-02-13T19:09:02.274Z",
-        status: true
-    }];
+    useEffect(() => {
+        //REPLACE THIS WITH USER_ID
+        console.log("GET Call")
+        fetch('http://localhost:5019/User/All')
+            .then(response => response.json())
+            .then(data => {console.log(data); setAllUsers(data);})
+            .catch(error => console.error(error));
+    }, []);
 
     return (
         <div className="Page">
@@ -68,7 +39,7 @@ export default function Search() {
                         <Selector name="Sort By" values={["Score", "A-Z", "Z-A"]} onChangeFunction={(e) => setSortType(e.target.value)} />
                     </div>
                     {
-                        GetSortedPersons(tempData, sortType)
+                        GetSortedPersons(allUsers, sortType)
                     }
                 </div>
             </div>
