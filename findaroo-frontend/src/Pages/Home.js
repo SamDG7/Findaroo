@@ -76,7 +76,7 @@ export default function Home() {
                 <p>Your account is currently deactivated. Would you like to reactivate it?</p>
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
                     <button style={{ background: '#007AFF', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={reactivateAccount}>Yes</button>
-                    <button style={{ background: '#808080', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={() => navigate("/Login")}>Close Browser</button>
+                    <button style={{ background: '#808080', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={() => {GlobalVariables.authenticated = false; navigate("/Login");}}>Close Browser</button>
                 </div>
             </Popup>
 
