@@ -21,19 +21,13 @@ namespace Findaroo.Server.Controllers
             {
                 if (!Directory.Exists(path)) 
                 {
-                    Response.StatusCode = (int)HttpStatusCode.NotFound;
-                    return null;
-                }
-
-                var fileList = Directory.GetFiles(path);
-
-                if (fileList.Length == 0)
+                    path = Path.Combine(Directory.GetCurrentDirectory(), "Images\\Profile\\Default.jpg");
+                } 
+                else
                 {
-                    Response.StatusCode = (int)HttpStatusCode.NotFound;
-                    return null;
+                    path = Directory.GetFiles(path)
+                        .FirstOrDefault(Path.Combine(Directory.GetCurrentDirectory(), "Images\\Profile\\Default.jpg"));
                 }
-
-                path = fileList[0];
 
                 Byte[] b = System.IO.File.ReadAllBytes(path);
                 return File(b, "image/jpeg");

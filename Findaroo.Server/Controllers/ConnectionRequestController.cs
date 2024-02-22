@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Linq;
 
 namespace Findaroo.Server.Controllers
 {
@@ -60,6 +61,16 @@ namespace Findaroo.Server.Controllers
         [Route("accept")]
         public void acceptConnectionRequests([FromBody] ConnectionRequestRequest acceptConnectionRequest)
         {
+            ConnectionRequest? crExist = _psql.connection_request
+                .Where(cr => acceptConnectionRequest.sender_id == cr.sender_id && acceptConnectionRequest.receiver_id == cr.receiver_id)
+                .FirstOrDefault();
+
+            if (crExist == null) 
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+
             Connection newConnection = new Connection();
             newConnection.user_1_id = acceptConnectionRequest.sender_id;
             newConnection.user_2_id = acceptConnectionRequest.receiver_id;
@@ -67,6 +78,7 @@ namespace Findaroo.Server.Controllers
             try
             {
                 _psql.connection.Add(newConnection);
+                _psql.connection_request.Remove(crExist);
                 _psql.SaveChanges();
             }
             catch (Exception ex)

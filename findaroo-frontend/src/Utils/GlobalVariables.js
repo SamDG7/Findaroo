@@ -4,6 +4,8 @@
 export default class GlobalVariables {
     // Place all global variables in here
     static authenticated = false;
+    static backendURL = "http://localhost:5019"
     static userCredential;
     static email;
+    static isActivated;
 }
