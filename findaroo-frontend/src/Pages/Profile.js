@@ -30,6 +30,27 @@ export default function Profile() {
 
     }, []);
 
+    async function DisableAccountCall() {
+        console.log("PUT Call")
+        try {
+            const form = {
+                user_id: GlobalVariables.userCredential.uid,
+                status: false
+            }
+            await fetch('http://localhost:5019/User', {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(form)
+            }).then(response => {
+                return response.text()
+            });
+        }catch (err) {
+            console.log(err)
+        }
+    }
+
     return (
         <div className="Page">
             <Navbar/>
@@ -66,29 +87,8 @@ export default function Profile() {
         </div>
     );
 
-    function DisableAccountCall(userId) {
-
-    }
-
     function DeleteAccountCall(userId) {
 
     }
 
-    /*
-    async function UserCall(userId) {
-        console.log("Getting User with id " + userId);
-        // should return a dictionary of the values returned
-        // TODO: This is not correct, but should be close to what
-        //  it should be. The docs are here: http://localhost:5019/swagger/index.html - Andy
-        const response = await fetch("http://localhost:5019/User", {
-            mode: 'cors',
-            method: "Post",
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            },
-            body: JSON.stringify(userId)
-        }).then(response => setUserData(response.json()))
-            .catch(error => console.error(error));
-    }
-     */
 }

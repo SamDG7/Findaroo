@@ -3,12 +3,20 @@ import './PersonInfo.css';
 import GlobalVariables from "../Utils/GlobalVariables";
 
 export default function PersonInfo({personDict}) {
+    const [image, setImage] = useState();
+
+    useEffect(() => {
+        if (personDict != null && personDict.user_id != null) {
+            GetImage(personDict.user_id).then((val) => setImage(val));
+        }
+    }, [personDict]);
+
     if (!personDict) {
         return;
     }
     return (
         <div className="Row Start">
-            <img className="ProfileImage" src="https://andysharpe.dev/wp-content/uploads/2024/02/MeGGJ.png"
+            <img className="ProfileImage" src={image}
                  alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"}/>
             <div className="Column Start">
                 <h1>
@@ -40,8 +48,19 @@ export default function PersonInfo({personDict}) {
     );
 }
 
+async function GetImage({uid}) {
+    const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + uid);
+    console.log(imageResponse)
+    const blob = await imageResponse.blob();
+    return URL.createObjectURL(blob);
+}
+
 export function PersonInfoSmall({personDict}) {
-    const [image, setImage] = useState(undefined);
+    const [image, setImage] = useState();
+
+    if (personDict != null && personDict.user_id != null) {
+        GetImage(personDict.user_id).then((val) => setImage(val));
+    }
 
     if (!personDict) {
         return;
