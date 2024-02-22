@@ -16,10 +16,18 @@ export default function Home() {
         setIsPopupOpen(!isPopupOpen);
     };
 
+    useEffect(() => {
+        if (!GlobalVariables.authenticated) {
+            navigate("/Login");
+        }
+    }, []);
 
     useEffect(() => {
         //REPLACE THIS WITH USER_ID
         console.log("GET Call")
+        if (GlobalVariables.userCredential.uid === undefined) {
+            navigate("/Login");
+        }
         fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
             .then(response => response.json())
             .then(data => {
@@ -33,11 +41,7 @@ export default function Home() {
         }
     }, []);
 
-    useEffect(() => {
-        if (!GlobalVariables.authenticated) {
-            navigate("/Login");
-        }
-    }, []);
+    
 
     const reactivateAccount = async () => {
         console.log("PUT Call")

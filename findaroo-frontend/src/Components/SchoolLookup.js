@@ -47,7 +47,8 @@ function SchoolLookup({defaultValue, onChangeFunction}) {
                         backgroundColor: '#fff',
                         maxHeight: '400px', // Adjust this value as needed
                         overflowY: 'auto',
-                        maxWidth: '300px',
+                        width: '350px',
+                        maxWidth: '0.5hw',
                         zIndex: 1000,
                     }}
                 >
@@ -55,7 +56,7 @@ function SchoolLookup({defaultValue, onChangeFunction}) {
                         <li
                             key={index}
                             className="school-option"
-                            onMouseDown={() => setQuery(school)}
+                            onMouseDown={() => { setShowDropdown(false); setQuery(school); onChangeFunction(school); }}
                         >
                             {school}
                         </li>
