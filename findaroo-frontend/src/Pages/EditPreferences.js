@@ -17,6 +17,7 @@ export default function EditPreferences() {
     }, []);
 
     // Personal Info
+    const [roomType, setRoomType] = useState();
     const [priceLow, setPriceLow] = useState();
     const [priceHigh, setPriceHigh] = useState();
     const [roommatePreferences, setRoommatePreferences] = useState()
@@ -38,7 +39,8 @@ export default function EditPreferences() {
                 user_id: '6f3aa8f5-f149-4c5c-8c87-99fb046868fe',
                 min_price: priceLow,
                 max_price: priceHigh,
-                preferences: roommatePreferences
+                preferences: roommatePreferences,
+                room_type: roomType
             }
             await fetch('http://localhost:5019/User', {
 				method: "PUT",
@@ -66,6 +68,8 @@ export default function EditPreferences() {
                         <div className="Row Start">
                             <InputStandard name="Min Price" defaultValue={priceLow} onChangeFunction={(e) => setPriceLow(e.target.value)}/>
                             <InputStandard name="Max Price" defaultValue={priceHigh} onChangeFunction={(e) => setPriceHigh(e.target.value)}/>
+                            <InputStandard name="Room Type" defaultValue={roomType} onChangeFunction={(e) => setRoomType(e.target.value)}/>
+                            
                         </div>
                         <h2>Roommate Preferences</h2>
                         <div className="Row Start">
@@ -83,10 +87,4 @@ export default function EditPreferences() {
             </div>
         </div>
     );
-
-    //TODO: Save the preferences
-    // function SavePreferencesCall() {
-
-    // }
-    
 }
