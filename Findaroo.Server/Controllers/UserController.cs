@@ -38,6 +38,16 @@ namespace Findaroo.Server.Controllers
             return user;
         }
 
+        [HttpPost("idsFromNames")]
+        public List<String> idsToNames([FromBody] IdsToNamesRequest idsToNames)
+        {
+            List<String> ids = idsToNames.ids;
+            return _psql.user
+                .Where(u => ids.Contains(u.user_id))
+                .Select(u => u.first_name + " " + u.last_name)
+                .ToList();
+        }
+        
         [Route("all")]
         [HttpGet]
         public User[] GetAllUsers()

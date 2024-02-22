@@ -4,6 +4,9 @@ import GlobalVariables from "../Utils/GlobalVariables";
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { getAuth, deleteUser } from "firebase/auth";
 import PersonInfo from "../Components/PersonInfo";
 import Popup from "../Components/Popup";
 import { getAuth, signOut } from "firebase/auth";
@@ -99,6 +102,8 @@ export default function Profile() {
                         </div>
                         <div className="Row space-x-[2vw]">
                             <ButtonStandard text="View Roomies"/>
+                            <ButtonStandard text="My Connections" onClickFunction={() => {navigate("/Profile/MyConnections");}}/>
+                            <ButtonStandard text="Connection Requests" onClickFunction={() => {navigate("/Profile/MyConnectionRequests");}}/>
                             <ButtonStandard text="Blocked Users"/>
                             <ButtonStandard text="My Reviews"/>
                         </div>
@@ -116,8 +121,30 @@ export default function Profile() {
 
     }
 
-    function DeleteAccountCall(userId) {
+    async function DeleteAccountCall() {
+        let answer = window.confirm("Your record will be removed from Findaroo. Are you sure?");
+        if (!answer) return;
+        const auth = getAuth();
+        var toBeDeleted = auth.currentUser;
+        var user_id = auth.currentUser.uid;
 
+        deleteUser(toBeDeleted).catch((error) => {
+            console.log(error)
+        })
+
+        await fetch(GlobalVariables.backendURL + "/User", {
+            mode: 'cors',
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'Access-Control-Allow-Origin': 'http://localhost:3000'
+            },
+            body: JSON.stringify({"user_id": user_id})
+        })
+        .catch(error => console.error(error));
+
+        GlobalVariables.authenticated = false;
+        navigate("/Login");
     }
 
     /*
