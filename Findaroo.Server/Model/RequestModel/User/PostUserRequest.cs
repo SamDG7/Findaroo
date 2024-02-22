@@ -19,5 +19,6 @@
         public int[]? lifestyle_answers { get; set; }
         public string? preferences { get; set; }
         public string? room_type { get; set; }
+        public string user_id { get; set; }
     }
 }
