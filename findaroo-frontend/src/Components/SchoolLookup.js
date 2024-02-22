@@ -3,19 +3,20 @@ import React, { useState, useEffect } from 'react';
 import schools from '../schools';
 
 
-const SchoolLookup = ({onChangeFunction}) => {
-
+function SchoolLookup({defaultValue, onChangeFunction}) {
     const [query, setQuery] = useState('');
     const [filteredSchools, setFilteredSchools] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
 
     useEffect(() => {
         // Filter schools based on query
-        const results = schools.filter(school =>
-            school.toLowerCase().includes(query.toLowerCase())
-        );
-        setFilteredSchools(results);
-        setShowDropdown(query.length > 0 && results.length > 0);
+        if (query) {
+            const results = schools.filter(school =>
+                school.toLowerCase().includes(query.toLowerCase())
+            );
+            setFilteredSchools(results);
+            setShowDropdown(query.length > 0 && results.length > 0);
+        }
     }, [query]);
 
     
@@ -28,7 +29,7 @@ const SchoolLookup = ({onChangeFunction}) => {
                 placeholder="Start typing your school..."
                 className="InputStandard"
                 style={{width: "250px"}}
-                value={query}
+                value={defaultValue}
                 onChange={ocFunc}
                 onFocus={() => setShowDropdown(true)}
                 onBlur={() => setTimeout(() => setShowDropdown(false), 100)}

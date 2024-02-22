@@ -25,9 +25,13 @@ export default function EditPreferences() {
     useEffect(() => {
         //REPLACE THIS WITH USER_ID
         console.log("GET Call")
-        fetch('http://localhost:5019/User?user_id=6f3aa8f5-f149-4c5c-8c87-99fb046868fe')
+        fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
         .then(response => response.json())
-        .then(data => {console.log(data); setPriceLow(data.min_price); setPriceHigh(data.max_price); setRoommatePreferences(data.preferences)})
+        .then(data => {console.log(data);
+            if (data.min_price) setPriceLow(data.min_price);
+            if (data.max_price) setPriceHigh(data.max_price);
+            if (data.room_type) setRoomType(data.room_type);
+            if (data.preferences) setRoommatePreferences(data.preferences)})
         .catch(error => console.error(error));
         
     }, []);
@@ -36,7 +40,7 @@ export default function EditPreferences() {
         console.log("PUT Call")
         try {
             const form = {
-                user_id: '6f3aa8f5-f149-4c5c-8c87-99fb046868fe',
+                user_id: GlobalVariables.userCredential.uid,
                 min_price: priceLow,
                 max_price: priceHigh,
                 preferences: roommatePreferences,
