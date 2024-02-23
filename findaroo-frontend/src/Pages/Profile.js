@@ -3,7 +3,7 @@ import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
+import ButtonStandard, {ButtonDelete, ButtonImportant, ButtonWithNotification} from "../Components/Buttons";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { getAuth, deleteUser } from "firebase/auth";
@@ -21,6 +21,10 @@ export default function Profile() {
         setIsPopupOpen(!isPopupOpen);
     };
 
+    const auth = getAuth();
+
+    const [requestCount, setData] = useState(1)
+
 
     const [userData, setUserData] = useState(null);
 
@@ -35,10 +39,11 @@ export default function Profile() {
         fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 setUserData(data);
             }).catch(error => console.error(error));
 
+        ConnectionRequestsCount();
     }, []);
 
     const deactivateAccount = () => {
@@ -58,7 +63,7 @@ export default function Profile() {
             }).then(response => {
                 return response.text()
             });
-        } catch (err) {
+        }catch (err) {
             console.log(err)
         } finally {
             GlobalVariables.authenticated = false;
@@ -103,7 +108,7 @@ export default function Profile() {
                         <div className="Row space-x-[2vw]">
                             <ButtonStandard text="View Roomies"/>
                             <ButtonStandard text="My Connections" onClickFunction={() => {navigate("/Profile/MyConnections");}}/>
-                            <ButtonStandard text="Connection Requests" onClickFunction={() => {navigate("/Profile/MyConnectionRequests");}}/>
+                            <ButtonWithNotification text="Connection Requests" count={requestCount} onClickFunction={() => {navigate("/Profile/MyConnectionRequests");}}/>
                             <ButtonStandard text="Blocked Users"/>
                             <ButtonStandard text="My Reviews"/>
                         </div>
@@ -117,9 +122,11 @@ export default function Profile() {
         </div>
     );
 
-    function DisableAccountCall(userId) {
-
-    }
+    async function ConnectionRequestsCount() {
+        const response = await fetch(GlobalVariables.backendURL + "/ConnectionRequest/received?user_id=" + auth.currentUser.uid);
+        const connections = await response.json();
+        setData(connections.length);
+    } 
 
     async function DeleteAccountCall() {
         let answer = window.confirm("Your record will be removed from Findaroo. Are you sure?");
@@ -147,21 +154,4 @@ export default function Profile() {
         navigate("/Login");
     }
 
-    /*
-    async function UserCall(userId) {
-        console.log("Getting User with id " + userId);
-        // should return a dictionary of the values returned
-        // TODO: This is not correct, but should be close to what
-        //  it should be. The docs are here: http://localhost:5019/swagger/index.html - Andy
-        const response = await fetch("http://localhost:5019/User", {
-            mode: 'cors',
-            method: "Post",
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            },
-            body: JSON.stringify(userId)
-        }).then(response => setUserData(response.json()))
-            .catch(error => console.error(error));
-    }
-     */
 }

@@ -3,15 +3,32 @@ import { Link } from "react-router-dom";
 import './PersonInfo.css';
 import GlobalVariables from "../Utils/GlobalVariables";
 import { useNavigate } from "react-router-dom";
+import { ButtonImportant } from "./Buttons";
+import { getAuth } from "@firebase/auth";
 
-export default function PersonInfo({ personDict }) {
+export default function PersonInfo({personDict}) {
+    const [image, setImage] = useState();
+
+    useEffect(() => {
+        if (personDict != null) {
+            GetImage(personDict);
+        }
+    }, [personDict]);
+
+    const GetImage = async function() {
+        const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + personDict.user_id);
+        const blob = await imageResponse.blob();
+        const source = URL.createObjectURL(blob);
+        setImage(source);
+    }
+
     if (!personDict) {
         return;
     }
     return (
         <div className="Row Start">
-            <img className="ProfileImage" src="https://andysharpe.dev/wp-content/uploads/2024/02/MeGGJ.png"
-                alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"} />
+            <img className="ProfileImage" src={image}
+                 alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"}/>
             <div className="Column Start">
                 <h1>
                     {personDict.first_name + " " + personDict.last_name}
@@ -42,15 +59,33 @@ export default function PersonInfo({ personDict }) {
     );
 }
 
-export function PersonInfoSmall({ personDict }) {
+
+
+
+export function PersonInfoSmall({personDict}) {
     const navigate = useNavigate();
-    const [image, setImage] = useState(undefined);
+    const [image, setImage] = useState();
+
+    const auth = getAuth();
+
+    useEffect(() => {
+        if (personDict != null) {
+            GetImage(personDict);
+        }
+    }, [personDict]);
+
+    const GetImage = async function() {
+        const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + personDict.user_id);
+        const blob = await imageResponse.blob();
+        const source = URL.createObjectURL(blob);
+        setImage(source);
+    }
 
     if (!personDict) {
         return;
     }
     return (
-        <div className="Row Start" onClick={() => navigate("/User/" + personDict.user_id)}>
+        <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]" onClick={() => navigate("/User/" + personDict.user_id)}>
             <img className="ProfileImageSmall" src={image}
                 alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"} />
             <div className="Column Start">
@@ -79,7 +114,19 @@ export function PersonInfoSmall({ personDict }) {
             </div>
             <h3 className="Column End">
                 {personDict.rating >= 0 ? personDict.rating + "/5" : "Unrated"}
+                <div className="p-[1vw]"/>
+                <ButtonImportant text={"Add Connection"} onClickFunction={addConnection}></ButtonImportant>
             </h3>
         </div>
     );
+
+    async function addConnection() {
+        await fetch(GlobalVariables.backendURL + "/ConnectionRequest/send", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({"sender_id": auth.currentUser.uid, "receiver_id": personDict.user_id})
+        }).catch(error => console.log(error));
+    }
 }

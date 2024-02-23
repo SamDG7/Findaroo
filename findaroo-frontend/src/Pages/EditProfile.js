@@ -27,6 +27,8 @@ export default function EditProfile() {
     const [interests, setInterests] = useState();
     const [biography, setBiography] = useState();
 
+    const [saveText, setSaveText] = useState(null);
+
     useEffect(() => {
         if (!GlobalVariables.authenticated) {
             navigate("/Login");
@@ -56,6 +58,12 @@ export default function EditProfile() {
     }, []);
 
     const SaveInfoCall = async () => {
+        const regex = /[0-9]/g;
+        const numbers = firstName.match(regex);
+        if (numbers != null && numbers.length > 0) {
+            setSaveText("Save Failed - Name includes numbers");
+            return
+        }
         console.log("PUT Call")
         try {
             const form = {
@@ -78,10 +86,12 @@ export default function EditProfile() {
                 },
                 body: JSON.stringify(form)
             }).then(response => {
+                setSaveText("Save Successful!");
                 return response.text()
             });
         }catch (err) {
             console.log(err)
+            setSaveText("Save Failed");
         }
     }
 
@@ -117,6 +127,9 @@ export default function EditProfile() {
                         <Link to="/Profile">
                             <ButtonStandard text="Back"/>
                         </Link>
+                        {saveText && <h3>
+                            {saveText}
+                        </h3>}
                     </div>
                 </div>
             </div>

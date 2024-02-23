@@ -22,6 +22,8 @@ export default function EditPreferences() {
     const [priceHigh, setPriceHigh] = useState();
     const [roommatePreferences, setRoommatePreferences] = useState()
 
+    const [saveText, setSaveText] = useState(null);
+
     useEffect(() => {
         //REPLACE THIS WITH USER_ID
         console.log("GET Call")
@@ -53,10 +55,12 @@ export default function EditPreferences() {
 				},
 				body: JSON.stringify(form)
 			}).then(response => {
+                setSaveText("Save Successful!");
 				return response.text()
 			  });
         } catch (err) {
             console.log(err)
+            setSaveText("Save Failed");
         }
     }
 
@@ -86,6 +90,9 @@ export default function EditPreferences() {
                         <Link to="/Profile">
                             <ButtonStandard text="Back"/>
                         </Link>
+                        {saveText && <h3>
+                            {saveText}
+                        </h3>}
                     </div>
                 </div>
             </div>
