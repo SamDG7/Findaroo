@@ -17,6 +17,28 @@ export default function ButtonStandard({text, onClickFunction}) {
     }
 }
 
+export function ButtonWithNotification({text, count, onClickFunction}) {
+    if (count > 0) {
+        text += " (" + count + " pending requests)"
+    }
+
+    if (onClickFunction) {
+        return (
+            <div className="ButtonStandard">
+                <button onClick={onClickFunction}>
+                    <b>{text}</b>
+                </button>
+            </div>
+        );
+    } else {
+        return (
+            <div className="ButtonStandard">
+                <button><b>{text}</b></button>
+            </div>
+        );
+    }
+}
+
 export function ButtonImportant({text, onClickFunction}) {
     if (onClickFunction) {
         return (

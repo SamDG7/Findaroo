@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import './PersonInfo.css';
 import GlobalVariables from "../Utils/GlobalVariables";
+import { ButtonImportant } from "./Buttons";
+import { getAuth } from "@firebase/auth";
 
 export default function PersonInfo({personDict}) {
     const [image, setImage] = useState();
@@ -60,6 +62,8 @@ export default function PersonInfo({personDict}) {
 export function PersonInfoSmall({personDict}) {
     const [image, setImage] = useState();
 
+    const auth = getAuth();
+
     useEffect(() => {
         if (personDict != null) {
             GetImage(personDict);
@@ -104,7 +108,19 @@ export function PersonInfoSmall({personDict}) {
             </div>
             <h3 className="Column End">
                 {personDict.rating >= 0 ? personDict.rating + "/5" : "Unrated"}
+                <div className="p-[1vw]"/>
+                <ButtonImportant text={"Add Connection"} onClickFunction={addConnection}></ButtonImportant>
             </h3>
         </div>
     );
+
+    async function addConnection() {
+        await fetch(GlobalVariables.backendURL + "/ConnectionRequest/send", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({"sender_id": auth.currentUser.uid, "receiver_id": personDict.user_id})
+        }).catch(error => console.log(error));
+    }
 }
