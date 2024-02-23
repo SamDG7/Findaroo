@@ -113,12 +113,12 @@ export default function Login() {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 console.log(errorCode + ": " + errorMessage);
-                setMessage("Incorrect Password");
-                // Check if the incorrect username was used
+                setMessage("Incorrect Email");
+                // Check if the username exists
                 fetch('http://localhost:5019/User/All')
                     .then(response => response.json())
                     .then(data => {
-                        data.forEach((person)=> {if (person.email === email) {setMessage("Incorrect Email")}})
+                        data.forEach((person)=> {if (person.email === email) {setMessage("Incorrect Password")}})
                     })
                     .catch(error => console.error(error));
             });
