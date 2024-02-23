@@ -103,6 +103,12 @@ namespace Findaroo.Server.Controllers
                 return;
             }
 
+            _psql.connection
+                .Where(u => u.user_1_id.Equals(deleteUserRequest) || u.user_2_id.Equals(deleteUserRequest))
+                .ExecuteDelete();
+            _psql.connection_request
+                .Where(u => u.sender_id.Equals(deleteUserRequest) || u.receiver_id.Equals(deleteUserRequest))
+                .ExecuteDelete();
             _psql.user.Remove(toBeDeleted);
             _psql.SaveChanges();
         }
