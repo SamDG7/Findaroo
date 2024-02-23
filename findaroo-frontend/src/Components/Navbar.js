@@ -36,7 +36,7 @@ const Navbar = () => {
                             navigate("/Login");
                         }}/>
                         :
-                        <ButtonImportant text={"Log In"} onClickFunction={() => {
+                        <ButtonTransparent text={"Log In"} onClickFunction={() => {
                             navigate("/Login");
                         }}/>
                     }
