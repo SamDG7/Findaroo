@@ -27,6 +27,8 @@ export default function EditProfile() {
     const [interests, setInterests] = useState();
     const [biography, setBiography] = useState();
 
+    const [saveText, setSaveText] = useState();
+
     useEffect(() => {
         if (!GlobalVariables.authenticated) {
             navigate("/Login");
