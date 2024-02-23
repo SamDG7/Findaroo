@@ -9,7 +9,7 @@ export default function Home() {
     // This redirects to the login page if not logged in
     const navigate = useNavigate();
 
-    const [status, setStatus] = useState(false);
+    const [status, setStatus] = useState(true);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const togglePopup = () => {
@@ -17,13 +17,11 @@ export default function Home() {
     };
 
     useEffect(() => {
-        if (!GlobalVariables.authenticated) {
+        if (!GlobalVariables.authenticated || GlobalVariables.userCredential.uid === undefined) {
             navigate("/Login");
+            return;
         }
-    }, []);
 
-    useEffect(() => {
-        //REPLACE THIS WITH USER_ID
         console.log("GET Call")
         if (GlobalVariables.userCredential.uid === undefined) {
             navigate("/Login");
@@ -35,15 +33,11 @@ export default function Home() {
                 setStatus(data.status);
             })
             .catch(error => console.error(error));
-
-        if (!status) {
-            togglePopup();
-        }
     }, []);
 
     
 
-    const reactivateAccount = async () => {
+    const reactivateAccount = () => {
         console.log("PUT Call")
         try {
             const form = {
@@ -51,7 +45,7 @@ export default function Home() {
                 status: true
             }
             console.log(form);
-            await fetch('http://localhost:5019/User', {
+            fetch('http://localhost:5019/User', {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -71,7 +65,7 @@ export default function Home() {
         <div className="Page">
             <Navbar />
 
-            <Popup isOpen={isPopupOpen} closePopup={togglePopup}>
+            <Popup isOpen={!status} closePopup={togglePopup}>
                 <h2>Reactivate Account?</h2>
                 <p>Your account is currently deactivated. Would you like to reactivate it?</p>
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center', gap: '10px' }}>

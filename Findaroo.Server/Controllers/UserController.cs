@@ -52,7 +52,7 @@ namespace Findaroo.Server.Controllers
         [HttpGet]
         public User[] GetAllUsers()
         {
-            User[] users = _psql.user.Select(row => row).ToArray();
+            User[] users = _psql.user.Where(row => row.status).ToArray();
 
             return users;
 

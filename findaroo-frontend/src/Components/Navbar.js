@@ -10,6 +10,7 @@ import { getAuth, signOut } from "firebase/auth";
 
 const Navbar = () => {
     const navigate = useNavigate();
+    
 
     return (
         <nav className="fixed w-full z-10 top-0 drop-shadow-xl">

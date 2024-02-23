@@ -9,6 +9,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { getAuth, deleteUser } from "firebase/auth";
 import PersonInfo from "../Components/PersonInfo";
 import Popup from "../Components/Popup";
+import { signOut } from "firebase/auth";
 
 export default function Profile() {
     // This redirects to the login page if not logged in
@@ -21,16 +22,15 @@ export default function Profile() {
     };
 
 
-    useEffect(() => {
-        if (!GlobalVariables.authenticated) {
-            navigate("/Login");
-        }
-    }, []);
-
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        //REPLACE THIS WITH USER_ID
+
+        if (!GlobalVariables.authenticated || GlobalVariables.userCredential.uid === undefined) {
+            navigate("/Login");
+            return;
+        }
+
         console.log("GET Call")
         fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
             .then(response => response.json())
@@ -41,14 +41,15 @@ export default function Profile() {
 
     }, []);
 
-    async function DisableAccountCall() {
+    const deactivateAccount = () => {
         console.log("PUT Call")
         try {
             const form = {
                 user_id: GlobalVariables.userCredential.uid,
                 status: false
             }
-            await fetch('http://localhost:5019/User', {
+            console.log(form);
+            fetch('http://localhost:5019/User', {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -59,6 +60,11 @@ export default function Profile() {
             });
         }catch (err) {
             console.log(err)
+        } finally {
+            GlobalVariables.authenticated = false;
+            const auth = getAuth();
+            signOut(auth);
+            navigate("/Login");
         }
     }
 
@@ -70,7 +76,7 @@ export default function Profile() {
                 <h2>Deactivate Account</h2>
                 <p>Are you sure you want to deactivate your account?</p>
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
-                    <button style={{ background: '#007AFF', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={DisableAccountCall}>Yes</button>
+                    <button style={{ background: '#007AFF', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={deactivateAccount}>Yes</button>
                     <button style={{ background: '#808080', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={togglePopup}>Cancel</button>
                 </div>
             </Popup>
