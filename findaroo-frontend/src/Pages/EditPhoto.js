@@ -36,32 +36,31 @@ export default function EditPhoto() {
         }
     };
 
-    const SavePhotoCall = async () => {
+    function SavePhotoCall() {
+        SavePhotoAsync();
+    }
+
+    async function SavePhotoAsync() {
         console.log("PUT Call");
         try {
             let imageBlob = await fetch(croppedImage).then(r => r.blob());
             const imageFile = new File([imageBlob], "Profile.png", { type: imageBlob.type })
-            var reader = new FileReader();
 
-            reader.onload = async function(event) {
-                const imageBinary = event.target.result
-                console.log(imageBinary);
-                const form = {
-                    user_id: GlobalVariables.userCredential.uid,
-                    image_name: "Profile",
-                    form_file: imageBinary
-                }
-                await fetch('http://localhost:5019/Image', {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(form)
-                }).then(response => {
-                    return response.text()
-                });
-            };
-            reader.readAsArrayBuffer(imageBlob);
+            const form = {
+                user_id: GlobalVariables.userCredential.uid,
+                image_name: "Profile.png",
+                form_file: imageFile
+            }
+
+            await fetch('http://localhost:5019/Image', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                body: form
+            }).then(response => {
+                return response.text()
+            });
         }catch (err) {
             console.log(err)
         }

@@ -35,7 +35,7 @@ export default function Profile() {
         fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 setUserData(data);
             }).catch(error => console.error(error));
 
@@ -58,7 +58,7 @@ export default function Profile() {
             }).then(response => {
                 return response.text()
             });
-        } catch (err) {
+        }catch (err) {
             console.log(err)
         } finally {
             GlobalVariables.authenticated = false;
@@ -117,10 +117,6 @@ export default function Profile() {
         </div>
     );
 
-    function DisableAccountCall(userId) {
-
-    }
-
     async function DeleteAccountCall() {
         let answer = window.confirm("Your record will be removed from Findaroo. Are you sure?");
         if (!answer) return;
@@ -147,21 +143,4 @@ export default function Profile() {
         navigate("/Login");
     }
 
-    /*
-    async function UserCall(userId) {
-        console.log("Getting User with id " + userId);
-        // should return a dictionary of the values returned
-        // TODO: This is not correct, but should be close to what
-        //  it should be. The docs are here: http://localhost:5019/swagger/index.html - Andy
-        const response = await fetch("http://localhost:5019/User", {
-            mode: 'cors',
-            method: "Post",
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            },
-            body: JSON.stringify(userId)
-        }).then(response => setUserData(response.json()))
-            .catch(error => console.error(error));
-    }
-     */
 }

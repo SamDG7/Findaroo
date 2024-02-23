@@ -3,12 +3,27 @@ import './PersonInfo.css';
 import GlobalVariables from "../Utils/GlobalVariables";
 
 export default function PersonInfo({personDict}) {
+    const [image, setImage] = useState();
+
+    useEffect(() => {
+        if (personDict != null) {
+            GetImage(personDict);
+        }
+    }, [personDict]);
+
+    const GetImage = async function() {
+        const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + personDict.user_id);
+        const blob = await imageResponse.blob();
+        const source = URL.createObjectURL(blob);
+        setImage(source);
+    }
+
     if (!personDict) {
         return;
     }
     return (
         <div className="Row Start">
-            <img className="ProfileImage" src="https://andysharpe.dev/wp-content/uploads/2024/02/MeGGJ.png"
+            <img className="ProfileImage" src={image}
                  alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"}/>
             <div className="Column Start">
                 <h1>
@@ -40,14 +55,29 @@ export default function PersonInfo({personDict}) {
     );
 }
 
+
+
 export function PersonInfoSmall({personDict}) {
-    const [image, setImage] = useState(undefined);
+    const [image, setImage] = useState();
+
+    useEffect(() => {
+        if (personDict != null) {
+            GetImage(personDict);
+        }
+    }, [personDict]);
+
+    const GetImage = async function() {
+        const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + personDict.user_id);
+        const blob = await imageResponse.blob();
+        const source = URL.createObjectURL(blob);
+        setImage(source);
+    }
 
     if (!personDict) {
         return;
     }
     return (
-        <div className="Row Start">
+        <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]">
             <img className="ProfileImageSmall" src={image}
                  alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"}/>
             <div className="Column Start">
