@@ -89,7 +89,6 @@ export default function Login() {
         </div>
     );
 
-    // TODO: This is called when the sign-in button is pressed
     function LoginCall() {
         console.log("Logging in as " + email + " with password " + password);
         const auth = getAuth();
@@ -114,7 +113,14 @@ export default function Login() {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 console.log(errorCode + ": " + errorMessage);
-                setMessage("Incorrect Login Credentials");
+                setMessage("Incorrect Password");
+                // Check if the incorrect username was used
+                fetch('http://localhost:5019/User/All')
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach((person)=> {if (person.email === email) {setMessage("Incorrect Email")}})
+                    })
+                    .catch(error => console.error(error));
             });
     }
 
