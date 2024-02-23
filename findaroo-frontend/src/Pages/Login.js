@@ -28,7 +28,7 @@ export default function Login() {
         try {
             const form = {
                 user_id: GlobalVariables.userCredential.uid,
-                status: false
+                status: true
             }
             await fetch('http://localhost:5019/User', {
                 method: "PUT",
@@ -52,7 +52,7 @@ export default function Login() {
             <Popup isOpen={isPopupOpen} closePopup={togglePopup}>
                 <h2>Account is deactivated. Do you want to Reactivate?</h2>
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
-                    <button style={{ background: '#007AFF', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={() => EnableAccountCall()}>Yes</button>
+                    <button style={{ background: '#007AFF', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={EnableAccountCall}>Yes</button>
                     <button style={{ background: '#808080', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={() => navigate("/")}>No</button>
                 </div>
             </Popup>
