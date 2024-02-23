@@ -3,7 +3,7 @@ import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
+import ButtonStandard, {ButtonDelete, ButtonImportant, ButtonWithNotification} from "../Components/Buttons";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { getAuth, deleteUser } from "firebase/auth";
@@ -20,6 +20,10 @@ export default function Profile() {
     const togglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
     };
+
+    const auth = getAuth();
+
+    const [requestCount, setData] = useState(1)
 
 
     const [userData, setUserData] = useState(null);
@@ -39,6 +43,7 @@ export default function Profile() {
                 setUserData(data);
             }).catch(error => console.error(error));
 
+        ConnectionRequestsCount();
     }, []);
 
     const deactivateAccount = () => {
@@ -103,7 +108,7 @@ export default function Profile() {
                         <div className="Row space-x-[2vw]">
                             <ButtonStandard text="View Roomies"/>
                             <ButtonStandard text="My Connections" onClickFunction={() => {navigate("/Profile/MyConnections");}}/>
-                            <ButtonStandard text="Connection Requests" onClickFunction={() => {navigate("/Profile/MyConnectionRequests");}}/>
+                            <ButtonWithNotification text="Connection Requests" count={requestCount} onClickFunction={() => {navigate("/Profile/MyConnectionRequests");}}/>
                             <ButtonStandard text="Blocked Users"/>
                             <ButtonStandard text="My Reviews"/>
                         </div>
@@ -116,6 +121,12 @@ export default function Profile() {
             </div>
         </div>
     );
+
+    async function ConnectionRequestsCount() {
+        const response = await fetch(GlobalVariables.backendURL + "/ConnectionRequest/received?user_id=" + auth.currentUser.uid);
+        const connections = await response.json();
+        setData(connections.length);
+    } 
 
     async function DeleteAccountCall() {
         let answer = window.confirm("Your record will be removed from Findaroo. Are you sure?");
