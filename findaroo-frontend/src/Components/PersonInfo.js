@@ -1,6 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import './PersonInfo.css';
 import GlobalVariables from "../Utils/GlobalVariables";
+import { useNavigate } from "react-router-dom";
 import { ButtonImportant } from "./Buttons";
 import { getAuth } from "@firebase/auth";
 
@@ -59,7 +61,9 @@ export default function PersonInfo({personDict}) {
 
 
 
+
 export function PersonInfoSmall({personDict}) {
+    const navigate = useNavigate();
     const [image, setImage] = useState();
 
     const auth = getAuth();
@@ -81,19 +85,21 @@ export function PersonInfoSmall({personDict}) {
         return;
     }
     return (
-        <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]">
+        <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]" onClick={() => navigate("/User/" + personDict.user_id)}>
             <img className="ProfileImageSmall" src={image}
-                 alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"}/>
+                alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"} />
             <div className="Column Start">
-                <h3>
-                    {personDict.first_name + " " + personDict.last_name}
-                </h3>
+                <Link to="/User" params={{ uid: personDict.user_id }}>
+                    <h3>
+                        {personDict.first_name + " " + personDict.last_name}
+                    </h3>
+                </Link>
                 <h4>
                     {(!(personDict.school === null || personDict.school === "")
                         ? "Student" + " at " + personDict.school
                         : "") +
                         (!(personDict.company === null || personDict.company === "") &&
-                        !(personDict.school === null || personDict.school === "")
+                            !(personDict.school === null || personDict.school === "")
                             ? " and "
                             : "")
                         +
