@@ -10,16 +10,6 @@ import { getAuth, signOut } from "firebase/auth";
 
 const Navbar = () => {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!GlobalVariables.authenticated || GlobalVariables.userCredential.uid === undefined) {
-            navigate("/Login");
-            return;
-        }
-    }, []);
-
-
-
     
 
     return (
