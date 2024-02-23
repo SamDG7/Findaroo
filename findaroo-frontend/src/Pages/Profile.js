@@ -70,7 +70,7 @@ export default function Profile() {
                 <h2>Deactivate Account</h2>
                 <p>Are you sure you want to deactivate your account?</p>
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
-                    <button style={{ background: '#007AFF', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={deactivateAccount}>Yes</button>
+                    <button style={{ background: '#007AFF', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={DisableAccountCall}>Yes</button>
                     <button style={{ background: '#808080', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={togglePopup}>Cancel</button>
                 </div>
             </Popup>
