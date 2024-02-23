@@ -6,7 +6,6 @@ import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Butto
 import InputStandard, {InputBox} from "../Components/InputFields";
 import GlobalVariables from "../Utils/GlobalVariables";
 import SchoolLookup from "../Components/SchoolLookup";
-import schoolLookup from "../Components/SchoolLookup";
 
 export default function EditProfile() {
     const navigate = useNavigate();
@@ -70,6 +69,7 @@ export default function EditProfile() {
                 user_id: GlobalVariables.userCredential.uid,
                 first_name: firstName,
                 last_name: lastName,
+                age: age,
                 country: country,
                 state: state,
                 address: address,
