@@ -159,7 +159,7 @@ export default function SignUp() {
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     console.log(errorCode + " " + errorMessage);
-                    setMessage("Unable to sign up as " + email);
+                    setMessage("An account alreadye exists with that email");
                 });
                 
 
