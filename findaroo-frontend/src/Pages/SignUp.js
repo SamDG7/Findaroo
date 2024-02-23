@@ -177,24 +177,26 @@ export default function SignUp() {
         const auth = getAuth();
         signInWithPopup(auth, provider).then((result) => {
             const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
             const user = result.user;
-
+                GlobalVariables.email = user.email;
+                GlobalVariables.userCredential = user;
+                console.log("User signed up: " + GlobalVariables.userCredential.email);
+                GlobalVariables.authenticated = true;
+                navigate("/AccountSetup");
             // TODO: I think we may have to change it so to sign up passwords are not
             // TODO: required if a google account is used and probably make a field to
             // TODO: track if that is the case - Andy
-            createUserWithEmailAndPassword(auth, user.email, null).then((userCredential) => {
-                GlobalVariables.email = user.email;
-                GlobalVariables.userCredential = userCredential.user;
-                console.log("User signed up: " + GlobalVariables.userCredential.email);
-                // After everything is done, return to the login page
-                navigate("/AccountSetup");
-            }).catch((error) =>{
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorCode + " " + errorMessage);
-                setMessage("Unable to sign up as " + user.email);
-            })
+            // createUserWithEmailAndPassword(auth, user.email, null).then((userCredential) => {
+            //     GlobalVariables.email = user.email;
+            //     GlobalVariables.userCredential = userCredential.user;
+            //     console.log("User signed up: " + GlobalVariables.userCredential.email);
+            //     navigate("/AccountSetup");
+            // }).catch((error) =>{
+            //     const errorCode = error.code;
+            //     const errorMessage = error.message;
+            //     console.log(errorCode + " " + errorMessage);
+            //     setMessage("Unable to sign up as " + user.email);
+            // })
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
