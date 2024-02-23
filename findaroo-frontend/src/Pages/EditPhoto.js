@@ -43,13 +43,16 @@ export default function EditPhoto() {
     async function SavePhotoAsync() {
         console.log("PUT Call");
         try {
-            let imageBlob = await fetch(croppedImage).then(r => r.blob());
-            const imageFile = new File([imageBlob], "Profile.png", { type: imageBlob.type })
+            //let imageBlob = await fetch(croppedImage).then(r => r.blob());
+            console.log(croppedImage);
+            //const imageObject = new File([croppedImage], "Profile.png");
+            //console.log(typeof imageObject);
+            //const imageBinary = atob(imageObject);
 
             const form = {
                 user_id: GlobalVariables.userCredential.uid,
                 image_name: "Profile.png",
-                form_file: imageFile
+                form_file: croppedImage
             }
 
             await fetch('http://localhost:5019/Image', {
