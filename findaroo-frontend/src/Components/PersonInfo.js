@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 import './PersonInfo.css';
 import GlobalVariables from "../Utils/GlobalVariables";
 
@@ -51,9 +52,11 @@ export function PersonInfoSmall({personDict}) {
             <img className="ProfileImageSmall" src={image}
                  alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"}/>
             <div className="Column Start">
-                <h3>
-                    {personDict.first_name + " " + personDict.last_name}
-                </h3>
+                <Link to="/User" params={{ uid: personDict.user_id }}>
+                    <h3>
+                        {personDict.first_name + " " + personDict.last_name}
+                    </h3>
+                </Link>
                 <h4>
                     {(!(personDict.school === null || personDict.school === "")
                         ? "Student" + " at " + personDict.school
