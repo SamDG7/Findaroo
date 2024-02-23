@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import './PersonInfo.css';
 import GlobalVariables from "../Utils/GlobalVariables";
+import { useNavigate } from "react-router-dom";
 
-export default function PersonInfo({personDict}) {
+export default function PersonInfo({ personDict }) {
     if (!personDict) {
         return;
     }
     return (
         <div className="Row Start">
             <img className="ProfileImage" src="https://andysharpe.dev/wp-content/uploads/2024/02/MeGGJ.png"
-                 alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"}/>
+                alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"} />
             <div className="Column Start">
                 <h1>
                     {personDict.first_name + " " + personDict.last_name}
@@ -41,16 +42,17 @@ export default function PersonInfo({personDict}) {
     );
 }
 
-export function PersonInfoSmall({personDict}) {
+export function PersonInfoSmall({ personDict }) {
+    const navigate = useNavigate();
     const [image, setImage] = useState(undefined);
 
     if (!personDict) {
         return;
     }
     return (
-        <div className="Row Start">
+        <div className="Row Start" onClick={() => navigate("/User/" + personDict.user_id)}>
             <img className="ProfileImageSmall" src={image}
-                 alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"}/>
+                alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"} />
             <div className="Column Start">
                 <Link to="/User" params={{ uid: personDict.user_id }}>
                     <h3>
@@ -62,7 +64,7 @@ export function PersonInfoSmall({personDict}) {
                         ? "Student" + " at " + personDict.school
                         : "") +
                         (!(personDict.company === null || personDict.company === "") &&
-                        !(personDict.school === null || personDict.school === "")
+                            !(personDict.school === null || personDict.school === "")
                             ? " and "
                             : "")
                         +

@@ -22,6 +22,7 @@ import MyConnections from './Pages/MyConnections';
 import AccountSetup from "./Pages/AccountSetup";
 import EditPhoto from "./Pages/EditPhoto";
 import MyConnectionRequests from './Pages/MyConnectionRequest';
+import User from './Pages/User';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -94,8 +95,8 @@ const router = createBrowserRouter(
             errorElement: <Error />,
         },
         {
-            path: "/User:uid",
-            element: <Login />,
+            path: "/User/:uid",
+            element: <User />,
             errorElement: <Error />,
         },
         {
@@ -111,12 +112,12 @@ const router = createBrowserRouter(
         {
             path: "/Profile/MyConnections",
             element: <MyConnections />,
-            errorElement: <Error/>,
+            errorElement: <Error />,
         },
         {
             path: "/Profile/MyConnectionRequests",
             element: <MyConnectionRequests />,
-            errorElement: <Error/>,
+            errorElement: <Error />,
         }
     ]
 );
