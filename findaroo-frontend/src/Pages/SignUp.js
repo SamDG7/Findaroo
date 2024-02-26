@@ -145,6 +145,8 @@ export default function SignUp() {
                             
                             console.log("User signed up: " + GlobalVariables.userCredential.email);
                             GlobalVariables.authenticated = true;
+                            document.cookie = `idToken=${userCredential._tokenResponse.idToken};` + 
+                                `max-age=${userCredential._tokenResponse.expiresIn};`;
                             navigate("/AccountSetup");
                           } else {
                             // Email not verified yet, continue checking
@@ -182,6 +184,8 @@ export default function SignUp() {
                 GlobalVariables.userCredential = user;
                 console.log("User signed up: " + GlobalVariables.userCredential.email);
                 GlobalVariables.authenticated = true;
+                document.cookie = `idToken=${result._tokenResponse.idToken};` + 
+                    `max-age=${result._tokenResponse.expiresIn};`;
                 navigate("/AccountSetup");
             // TODO: I think we may have to change it so to sign up passwords are not
             // TODO: required if a google account is used and probably make a field to
