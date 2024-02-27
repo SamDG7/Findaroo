@@ -4,6 +4,7 @@ using Findaroo.Server.Model.TableModel;
 using Findaroo.Server.PostgreSQL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Findaroo.Server.Controllers
 {
@@ -40,6 +41,21 @@ namespace Findaroo.Server.Controllers
                     })
                 .OrderBy(r => r.date_created)
                 .ToList());
+        }
+
+        [HttpPost]
+        public void createRoom(string room_name)
+        {
+            Room newRoom = new Room(room_name);
+
+            if (Request.Cookies["idToken"] == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized; 
+                return;
+            }
+
+            String room_id = _psql.room.Add(newRoom).Entity.room_id;
+            
         }
     }
 }

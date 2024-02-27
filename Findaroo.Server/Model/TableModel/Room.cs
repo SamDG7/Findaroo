@@ -11,5 +11,10 @@ namespace Findaroo.Server.Model.TableModel
         public String room_name { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime date_created { get; set; }
+
+        public Room(String room_name)
+        {
+            this.room_name = room_name;
+        }
     }
 }
