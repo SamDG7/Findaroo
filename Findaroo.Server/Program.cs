@@ -31,7 +31,6 @@ FirebaseApp.Create(new AppOptions
 {
     Credential = GoogleCredential.FromFile("firebase.json")
 });
-builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
 
 var app = builder.Build();
 

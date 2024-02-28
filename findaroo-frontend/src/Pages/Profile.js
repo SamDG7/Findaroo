@@ -104,6 +104,7 @@ export default function Profile() {
                             <Link to="/Profile/Questions">
                                 <ButtonImportant text="Compatibility Questions"/>
                             </Link>
+                            <ButtonImportant text="Create Group" onClickFunction={CreateGroup}/>
                         </div>
                         <div className="Row space-x-[2vw]">
                             <ButtonStandard text="View Roomies"/>
@@ -152,6 +153,18 @@ export default function Profile() {
 
         GlobalVariables.authenticated = false;
         navigate("/Login");
+    }
+
+    async function CreateGroup() {
+        const response = await fetch(GlobalVariables.backendURL + "/Room", {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({"room_name": "test"})
+        })
+        console.log(response)
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Findaroo.Server.Model.TableModel
 {
@@ -7,6 +8,7 @@ namespace Findaroo.Server.Model.TableModel
     {
         public String room_id {  get; set; }
         public String roommate_id {  get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime date_joined { get; set; }
 
         public Roommate(string room_id, string roommate_id)

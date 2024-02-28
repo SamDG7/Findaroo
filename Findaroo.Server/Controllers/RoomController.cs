@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Findaroo.Server.Authentication;
+using FirebaseAdmin;
+using FirebaseAdmin.Auth;
+using Findaroo.Server.Model.RequestModel.Room;
 
 namespace Findaroo.Server.Controllers
 {
@@ -14,17 +17,32 @@ namespace Findaroo.Server.Controllers
     public class RoomController : ControllerBase
     {
         PostgresContext _psql;
-        IAuthenticationService _authenticationService;
 
-        public RoomController(PostgresContext psql, IAuthenticationService authenticationService)
+        public RoomController(PostgresContext psql)
         {
             _psql = psql;
-            _authenticationService = authenticationService;
         }
 
         [HttpGet]
-        public GetMyRoomsResponse getMyRooms(string user_id) 
+        public async Task<GetMyRoomsResponse> getMyRooms() 
         {
+            String user_id = null;
+
+            if (Request.Cookies["idToken"] == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return null;
+            }
+            else
+            {
+                var userRecord = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(Request.Cookies["idTOken"]);
+                if (userRecord == null)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return null;
+                }
+                user_id = userRecord.Uid;
+            }
             List<String> room_ids = _psql.roommate
                 .Where(rm => rm.roommate_id.Equals(user_id))
                 .Select(rm => rm.room_id).ToList();
@@ -47,10 +65,10 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpPost]
-        public async void createRoom(string room_name)
+        public async Task createRoom([FromBody] CreateRoomRequest createRoomRequest)
         {
-            Room newRoom = new Room(room_name);
-            String user_id = null;
+            Room newRoom = new Room(createRoomRequest.room_name);
+            String userId = null;
 
             if (Request.Cookies["idToken"] == null)
             {
@@ -59,17 +77,17 @@ namespace Findaroo.Server.Controllers
             } 
             else
             {
-                var res = await _authenticationService.Authenticate(Request.Cookies["idToken"]);
-                user_id = res;
-                if (user_id == null)
+                var userRecord = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(Request.Cookies["idToken"]);
+                if (userRecord == null)
                 {
                     Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     return;
                 }
+                userId = userRecord.Uid;
             }
 
-            String room_id = _psql.room.Add(newRoom).Entity.room_id;
-            Roommate roommate = new Roommate(room_id, user_id);
+            String roomId = _psql.room.Add(newRoom).Entity.room_id;
+            Roommate roommate = new Roommate(roomId, userId);
             _psql.roommate.Add(roommate);
             _psql.SaveChanges();
         }

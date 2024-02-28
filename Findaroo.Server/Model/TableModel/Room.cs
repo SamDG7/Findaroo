@@ -9,7 +9,7 @@ namespace Findaroo.Server.Model.TableModel
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public String room_id { get; set; }
         public String room_name { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime date_created { get; set; }
 
         public Room(String room_name)
