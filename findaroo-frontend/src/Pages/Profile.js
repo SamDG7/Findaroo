@@ -104,7 +104,7 @@ export default function Profile() {
                             <Link to="/Profile/Questions">
                                 <ButtonImportant text="Compatibility Questions"/>
                             </Link>
-                            <ButtonImportant text="Create Group" onClickFunction={CreateGroup}/>
+                            
                         </div>
                         <div className="Row space-x-[2vw]">
                             <ButtonStandard text="View Roomies"/>
