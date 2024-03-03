@@ -122,7 +122,7 @@ const router = createBrowserRouter(
         },
         {
             path: "/Profile/MyRooms",
-            element: <MyRooms />,
+            element: <MyRooms/>,
             errorElement: <Error />,
         }
     ]

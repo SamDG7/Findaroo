@@ -47,12 +47,12 @@ namespace Findaroo.Server.Controllers
                 .Where(rm => rm.roommate_id.Equals(user_id))
                 .Select(rm => rm.room_id).ToList();
 
-            return new GetMyRoomsResponse(_psql.room
+            var queryResult = _psql.room
                 .Where(r => room_ids.Contains(r.room_id))
                 .Join(_psql.roommate,
                     room => room.room_id,
                     roommate => roommate.room_id,
-                    (_room, _roommate) => new RoomWithRoommateDTO
+                    (_room, _roommate) => new
                     {
                         room_id = _room.room_id,
                         room_name = _room.room_name,
@@ -61,7 +61,21 @@ namespace Findaroo.Server.Controllers
                         date_joined = _roommate.date_joined
                     })
                 .OrderBy(r => r.date_created)
-                .ToList());
+                .GroupBy(r => r.room_id)
+                .ToList();
+
+            List<RoomWithRoommateDTO> rooms = new List<RoomWithRoommateDTO>();
+            queryResult.ForEach(q =>
+            {
+                rooms.Add(new RoomWithRoommateDTO(
+                    q.Select(q => q.room_id).FirstOrDefault(),
+                    q.Select(q => q.room_name).FirstOrDefault(),
+                    q.Select(q => q.roommate_id).ToList(),
+                    q.Select(q => q.date_created).FirstOrDefault(),
+                    q.Select(q => q.date_joined).ToList()));
+            });
+
+            return new GetMyRoomsResponse(rooms);
         }
 
         [HttpPost]

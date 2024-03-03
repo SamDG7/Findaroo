@@ -43,7 +43,6 @@ export default function MyConnectionRequests() {
         const connections = await response.json();
 
         if (connections.length == 0) {
-            //setData({});
             return;
         }
 

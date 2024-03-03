@@ -99,12 +99,14 @@ export default function Profile() {
                                 <ButtonImportant text="Change Photo"/>
                             </Link>
                             <Link to="/Profile/Preferences">
-                            <ButtonImportant text="Edit Preferences"/>
+                                <ButtonImportant text="Edit Preferences"/>
                             </Link>
                             <Link to="/Profile/Questions">
                                 <ButtonImportant text="Compatibility Questions"/>
                             </Link>
-                            
+                            <Link to="/Profile/MyRooms">
+                                <ButtonImportant text="My Rooms"/>
+                            </Link>
                         </div>
                         <div className="Row space-x-[2vw]">
                             <ButtonStandard text="View Roomies"/>
@@ -153,18 +155,6 @@ export default function Profile() {
 
         GlobalVariables.authenticated = false;
         navigate("/Login");
-    }
-
-    async function CreateGroup() {
-        const response = await fetch(GlobalVariables.backendURL + "/Room", {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            },
-            body: JSON.stringify({"room_name": "test"})
-        })
-        console.log(response)
     }
 
 }
