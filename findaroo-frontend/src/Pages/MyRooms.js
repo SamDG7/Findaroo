@@ -4,15 +4,29 @@ import GlobalVariables from "../Utils/GlobalVariables";
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getAuth} from "firebase/auth";
-import { ButtonImportant } from "../Components/Buttons";
+import ButtonStandard, { ButtonImportant } from "../Components/Buttons";
 import {RoomAndRoommates} from "../Components/RoomAndRoommates"
+import InputStandard from "../Components/InputFields";
 
 export default function MyRooms() {
+    const navigate = useNavigate();
     const auth = getAuth();
     const [data, setData] = useState();
+    const [showCreateRoom, setShowCreateRoom] = useState(false);
+    const [newRoomName, setNewRoomName] = useState();
 
     useEffect(() => {
+
+        if (!GlobalVariables.authenticated || GlobalVariables.userCredential.uid === undefined) {
+            navigate("/Login");
+            return;
+        }
+
         getRooms();
+    }, []);
+
+    useEffect(() => {
+        
     }, []);
 
     return (
@@ -25,23 +39,46 @@ export default function MyRooms() {
                             <RoomAndRoommates dataDict={d}></RoomAndRoommates>
                         ))
                     }
-                    <ButtonImportant text="Create Room" onClickFunction={createRoom}></ButtonImportant>
+                    {
+                        showCreateRoom && <div>
+                            <InputStandard name="Room Name" defaultValue={newRoomName} onChangeFunction={(e) => setNewRoomName(e.target.value)}/>
+                        </div>
+                    }
+                    <div className="Row Start">
+                        {
+                            showCreateRoom && <ButtonStandard text="Cancel" onClickFunction={cancel}></ButtonStandard>
+                        }
+                        <ButtonImportant text="Create Room" onClickFunction={createRoom}></ButtonImportant>
+                    </div>
                 </div>
             </div>
         </div>
     );
 
     async function createRoom() {
+        if (showCreateRoom) {
+            const response = await fetch(GlobalVariables.backendURL + "/Room", {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify({"room_name": newRoomName})
+            });
+            navigate("/Profile/MyRooms");
+        } else {
+            setShowCreateRoom(true);
+        }
+    }
 
+    function cancel() {
+        setShowCreateRoom(false);
     }
 
     async function getRooms() {
         const response = await fetch(GlobalVariables.backendURL + "/Room", {
             method: 'GET',
             credentials: 'include',
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            }
         })
         const responseBody = await response.json();
         setData(responseBody.rooms);

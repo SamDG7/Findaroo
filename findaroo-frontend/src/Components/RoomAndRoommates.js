@@ -10,18 +10,23 @@ import { Link } from "react-router-dom";
 
 export function RoomAndRoommates({dataDict}) {
     const auth = getAuth();
-    const [showRoommate, setVisible] = useState(false);
+    const [showRoommate, setShowRoommate] = useState(false);
     const [roommateDict, setRoommateDict] = useState({});
+    const [visible, setVisible] = useState(true);
+
+    if (!visible) {
+        return;
+    }
 
     return (
         <div>
             <div className="Row Start">
                 <div className="Column Start">
                     <h1>{dataDict.room_name}</h1>
-                    <h2>{`Created on: ${dataDict.date_created}`}</h2>
+                    <h2>{`Created on: ${dataDict.date_created.substring(0, dataDict["date_created"].indexOf('T'))}`}</h2>
                 </div>
                 <div className="Column End">
-                    <ButtonImportant text="Leave"></ButtonImportant>
+                    <ButtonImportant text="Leave" onClickFunction={removeFromGroup}></ButtonImportant>
                     <div className="p-[1vw]"/>
                     <ButtonStandard text="View Roommates" onClickFunction={displayRoommates}/>
                 </div>
@@ -29,15 +34,26 @@ export function RoomAndRoommates({dataDict}) {
             <div className="Row Start">
                 {
                     showRoommate && roommateDict.map((rm, i) => (
-                        <RoommateInfo roommate={rm}/>
+                        <RoommateInfo roommate={rm} room_id={dataDict.room_id}/>
                     ))
                 }
             </div>
         </div>
     );
 
+    async function removeFromGroup() {
+        setVisible(false);
+        const response = await fetch(GlobalVariables.backendURL + "/Roommate", {
+            method:'DELETE',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({"roomId": dataDict.room_id, "userIdToRemove": auth.currentUser.uid})
+        })
+    }
+
     async function displayRoommates() {
-        if (!showRoommate) {
+        if (!showRoommate && roommateDict == {}) {
             const userResponse = await fetch(GlobalVariables.backendURL + "/User/idsFromNames", {
                 method: "POST",
                 headers: {
@@ -49,22 +65,23 @@ export function RoomAndRoommates({dataDict}) {
             setRoommateDict(userData.map((name, i) => ({
                 'name': name,
                 'id': dataDict["roommate_id"][i],
-                'date_joined': dataDict["date_joined"][i]
+                'date_joined': dataDict["date_joined"][i].substring(0, dataDict["date_joined"][i].indexOf('T'))
             })));
         }
-        setVisible(!showRoommate);
+        setShowRoommate(!showRoommate);
         console.log(roommateDict);
     }
 }
 
-export function RoommateInfo({roommate}) {
+export function RoommateInfo({roommate, room_id}) {
     const navigate = useNavigate();
-    const [image, setImage] = useState();
+    const [image, setImage] = useState(null);
+    const [visible, setVisible] = useState(true);
 
     const auth = getAuth();
 
     useEffect(() => {
-        if (roommate["id"] != null) {
+        if (roommate["id"] != null && image == null) {
             GetImage(roommate["id"]);
         }
     }, [roommate['id']]);
@@ -77,7 +94,7 @@ export function RoommateInfo({roommate}) {
         setImage(source);
     }
 
-    if (!roommate['id']) {
+    if (!roommate['id'] || !visible) {
         return;
     }
     return (
@@ -86,17 +103,28 @@ export function RoommateInfo({roommate}) {
                 alt={roommate['name'] + "'s profile picture"} />
             <div className="Column Start">
                 <Link to="/User" params={roommate["id"]}>
-                    <h3>
+                    <h2>
                         {roommate['name']}
-                    </h3>
+                    </h2>
                 </Link>
-                <h5>
+                <h4>
                     Date joined: {roommate['date_joined']}
-                </h5>
+                </h4>
             </div>
             <h3 className="Column End">
-                <ButtonImportant text={"Remove from group"} ></ButtonImportant>
+                <ButtonImportant text={"Remove from group"} onClickFunction={removeFromGroup}></ButtonImportant>
             </h3>
         </div>
     );
+
+    async function removeFromGroup() {
+        setVisible(false);
+        const response = await fetch(GlobalVariables.backendURL + "/Roommate", {
+            method:'DELETE',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({"roomId": room_id, "userIdToRemove": roommate.id})
+        })
+    }
 }
