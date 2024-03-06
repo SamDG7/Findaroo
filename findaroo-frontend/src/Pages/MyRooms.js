@@ -14,6 +14,7 @@ export default function MyRooms() {
     const [data, setData] = useState();
     const [showCreateRoom, setShowCreateRoom] = useState(false);
     const [newRoomName, setNewRoomName] = useState();
+    const [connections, setConnections] = useState(null);
 
     useEffect(() => {
 
@@ -23,6 +24,7 @@ export default function MyRooms() {
         }
 
         getRooms();
+        getConnections();
     }, []);
 
     useEffect(() => {
@@ -36,7 +38,7 @@ export default function MyRooms() {
                 <div className="Grid">
                     {
                         data && data.map((d, index) => (
-                            <RoomAndRoommates dataDict={d}></RoomAndRoommates>
+                            <RoomAndRoommates roomDict={d} connectionDict={connections}></RoomAndRoommates>
                         ))
                     }
                     {
@@ -82,5 +84,38 @@ export default function MyRooms() {
         })
         const responseBody = await response.json();
         setData(responseBody.rooms);
+    }
+
+    async function getConnections() {
+        const connectionResponse = await fetch(`${GlobalVariables.backendURL}/Connection?user_id=${auth.currentUser.uid}`);
+        const connectionBody = await connectionResponse.json();
+
+        var idList = [];
+        connectionBody.forEach(element => {
+            if (element['user_1_id'] == auth.currentUser.uid) {
+                idList.push(element['user_2_id'])
+            } else {
+                idList.push(element['user_1_id'])
+            }
+        });
+
+        var imageList = [];
+
+        for (const id of idList) {
+            var imageResponse = await fetch(GlobalVariables.backendURL + "/Image?user_id=" + id);
+            var blob = await imageResponse.blob();
+            imageList.push(URL.createObjectURL(blob));
+        }
+
+        var nameList = await fetch(GlobalVariables.backendURL + "/User/idsFromNames", {
+            method: 'POST',
+            body: JSON.stringify({"ids": idList}),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }).then(response => response.json());
+
+        var nameIdImageList = nameList.map((name, i) => ({'name':name, 'image':imageList[i], 'user_id':idList[i]}));
+        setConnections(nameIdImageList);
     }
 }

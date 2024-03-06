@@ -2,7 +2,7 @@
 {
     public class RemoveRoommateRequest
     {
-        public string roomId;
-        public string userIdToRemove;
+        public string roomId { get; set; }
+        public string userIdToRemove { get; set; }
     }
 }

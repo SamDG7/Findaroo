@@ -7,11 +7,13 @@ import GlobalVariables from "../Utils/GlobalVariables";
 import { PersonInfoSmall } from "./PersonInfo";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import InputStandard from "./InputFields";
 
-export function RoomAndRoommates({dataDict}) {
+export function RoomAndRoommates({roomDict, connectionDict}) {
     const auth = getAuth();
     const [showRoommate, setShowRoommate] = useState(false);
-    const [roommateDict, setRoommateDict] = useState({});
+    const [roommateDict, setRoommateDict] = useState(null);
+    const [showAddRoommate, setShowAddRoommate] = useState(false);
     const [visible, setVisible] = useState(true);
 
     if (!visible) {
@@ -22,19 +24,28 @@ export function RoomAndRoommates({dataDict}) {
         <div>
             <div className="Row Start">
                 <div className="Column Start">
-                    <h1>{dataDict.room_name}</h1>
-                    <h2>{`Created on: ${dataDict.date_created.substring(0, dataDict["date_created"].indexOf('T'))}`}</h2>
+                    <h1>{roomDict.room_name}</h1>
+                    <h2>{`Created on: ${roomDict.date_created.substring(0, roomDict["date_created"].indexOf('T'))}`}</h2>
+                    
                 </div>
                 <div className="Column End">
-                    <ButtonImportant text="Leave" onClickFunction={removeFromGroup}></ButtonImportant>
-                    <div className="p-[1vw]"/>
-                    <ButtonStandard text="View Roommates" onClickFunction={displayRoommates}/>
+                    <div className="Row Start">
+                        <ButtonStandard text="Add Roommates" onClickFunction={displayAddRoommate}></ButtonStandard>
+                        <div className="p-[0.25vw]"/>
+                        <ButtonStandard text="View Roommates" onClickFunction={displayRoommates}/>
+                        <div className="p-[0.25vw]"/>
+                        <ButtonImportant text="Leave" onClickFunction={removeFromGroup}></ButtonImportant>
+                    </div>
                 </div>
             </div>
+            {showAddRoommate && <div className="Row Start">
+                <AddRoommate connectionDict={connectionDict} roomId={roomDict.room_id}/>
+                
+            </div>}
             <div className="Row Start">
                 {
                     showRoommate && roommateDict.map((rm, i) => (
-                        <RoommateInfo roommate={rm} room_id={dataDict.room_id}/>
+                        <RoommateInfo roommate={rm} room_id={roomDict.room_id}/>
                     ))
                 }
             </div>
@@ -45,31 +56,106 @@ export function RoomAndRoommates({dataDict}) {
         setVisible(false);
         const response = await fetch(GlobalVariables.backendURL + "/Roommate", {
             method:'DELETE',
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/json; charset=UTF-8'
             },
-            body: JSON.stringify({"roomId": dataDict.room_id, "userIdToRemove": auth.currentUser.uid})
+            body: JSON.stringify({"roomId": roomDict.room_id, "userIdToRemove": auth.currentUser.uid})
         })
     }
 
     async function displayRoommates() {
-        if (!showRoommate && roommateDict == {}) {
+        if (!showRoommate) {
+            console.log("debug")
             const userResponse = await fetch(GlobalVariables.backendURL + "/User/idsFromNames", {
                 method: "POST",
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8'
                 },
-                body: JSON.stringify({"ids": dataDict["roommate_id"]})
+                body: JSON.stringify({"ids": roomDict["roommate_id"]})
             })
             const userData = await userResponse.json();
             setRoommateDict(userData.map((name, i) => ({
                 'name': name,
-                'id': dataDict["roommate_id"][i],
-                'date_joined': dataDict["date_joined"][i].substring(0, dataDict["date_joined"][i].indexOf('T'))
+                'id': roomDict["roommate_id"][i],
+                'date_joined': roomDict["date_joined"][i].substring(0, roomDict["date_joined"][i].indexOf('T'))
             })));
         }
         setShowRoommate(!showRoommate);
-        console.log(roommateDict);
+    }
+
+    function displayAddRoommate() {
+        setShowAddRoommate(!showAddRoommate);
+    }
+}
+
+function AddRoommate({connectionDict, roomId}) {
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [addRoommateInput, setAddRoommateInput] = useState("");
+    const [roommateToAddId, setRoommateToAddId] = useState("");
+    const [filteredConnectionDict, setFilteredConnectionDict] = useState(connectionDict);
+
+    //console.log(connectionDict);
+
+    return (
+        <div style={{display: "flex", padding: "0.5vw"}}>
+            <div className="Column Start">
+                <h3>Add your connections as roommates</h3>
+                <div className="Row Start">
+                <input
+                type="text"
+                placeholder="Start typing your school..."
+                className="InputStandard"
+                style={{width: "250px"}}
+                value={addRoommateInput}
+                onChange={onChangeHelper}
+                onFocus={() => setShowDropdown(true)}
+                onBlur={() => setTimeout(() => setShowDropdown(false), 100)}
+            />
+                    <ButtonImportant text="Add Roommate"/>
+                </div>
+            </div>
+            
+            {showDropdown && (
+                <ul
+                    style={{
+                        position: 'absolute',
+                        listStyleType: 'none',
+                        padding: 0,
+                        margin: 0,
+                        marginTop: '60px',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                        backgroundColor: '#fff',
+                        maxHeight: '400px', // Adjust this value as needed
+                        overflowY: 'auto',
+                        width: '350px',
+                        maxWidth: '0.5hw',
+                        zIndex: 1000,
+                    }}
+                >
+                    {filteredConnectionDict.map((connection, index) => (
+                        <li
+                            //key={}
+                            className="connection"
+                            onMouseDown={() => { setShowDropdown(false); setRoommateToAddId(connection.user_id); setAddRoommateInput(connection.name); }}
+                        >
+                            <div className="Row Start">
+                                <img className="w-5 h-5 inset-y-0 left-0" src={connection.image}></img>
+                                {connection.name}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    )
+
+    function onChangeHelper(e) {
+        setAddRoommateInput(e.target.value);
+        console.log(addRoommateInput);
+        setFilteredConnectionDict(connectionDict.filter(connection => 
+            connection.name.toLowerCase().includes(addRoommateInput.toLowerCase())));
     }
 }
 
@@ -77,8 +163,6 @@ export function RoommateInfo({roommate, room_id}) {
     const navigate = useNavigate();
     const [image, setImage] = useState(null);
     const [visible, setVisible] = useState(true);
-
-    const auth = getAuth();
 
     useEffect(() => {
         if (roommate["id"] != null && image == null) {
@@ -121,6 +205,7 @@ export function RoommateInfo({roommate, room_id}) {
         setVisible(false);
         const response = await fetch(GlobalVariables.backendURL + "/Roommate", {
             method:'DELETE',
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/json; charset=UTF-8'
             },
