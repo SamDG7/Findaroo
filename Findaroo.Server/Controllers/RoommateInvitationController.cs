@@ -9,7 +9,7 @@ using System.Net;
 
 namespace Findaroo.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class RoommateInvitationController : ControllerBase
     {

@@ -2,7 +2,7 @@
 {
     public class SendRoommateInvitationRequest
     {
-        public String room_id;
-        public String receiver_id;
+        public String room_id { get; set; }
+        public String receiver_id { get; set; }
     }
 }

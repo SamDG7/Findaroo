@@ -2,7 +2,7 @@
 {
     public class AcceptRoommateInvitationRequest
     {
-        public string receiver_id;
-        public string room_id;
+        public string receiver_id { get; set; }
+        public string room_id { get; set; }
     }
 }

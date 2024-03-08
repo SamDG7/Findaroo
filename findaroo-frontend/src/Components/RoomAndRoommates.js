@@ -96,24 +96,32 @@ function AddRoommate({connectionDict, roomId}) {
     const [filteredConnectionDict, setFilteredConnectionDict] = useState(connectionDict);
 
     //console.log(connectionDict);
+    useEffect(() => {
+        setFilteredConnectionDict(connectionDict.filter(connection => 
+            connection.name.toLowerCase().includes(addRoommateInput.toLowerCase())));
+    }, [addRoommateInput]);
 
     return (
         <div style={{display: "flex", padding: "0.5vw"}}>
-            <div className="Column Start">
-                <h3>Add your connections as roommates</h3>
-                <div className="Row Start">
+            <div className="Row Start">
                 <input
-                type="text"
-                placeholder="Start typing your school..."
-                className="InputStandard"
-                style={{width: "250px"}}
-                value={addRoommateInput}
-                onChange={onChangeHelper}
-                onFocus={() => setShowDropdown(true)}
-                onBlur={() => setTimeout(() => setShowDropdown(false), 100)}
-            />
+                    type="text"
+                    placeholder="Add your connections as roommates"
+                    className="InputStandard"
+                    style={{width: "500px"}}
+                    value={addRoommateInput}
+                    onChange={(e) => onChangeHelper(e.target.value)}
+                    onFocus={() => setShowDropdown(true)}
+                    onBlur={() => setTimeout(() => setShowDropdown(false), 100)}
+                />
+                <Link
+                    to={{
+                        pathname: "/Profile/MyRooms/RoommateAgreement",
+                        state: {'id': roommateToAddId, 'name': addRoommateInput}
+                    }}
+                >
                     <ButtonImportant text="Add Roommate"/>
-                </div>
+                </Link>
             </div>
             
             {showDropdown && (
@@ -123,7 +131,7 @@ function AddRoommate({connectionDict, roomId}) {
                         listStyleType: 'none',
                         padding: 0,
                         margin: 0,
-                        marginTop: '60px',
+                        marginTop: '40px',
                         border: '1px solid #ccc',
                         borderRadius: '4px',
                         backgroundColor: '#fff',
@@ -151,11 +159,24 @@ function AddRoommate({connectionDict, roomId}) {
         </div>
     )
 
-    function onChangeHelper(e) {
-        setAddRoommateInput(e.target.value);
-        console.log(addRoommateInput);
-        setFilteredConnectionDict(connectionDict.filter(connection => 
-            connection.name.toLowerCase().includes(addRoommateInput.toLowerCase())));
+    function onChangeHelper(value) {
+        setAddRoommateInput(value);
+    }
+
+    async function sendAddRoommateRequest() {
+        if (roommateToAddId == "") {
+            return;
+        }
+        const response = await fetch(`${GlobalVariables.backendURL}/RoommateInvitation/send`, {
+            method:"POST",
+            credentials:"include",
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({"room_id": roomId, "receiver_id": roommateToAddId})
+        });
+        setAddRoommateInput("");
+        setRoommateToAddId("");
     }
 }
 
