@@ -22,13 +22,13 @@ function SchoolLookup({defaultValue, onChangeFunction}) {
     
 
     return (
-        <div style={{display: "flex", padding: "0.5vw"}}>
-            <h3>School</h3>
+        <div style={{display: "flex", padding: "0.5vw", position: "relative"}}>
+            <h3 style={{ width: "10vw", textAlign: "right" }}>School</h3>
             <input
                 type="text"
                 placeholder="Start typing your school..."
                 className="InputStandard"
-                style={{width: "250px"}}
+                style={{width: "100%"}}
                 value={defaultValue}
                 onChange={ocFunc}
                 onFocus={() => setShowDropdown(true)}
@@ -38,6 +38,8 @@ function SchoolLookup({defaultValue, onChangeFunction}) {
                 <ul
                     style={{
                         position: 'absolute',
+                        left: '70%',
+                        transform: 'translateX(-50%)',
                         listStyleType: 'none',
                         padding: 0,
                         margin: 0,
@@ -47,7 +49,7 @@ function SchoolLookup({defaultValue, onChangeFunction}) {
                         backgroundColor: '#fff',
                         maxHeight: '400px', // Adjust this value as needed
                         overflowY: 'auto',
-                        width: '350px',
+                        width: '90%',
                         maxWidth: '0.5hw',
                         zIndex: 1000,
                     }}
