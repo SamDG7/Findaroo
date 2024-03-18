@@ -98,6 +98,7 @@ export default function Login() {
                 GlobalVariables.userCredential = userCredential.user;
                 console.log("Logged in as " + GlobalVariables.userCredential.email + "with uid " + GlobalVariables.userCredential.uid);
                 GlobalVariables.authenticated = true;
+                document.cookie = "idToken=\"\"; max-age=0";
                 document.cookie = `idToken=${userCredential._tokenResponse.idToken};` + 
                     `max-age=${userCredential._tokenResponse.expiresIn};`;
                 // Get status
@@ -133,6 +134,7 @@ export default function Login() {
             GlobalVariables.userCredential = result.user;
             console.log("Logged in as " + GlobalVariables.userCredential.email);
             GlobalVariables.authenticated = true;
+            document.cookie = "idToken=\"\"; max-age=0";
             document.cookie = `idToken=${result._tokenResponse.idToken};` + 
                 `max-age=${result._tokenResponse.expiresIn};`;
             navigate("/");

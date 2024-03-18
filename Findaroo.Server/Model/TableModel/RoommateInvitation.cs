@@ -10,14 +10,16 @@ namespace Findaroo.Server.Model.TableModel
         public string sender_id {  get; set; }
         public string receiver_id { get; set; }
         public string room_id { get; set; }
+        public int[] roommate_agreement { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime date_created { get; set; }
 
-        public RoommateInvitation(string sender_id, string receiver_id, string room_id)
+        public RoommateInvitation(string sender_id, string receiver_id, string room_id, int[] roommate_agreement)
         {
             this.room_id = room_id;
             this.sender_id = sender_id;
             this.receiver_id = receiver_id;
+            this.roommate_agreement = roommate_agreement;
         }
     }
 }

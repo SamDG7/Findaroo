@@ -75,7 +75,8 @@ namespace Findaroo.Server.Controllers
 
             RoommateInvitation newRoommateInvitation = new RoommateInvitation(userId, 
                 sendRoommateInvitationRequest.receiver_id, 
-                sendRoommateInvitationRequest.room_id);
+                sendRoommateInvitationRequest.room_id,
+                sendRoommateInvitationRequest.roommate_agreement);
             _psql.roommate_invitation.Add(newRoommateInvitation);
             _psql.SaveChanges();
         }

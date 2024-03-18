@@ -5,11 +5,12 @@ import {getAuth} from 'firebase/auth';
 import {useState, useEffect} from "react";
 import GlobalVariables from "../Utils/GlobalVariables";
 import { PersonInfoSmall } from "./PersonInfo";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import InputStandard from "./InputFields";
 
 export function RoomAndRoommates({roomDict, connectionDict}) {
+    //const navigate = useNavigate();
     const auth = getAuth();
     const [showRoommate, setShowRoommate] = useState(false);
     const [roommateDict, setRoommateDict] = useState(null);
@@ -116,9 +117,15 @@ function AddRoommate({connectionDict, roomId}) {
                 />
                 <Link
                     to={{
-                        pathname: "/Profile/MyRooms/RoommateAgreement",
-                        state: {'id': roommateToAddId, 'name': addRoommateInput}
+                        pathname: `/Profile/MyRooms/RoommateAgreement`,
                     }}
+                    state={
+                        {
+                            'name': addRoommateInput, 
+                            'receiver_id': roommateToAddId,
+                            'room_id': roomId
+                        }
+                    }
                 >
                     <ButtonImportant text="Add Roommate"/>
                 </Link>
@@ -161,22 +168,9 @@ function AddRoommate({connectionDict, roomId}) {
 
     function onChangeHelper(value) {
         setAddRoommateInput(value);
-    }
-
-    async function sendAddRoommateRequest() {
-        if (roommateToAddId == "") {
-            return;
+        if (roommateToAddId != "") {
+            setRoommateToAddId("");
         }
-        const response = await fetch(`${GlobalVariables.backendURL}/RoommateInvitation/send`, {
-            method:"POST",
-            credentials:"include",
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            },
-            body: JSON.stringify({"room_id": roomId, "receiver_id": roommateToAddId})
-        });
-        setAddRoommateInput("");
-        setRoommateToAddId("");
     }
 }
 

@@ -1,6 +1,6 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
-import { Form, Link, useNavigate } from "react-router-dom";
+import { Form, Link, useLocation, useNavigate } from "react-router-dom";
 import { ButtonImportant } from "../Components/Buttons";
 import { useEffect } from "react";
 import GlobalVariables from "../Utils/GlobalVariables";
@@ -30,20 +30,30 @@ export default function RoommateAgreement() {
 
     // This redirects to the login page if not logged in
     const navigate = useNavigate();
+    const location = useLocation();
     const auth = getAuth();
+    //console.log(location.state);
+    
+    const [name, setName] = useState("");
+    const [receiver_id, setReceiverId] = useState("");
+    const [room_id, setRoomId] = useState("");
 
     useEffect(() => {
         if (!GlobalVariables.authenticated) {
             navigate("/Login");
         }
+        if (location == null || location.state == null) {
+            navigate("/Profile/MyRooms");
+        } else {
+            setName(location.state.name);
+            setReceiverId(location.state.receiver_id);
+            setRoomId(location.state.room_id);
+        }
     }, []);
 
+    
 
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-    const togglePopup = () => {
-        setIsPopupOpen(!isPopupOpen);
-    };
 
     useEffect(() => {
         if (auth.currentUser == null) {
@@ -76,77 +86,18 @@ export default function RoommateAgreement() {
 
     }, []);
 
-    const submitQuestions = async () => {
-        //const { state } = this.props.location;
-        //console.log(state);
-        console.log("PUT Call")
-        try {
-            const form = {
-                user_id: auth.currentUser.uid,
-                lifestyle_answers: [
-                    status,
-                    roommatePreferences,
-                    smoke,
-                    roommateSmoke,
-                    visitors,
-                    roommateVisitors,
-                    pets,
-                    roommatePets,
-                    focus,
-                    gamingTime,
-                    tidiness,
-                    cleaningFrequency,
-                    noiseSensitivity,
-                    socializingFrequency,
-                    alcoholConsumption,
-                    drugUse,
-                    borrowingFrequency
-                ]
-            }
-            console.log(form);
-            await fetch('http://localhost:5019/User', {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(form)
-            }).then(response => {
-                return response.text()
-            });
-        } catch (err) {
-            console.log(err)
-        } finally {
-            navigate("/Profile");
-        }
-    }
-
     return (
         <div className="Page">
             <Navbar />
 
-            <Popup isOpen={isPopupOpen} closePopup={togglePopup}>
-                <h2>Submit Answers?</h2>
-                <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
-                    <button style={{ background: '#007AFF', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={submitQuestions}>Yes</button>
-                    <button style={{ background: '#808080', color: 'white', border: 'none', padding: '10px 20px', cursor: 'pointer' }} onClick={togglePopup}>Cancel</button>
-                </div>
-            </Popup>
-
             <h1>
-                Review your roommate agreement
+                Review your roommate agreement with {name}
             </h1>
             <h5>
                 Agreement form has been auto-filled with your lifestyle preferences.
             </h5>
 
             <Form>
-                <h3>Do you want your roommate(s) to be the same?</h3>
-                <input type="radio" id="roommatePreferences" name="roommatePreferences" value="0" className="radio-option" defaultChecked={status === 0} onChange={(e) => setRoommatePreferences(e.target.value)} />
-                <label htmlFor="roommatePreferences">Yes</label>
-
-                <input type="radio" id="roommatePreferences" name="roommatePreferences" value="1" className="radio-option" defaultChecked={status === 1} onChange={(e) => setRoommatePreferences(e.target.value)} />
-                <label htmlFor="roommatePreferences">No</label>
-
                 <h3>Do you smoke/vape?</h3>
                 <select id="smoke" name="smoke" value={smoke} onChange={(e) => setSmoke(e.target.value)}>
                     <option value="0">Never</option>
@@ -154,7 +105,7 @@ export default function RoommateAgreement() {
                     <option value="2">Regularly</option>
                 </select>
 
-                <h3>Is it okay if your roommate is a smoker and/or vapes:</h3>
+                <h3>Is it okay if {name} is a smoker and/or vapes:</h3>
                 <select id="roommateSmoke" name="roommateSmoke" value={roommateSmoke} onChange={(e) => setRoommateSmoke(e.target.value)}>
                     <option value="0">Yes</option>
                     <option value="1">No</option>
@@ -168,7 +119,7 @@ export default function RoommateAgreement() {
                     <option value="2">Often</option>
                 </select>
 
-                <h3>Is it okay if your roommate has visitors over, and if so how often?</h3>
+                <h3>Is it okay if {name} has visitors over, and if so how often?</h3>
                 <select id="roommateVisitors" name="roommateVisitors" value={roommateVisitors} onChange={(e) => setRoommateVisitors(e.target.value)}>
                     <option value="0">Never</option>
                     <option value="1">Sometimes</option>
@@ -181,7 +132,7 @@ export default function RoommateAgreement() {
                     <option value="2">Yes</option>
                 </select>
 
-                <h3>Is it okay if your roommate has pets?</h3>
+                <h3>Is it okay if {name} has pets?</h3>
                 <select id="roommatePets" name="roommatePets" value={roommatePets} onChange={(e) => setRoommatePets(e.target.value)}>
                     <option value="0">Yes</option>
                     <option value="1">No</option>
@@ -253,11 +204,44 @@ export default function RoommateAgreement() {
                     <option value="2">Frequently</option>
                 </select>
 
-                <ButtonImportant text="Submit" onClickFunction={togglePopup} />
+                <ButtonImportant text="Submit" onClickFunction={sendAddRoommateRequest} />
             </Form>
             <p> </p>
         </div>
     );
-
+    
+    async function sendAddRoommateRequest() {
+        const response = await fetch(`${GlobalVariables.backendURL}/RoommateInvitation/send`, {
+            method:"POST",
+            credentials:"include",
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({
+                "room_id": room_id, 
+                "receiver_id": receiver_id,
+                "roommate_agreement": [
+                    status,
+                    roommatePreferences,
+                    smoke,
+                    roommateSmoke,
+                    visitors,
+                    roommateVisitors,
+                    pets,
+                    roommatePets,
+                    focus,
+                    gamingTime,
+                    tidiness,
+                    cleaningFrequency,
+                    noiseSensitivity,
+                    socializingFrequency,
+                    alcoholConsumption,
+                    drugUse,
+                    borrowingFrequency
+                ]
+            })
+        });
+        navigate("/Profile/MyRooms");
+    }
 }
 
