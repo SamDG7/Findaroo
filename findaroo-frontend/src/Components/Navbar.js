@@ -33,7 +33,7 @@ const Navbar = () => {
                             GlobalVariables.authenticated = false;
                             const auth = getAuth();
                             signOut(auth);
-                            document.cookie = "idToken=\"\"; max-age=0";
+                            document.cookie = "idToken=\"\"; max-age=0; path=/";
                             navigate("/Login");
                         }}/>
                         :

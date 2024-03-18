@@ -198,7 +198,7 @@ export function RoommateInfo({roommate, room_id}) {
     }
     return (
         <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]" onClick={() => navigate("/User/" + roommate["id"])}>
-            <img className="ProfileImageSmall" src={image}
+            <img className="object-scale-down w-24 h-24" src={image}
                 alt={roommate['name'] + "'s profile picture"} />
             <div className="Column Start">
                 <Link to="/User" params={roommate["id"]}>
@@ -206,9 +206,9 @@ export function RoommateInfo({roommate, room_id}) {
                         {roommate['name']}
                     </h2>
                 </Link>
-                <h4>
+                <h3>
                     Date joined: {roommate['date_joined']}
-                </h4>
+                </h3>
             </div>
             <h3 className="Column End">
                 <ButtonImportant text={"Remove from group"} onClickFunction={removeFromGroup}></ButtonImportant>

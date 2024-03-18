@@ -20,8 +20,8 @@ namespace Findaroo.Server.Controllers
             _psql = psql;
         }
 
-        [HttpGet]
-        public async Task<List<RoommateInvitation>> getMyInvitations()
+        [HttpGet("received")]
+        public async Task<List<RoommateInvitation>> getMyReceivedInvitations()
         {
             String userId = null;
 
@@ -42,6 +42,30 @@ namespace Findaroo.Server.Controllers
             }
 
             return _psql.roommate_invitation.Where(ri => ri.receiver_id == userId).ToList();
+        }
+
+        [HttpGet("sent")]
+        public async Task<List<RoommateInvitation>> getMySentInvitations()
+        {
+            String userId = null;
+
+            if (Request.Cookies["idToken"] == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return null;
+            }
+            else
+            {
+                var userRecord = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(Request.Cookies["idToken"]);
+                if (userRecord == null)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return null;
+                }
+                userId = userRecord.Uid;
+            }
+
+            return _psql.roommate_invitation.Where(ri => ri.sender_id == userId).ToList();
         }
 
         [HttpPost("send")]

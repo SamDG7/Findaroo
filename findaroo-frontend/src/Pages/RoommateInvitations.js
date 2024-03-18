@@ -1,45 +1,51 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
+import { Form, Link, useLocation, useNavigate } from "react-router-dom";
+import { ButtonImportant } from "../Components/Buttons";
+import { useEffect } from "react";
 import GlobalVariables from "../Utils/GlobalVariables";
-import {Link, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
-import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
-import { getAuth} from "firebase/auth";
-import {ConnectionRequestInfo} from "../Components/ConnectionRequestInfo";
+import Popup from "../Components/Popup";
+import { useState } from "react";
+import { getAuth } from "firebase/auth";
+import { InvitationInfo } from "../Components/InvitationInfo";
 
-export default function MyConnectionRequests() {
-    // This redirects to the login page if not logged in
+export default function RoommateInvitation() {
     const navigate = useNavigate();
     const auth = getAuth();
-    const [data, setData] = useState();
+    const [sentInvitations, setSentInvitations] = useState(null);
+    const [receivedInvitations, setReceivedInvitations] = useState(null);
 
     useEffect(() => {
         if (!GlobalVariables.authenticated || auth.currentUser == null) {
             navigate("/Login");
+            return;
         }
-    }, []);
-
-    useEffect(() => {
-        getReceivedConnectionRequests();
+        getInvitations("sent", setSentInvitations);
+        console.log(sentInvitations);
     }, []);
 
     return (
         <div className="Page">
             <Navbar/>
+
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Grid">
+                    <h2 className="text-left">Received Invitations</h2>
+                    {}
+                    <h2 className="text-left">Sent Invitation</h2>
                     {
-                        data && data.map((data, index) => (
-                            <ConnectionRequestInfo connectionDict={data}/>
-                        ))
+                        <InvitationInfo invitationDict={sentInvitations[0]}></InvitationInfo>
                     }
                 </div>
             </div>
         </div>
     );
 
-    async function getReceivedConnectionRequests() {
-        const response = await fetch(GlobalVariables.backendURL + "/ConnectionRequest/received?user_id=" + auth.currentUser.uid);
+    async function getInvitations(path, updateState) {
+        const response = await fetch(`${GlobalVariables.backendURL}/RoommateInvitation/${path}`, {
+            method: 'GET',
+            credentials: 'include',
+        });
         const connections = await response.json();
 
         if (connections.length == 0) {
@@ -61,14 +67,21 @@ export default function MyConnectionRequests() {
 
         var nameList = await fetch(GlobalVariables.backendURL + "/User/idsFromNames", {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify({"ids": idList}),
             headers: {
                 "Content-Type": "application/json"
             }
         }).then(response => response.json());
 
-        var nameImageList = nameList.map((name, i) => ({'name':name, 'image':imageList[i], 'user_id':idList[i]}));
-        console.log(nameImageList)
-        setData(nameImageList);
+        var dataList = nameList.map((name, i) => (
+            {
+                'name':name, 
+                'image':imageList[i], 
+                'user_id':idList[i], 
+                'room_id':connections[i]['room_id']
+            }
+        ));
+        updateState(dataList);
     }
 }

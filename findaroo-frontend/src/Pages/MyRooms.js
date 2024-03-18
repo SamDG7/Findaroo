@@ -41,18 +41,17 @@ export default function MyRooms() {
                             <RoomAndRoommates roomDict={d} connectionDict={connections}></RoomAndRoommates>
                         ))
                     }
-                    {
-                        showCreateRoom && <div>
-                            <InputStandard name="Room Name" defaultValue={newRoomName} onChangeFunction={(e) => setNewRoomName(e.target.value)}/>
-                        </div>
-                    }
-                    <div className="Row Start">
-                        {
-                            showCreateRoom && <ButtonStandard text="Cancel" onClickFunction={cancel}></ButtonStandard>
-                        }
-                        <ButtonImportant text="Create Room" onClickFunction={createRoom}></ButtonImportant>
-                    </div>
                 </div>
+                <ButtonStandard text="My Invitations" onClickFunction={() => navigate("/Profile/MyRooms/RoommateInvitations")}></ButtonStandard>
+                {
+                    showCreateRoom && <div>
+                        <InputStandard name="Room Name" defaultValue={newRoomName} onChangeFunction={(e) => setNewRoomName(e.target.value)}/>
+                    </div>
+                }
+                {
+                    showCreateRoom && <ButtonStandard text="Cancel" onClickFunction={cancel}></ButtonStandard>
+                }
+                <ButtonImportant text="Create Room" onClickFunction={createRoom}></ButtonImportant>
             </div>
         </div>
     );
