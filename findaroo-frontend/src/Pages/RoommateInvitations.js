@@ -29,14 +29,16 @@ export default function RoommateInvitation() {
             <Navbar/>
 
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
-                <div className="Grid">
-                    <h2 className="text-left">Received Invitations</h2>
-                    {}
-                    <h2 className="text-left">Sent Invitation</h2>
-                    {
-                        <InvitationInfo invitationDict={sentInvitations[0]}></InvitationInfo>
-                    }
-                </div>
+                <h2 className="text-left">Received Invitations</h2>
+                    {receivedInvitations && receivedInvitations.map((element, i) => (
+                        <InvitationInfo invitationDict={element} isSender={false}></InvitationInfo>
+                    ))}
+                <h2 className="text-left">Sent Invitations</h2>
+                {
+                    sentInvitations && sentInvitations.map((element, i) => (
+                        <InvitationInfo invitationDict={element} isSender={true}></InvitationInfo>
+                    ))
+                }
             </div>
         </div>
     );
@@ -54,7 +56,12 @@ export default function RoommateInvitation() {
 
         var idList = [];
         connections.forEach(element => {
-            idList.push(element["sender_id"])
+            if (path == 'sent') {
+                idList.push(element["receiver_id"])
+            } else {
+                idList.push(element["sender_id"])
+            }
+            
         });
 
         var imageList = [];
@@ -79,7 +86,8 @@ export default function RoommateInvitation() {
                 'name':name, 
                 'image':imageList[i], 
                 'user_id':idList[i], 
-                'room_id':connections[i]['room_id']
+                'room_id':connections[i]['room_id'],
+                'agreement_form': connections[i]['roommate_agreement']
             }
         ));
         updateState(dataList);

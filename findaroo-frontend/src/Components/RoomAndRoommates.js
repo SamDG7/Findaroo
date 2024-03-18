@@ -123,7 +123,9 @@ function AddRoommate({connectionDict, roomId}) {
                         {
                             'name': addRoommateInput, 
                             'receiver_id': roommateToAddId,
-                            'room_id': roomId
+                            'room_id': roomId,
+                            'is_sender': true,
+                            'accept_visible': false
                         }
                     }
                 >
