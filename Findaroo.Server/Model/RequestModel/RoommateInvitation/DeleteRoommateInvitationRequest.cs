@@ -1,6 +1,6 @@
 ﻿namespace Findaroo.Server.Model.RequestModel.RoommateInvitation
 {
-    public class AcceptRoommateInvitationRequest
+    public class DeleteRoommateInvitationRequest
     {
         public string sender_id { get; set; }
         public string receiver_id { get; set; }

@@ -70,7 +70,7 @@ export default function MyConnections() {
         }).then(response => response.json());
 
         var nameImageList = nameList.map((name, i) => ({'name':name, 'image':imageList[i], 'user_id':idList[i]}));
-        console.log(nameImageList)
+        console.log(nameImageList);
         setData(nameImageList);
     }
 }

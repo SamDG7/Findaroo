@@ -14,6 +14,7 @@ export default function RoommateInvitation() {
     const auth = getAuth();
     const [sentInvitations, setSentInvitations] = useState(null);
     const [receivedInvitations, setReceivedInvitations] = useState(null);
+    const [thisUserName, setThisUserName] = useState("");
 
     useEffect(() => {
         if (!GlobalVariables.authenticated || auth.currentUser == null) {
@@ -21,7 +22,7 @@ export default function RoommateInvitation() {
             return;
         }
         getInvitations("sent", setSentInvitations);
-        console.log(sentInvitations);
+        getInvitations("received", setReceivedInvitations);
     }, []);
 
     return (
@@ -30,28 +31,30 @@ export default function RoommateInvitation() {
 
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <h2 className="text-left">Received Invitations</h2>
-                    {receivedInvitations && receivedInvitations.map((element, i) => (
-                        <InvitationInfo invitationDict={element} isSender={false}></InvitationInfo>
-                    ))}
+                {
+                    receivedInvitations && receivedInvitations.map((element, i) => (
+                        <InvitationInfo invitationDict={element} isSender={false} thisUserName={thisUserName}></InvitationInfo>
+                    ))
+                }
                 <h2 className="text-left">Sent Invitations</h2>
                 {
                     sentInvitations && sentInvitations.map((element, i) => (
-                        <InvitationInfo invitationDict={element} isSender={true}></InvitationInfo>
+                        <InvitationInfo invitationDict={element} isSender={true} thisUserName={thisUserName}></InvitationInfo>
                     ))
                 }
             </div>
         </div>
     );
 
-    async function getInvitations(path, updateState) {
+    async function getInvitations(path, updateData) {
         const response = await fetch(`${GlobalVariables.backendURL}/RoommateInvitation/${path}`, {
             method: 'GET',
             credentials: 'include',
         });
         const connections = await response.json();
 
-        if (connections.length == 0) {
-            return;
+        if (connections == null || connections.length == 0) {
+            return null;
         }
 
         var idList = [];
@@ -61,7 +64,6 @@ export default function RoommateInvitation() {
             } else {
                 idList.push(element["sender_id"])
             }
-            
         });
 
         var imageList = [];
@@ -81,15 +83,23 @@ export default function RoommateInvitation() {
             }
         }).then(response => response.json());
 
-        var dataList = nameList.map((name, i) => (
+        var dataList = connections.map((c, i) => (
             {
-                'name':name, 
+                'name':nameList[i], 
                 'image':imageList[i], 
                 'user_id':idList[i], 
-                'room_id':connections[i]['room_id'],
-                'agreement_form': connections[i]['roommate_agreement']
+                'room_id':c['room_id'],
+                'agreement_form': c['roommate_agreement']
             }
         ));
-        updateState(dataList);
+        updateData(dataList);
+
+        setThisUserName(await fetch(GlobalVariables.backendURL + "/User/idsFromNames", {
+            method: 'POST',
+            credentials: 'include',
+            body: JSON.stringify({"ids": [auth.currentUser.uid]}),
+            headers: {
+                "Content-Type": "application/json"
+            }}).then(response => response.json())[0])
     }
 }

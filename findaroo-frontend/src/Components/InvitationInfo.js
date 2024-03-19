@@ -6,8 +6,9 @@ import GlobalVariables from "../Utils/GlobalVariables";
 import {getAuth} from 'firebase/auth';
 import { Link } from "react-router-dom";
 
-export function InvitationInfo({invitationDict, isSender}) {
+export function InvitationInfo({invitationDict, isSender, thisUserName}) {
     const [visible, setVisible] = useState(true);
+    const auth = getAuth();
 
     if (invitationDict == null){
         return;
@@ -30,8 +31,11 @@ export function InvitationInfo({invitationDict, isSender}) {
                     state={
                         {
                             'name': invitationDict.name, 
-                            'receiver_id': invitationDict.id,
+                            'receiver_id': isSender ? invitationDict.user_id : auth.currentUser.uid,
+                            'receiver_name': isSender ? invitationDict.name : thisUserName,
                             'room_id': invitationDict.room_id,
+                            'sender_id': isSender ? auth.currentUser.uid : invitationDict.user_id,
+                            'sender_name': isSender ? thisUserName : invitationDict.name,
                             'is_sender': isSender,
                             'agreement_form': invitationDict.agreement_form
                         }

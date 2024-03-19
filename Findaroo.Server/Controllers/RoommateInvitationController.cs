@@ -101,12 +101,14 @@ namespace Findaroo.Server.Controllers
                 sendRoommateInvitationRequest.receiver_id, 
                 sendRoommateInvitationRequest.room_id,
                 sendRoommateInvitationRequest.roommate_agreement);
+
             _psql.roommate_invitation.Add(newRoommateInvitation);
+
             _psql.SaveChanges();
         }
 
-        [HttpPost("accept")]
-        public async Task acceptRoommateInvitation([FromBody] AcceptRoommateInvitationRequest acceptRoommateInvitationRequest)
+        [HttpPut("update")]
+        public async Task updateRoommateInvitation([FromBody] UpdateRoommateInvitationRequest updateRoommateInvitationRequest)
         {
             String userId = null;
 
@@ -126,8 +128,54 @@ namespace Findaroo.Server.Controllers
                 userId = userRecord.Uid;
             }
 
+            if (userId != updateRoommateInvitationRequest.sender_id && userId != updateRoommateInvitationRequest.receiver_id)
+            {
+                Response.StatusCode = (int)(HttpStatusCode.Unauthorized);
+                return;
+            }
+
+            try
+            {
+                _psql.roommate_invitation.Update(new RoommateInvitation(
+                    updateRoommateInvitationRequest.sender_id,
+                    updateRoommateInvitationRequest.receiver_id,
+                    updateRoommateInvitationRequest.room_id,
+                    updateRoommateInvitationRequest.roommate_agreement
+                ));
+                _psql.SaveChanges();
+            } 
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)(HttpStatusCode.BadRequest);
+                return;
+            }
+        }
+
+        [HttpPost("accept")]
+        public async Task acceptRoommateInvitation([FromBody] AcceptRoommateInvitationRequest acceptRoommateInvitationRequest)
+        {
+            String userId = null;
+
+            if (Request.Cookies["idToken"] == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return;
+            }
+            else
+            {
+                var userRecord = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(Request.Cookies["idToken"]);
+                if (userRecord == null ||
+                    (!userRecord.Uid.Equals(acceptRoommateInvitationRequest.receiver_id) && !userRecord.Uid.Equals(acceptRoommateInvitationRequest.sender_id)))
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return;
+                }
+                userId = userRecord.Uid;
+            }
+
             if (_psql.roommate_invitation
-                .Where(rm => rm.receiver_id.Equals(userId) 
+                .Where(rm => rm.receiver_id.Equals(acceptRoommateInvitationRequest.receiver_id) 
+                    && rm.sender_id.Equals(acceptRoommateInvitationRequest.sender_id)
                     && rm.room_id.Equals(acceptRoommateInvitationRequest.room_id))
                 .FirstOrDefault() == null)
             {
@@ -136,10 +184,50 @@ namespace Findaroo.Server.Controllers
             }
 
             _psql.roommate_invitation
-                .Where(rm => rm.receiver_id.Equals(userId)
+                .Where(rm => rm.sender_id.Equals(acceptRoommateInvitationRequest.sender_id)
+                    && rm.receiver_id.Equals(acceptRoommateInvitationRequest.receiver_id)
                     && rm.room_id.Equals(acceptRoommateInvitationRequest.room_id)).ExecuteDelete();
-            Roommate newRoommate = new Roommate(acceptRoommateInvitationRequest.room_id, userId);
+            Roommate newRoommate = new Roommate(acceptRoommateInvitationRequest.room_id, acceptRoommateInvitationRequest.receiver_id);
             _psql.roommate.Add(newRoommate);
+            _psql.SaveChanges();
+        }
+
+        [HttpDelete]
+        public async Task declineRoommateInvitation(DeleteRoommateInvitationRequest deleteRoommateInvitationRequest)
+        {
+            String userId = null;
+
+            if (Request.Cookies["idToken"] == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return;
+            }
+            else
+            {
+                var userRecord = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(Request.Cookies["idToken"]);
+                if (userRecord == null ||
+                    (!userRecord.Uid.Equals(deleteRoommateInvitationRequest.receiver_id) && !userRecord.Uid.Equals(deleteRoommateInvitationRequest.sender_id)))
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return;
+                }
+                userId = userRecord.Uid;
+            }
+
+            if (_psql.roommate_invitation
+                .Where(rm => rm.receiver_id.Equals(deleteRoommateInvitationRequest.receiver_id)
+                    && rm.sender_id.Equals(deleteRoommateInvitationRequest.sender_id)
+                    && rm.room_id.Equals(deleteRoommateInvitationRequest.room_id))
+                .FirstOrDefault() == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+
+            _psql.roommate_invitation
+                .Where(rm => rm.receiver_id.Equals(deleteRoommateInvitationRequest.receiver_id) 
+                    && rm.sender_id.Equals(deleteRoommateInvitationRequest.sender_id)
+                    && rm.room_id.Equals(deleteRoommateInvitationRequest.room_id)).ExecuteDelete();
             _psql.SaveChanges();
         }
     }

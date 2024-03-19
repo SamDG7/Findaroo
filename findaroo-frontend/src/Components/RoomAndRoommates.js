@@ -43,7 +43,7 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
                 <AddRoommate connectionDict={connectionDict} roomId={roomDict.room_id}/>
                 
             </div>}
-            <div className="Row Start">
+            <div className="Panel">
                 {
                     showRoommate && roommateDict.map((rm, i) => (
                         <RoommateInfo roommate={rm} room_id={roomDict.room_id}/>
@@ -91,6 +91,7 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
 }
 
 function AddRoommate({connectionDict, roomId}) {
+    const auth = getAuth();
     const [showDropdown, setShowDropdown] = useState(false);
     const [addRoommateInput, setAddRoommateInput] = useState("");
     const [roommateToAddId, setRoommateToAddId] = useState("");
@@ -123,9 +124,10 @@ function AddRoommate({connectionDict, roomId}) {
                         {
                             'name': addRoommateInput, 
                             'receiver_id': roommateToAddId,
+                            'sender_id': auth.currentUser.uid,
                             'room_id': roomId,
                             'is_sender': true,
-                            'accept_visible': false
+                            'agreement_form': null
                         }
                     }
                 >
