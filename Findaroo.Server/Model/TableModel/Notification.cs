@@ -1,10 +1,15 @@
 ﻿using Findaroo.Server.Enums;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Findaroo.Server.Model.TableModel
 {
     public class Notification
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string notification_id { get; set; }
         public String sender_id {  get; set; }
         public String receiver_id { get; set; }
         public NotificationEnum type { get; set; }
