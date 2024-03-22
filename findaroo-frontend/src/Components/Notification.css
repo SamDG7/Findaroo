@@ -1,0 +1,27 @@
+@import "../Utils/Colors.css";
+
+.bell {
+    display: block;
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.dropdown-menu.active {
+    position:absolute;
+    top:75px;
+    right:50px;
+    background-color: #413c3c21;
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    width: 300px;
+}
+
+.dropdown-menu.inactive {
+    position:absolute;
+    visibility: hidden;
+}
+
+.notification-item img {
+    max-width:40px;
+    max-height:40px;
+}

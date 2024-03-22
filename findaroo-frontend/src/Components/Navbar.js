@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {useNavigate} from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
+import { Notification } from './Notification';
 
 
 const Navbar = () => {
@@ -42,6 +43,7 @@ const Navbar = () => {
                         }}/>
                     }
                 </li>
+                <Notification></Notification>
                 <li style={{float: "right"}}>
                     <Link to="/Profile">
                         <ButtonTransparent text={"Profile"}/>

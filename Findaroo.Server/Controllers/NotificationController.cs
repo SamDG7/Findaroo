@@ -30,7 +30,7 @@ namespace Findaroo.Server.Controllers
             }
             else
             {
-                var userRecord = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(Request.Cookies["idTOken"]);
+                var userRecord = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(Request.Cookies["idToken"]);
                 if (userRecord == null)
                 {
                     Response.StatusCode = (int)HttpStatusCode.Unauthorized;
