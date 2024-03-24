@@ -29,6 +29,7 @@ namespace Findaroo.Server.Mapper
             if (updateUserRequest.room_type != null) user.room_type = updateUserRequest.room_type;
             if (updateUserRequest.lifestyle_answers != null) user.lifestyle_answers = updateUserRequest.lifestyle_answers;
             if (updateUserRequest.status != null) user.status = (bool)updateUserRequest.status;
+            if (updateUserRequest.social != null) user.social = updateUserRequest.social;
         }
     }
 }

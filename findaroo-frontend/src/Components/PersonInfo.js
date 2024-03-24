@@ -5,6 +5,11 @@ import GlobalVariables from "../Utils/GlobalVariables";
 import { useNavigate } from "react-router-dom";
 import { ButtonImportant } from "./Buttons";
 import { getAuth } from "@firebase/auth";
+import fb from "../fb.png";
+import ig from "../ig.png";
+import tw from "../tw.png";
+import li from "../li.png";
+
 
 export default function PersonInfo({personDict}) {
     const [image, setImage] = useState();
@@ -13,6 +18,15 @@ export default function PersonInfo({personDict}) {
         if (personDict != null) {
             GetImage(personDict);
         }
+
+        // if (personDict.social === null) {
+            // personDict.social = {
+            //     fb: "sai.girap",
+            //     ig: "sai.girap",
+            //     tw: "sai.girap",
+            //     li: "sai-girap"
+            // }
+        // }
     }, [personDict]);
 
     const GetImage = async function() {
@@ -27,12 +41,32 @@ export default function PersonInfo({personDict}) {
     }
     return (
         <div className="Row Start">
-            <img className="ProfileImage" src={image}
+            <img className="ProfileImage" src={image} 
                  alt={personDict.first_name + " " + personDict.last_name + "'s profile picture"}/>
             <div className="Column Start">
                 <h1>
                     {personDict.first_name + " " + personDict.last_name}
                 </h1>
+            
+                {personDict.social && <div className="Row">
+
+                    {personDict.social[0] && <a href={"https://www.facebook.com/" + personDict.social[0]} target="_blank" rel="noopener noreferrer">
+                        <img src={fb} alt={"Facebook link"} style={{ width: '50%', height: 'auto' }} />
+                    </a>}
+
+                    {personDict.social[1] && <a href={"https://www.instagram.com/" + personDict.social[1]} target="_blank" rel="noopener noreferrer">
+                        <img src={ig} alt={"Instagram link"} style={{ width: '50%', height: 'auto' }} />
+                    </a>}
+
+                    {personDict.social[2] && <a href={"https://www.twitter.com/" + personDict.social[2]} target="_blank" rel="noopener noreferrer">
+                        <img src={tw} alt={"Twitter link"} style={{ width: '50%', height: 'auto' }} />
+                    </a>}
+
+                    {personDict.social[3] && <a href={"https://www.linkedin.com/in/" + personDict.social[3]} target="_blank" rel="noopener noreferrer">
+                        <img src={li} alt={"LinkedIn link"} style={{ width: '50%', height: 'auto' }} />
+                    </a>}
+                </div>}
+                
                 <h2>
                     {(personDict.state ? personDict.state + ", " : "") + personDict.country}
                 </h2>

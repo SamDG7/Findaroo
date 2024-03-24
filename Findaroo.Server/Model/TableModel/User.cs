@@ -33,6 +33,7 @@ namespace Findaroo.Server.Model.TableModel
         public bool status { get; set; }
         public int[]? lifestyle_answers { get; set; }
         public string? room_type { get; set; }
+        public string?[] social { get; set; }
 
         public User() { }
 
@@ -64,6 +65,7 @@ namespace Findaroo.Server.Model.TableModel
             this.preferences = pur.preferences;
             this.room_type = pur.room_type;
             this.user_id = pur.user_id;
+            this.social = pur.social;
         }
     }
 }
