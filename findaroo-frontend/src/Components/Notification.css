@@ -10,10 +10,12 @@
     position:absolute;
     top:75px;
     right:50px;
-    background-color: #413c3c21;
+    background-color: #7e7e7b;
+    padding: 10px 10px;
     border-radius: var(--border-radius);
-    padding: 10px 20px;
     width: 300px;
+    height:300px;
+    overflow-y: auto;
 }
 
 .dropdown-menu.inactive {
@@ -24,4 +26,12 @@
 .notification-item img {
     max-width:40px;
     max-height:40px;
+}
+
+.notification-item.seen {
+    background-color: #a0a09e;
+}
+
+.notification-item.not-seen {
+    background-color: #eaf093;
 }

@@ -1,4 +1,5 @@
-﻿using Findaroo.Server.Model.TableModel;
+﻿using Findaroo.Server.Enums;
+using Findaroo.Server.Model.TableModel;
 using Findaroo.Server.PostgreSQL;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +20,7 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Notification>> getMyNotifications(int offset)
+        public async Task<List<Notification>> getMyNonMessageNotifications(int offset)
         {
             String user_id = null;
 
@@ -40,10 +41,38 @@ namespace Findaroo.Server.Controllers
             }
 
             return _psql.notification
-                .Where(n => n.receiver_id.Equals(user_id))
+                .Where(n => n.receiver_id.Equals(user_id) && n.type != NotificationEnum.Message)
+                .OrderBy(n => n.date_created)
                 .Skip(offset)
                 .Take(10)
                 .ToList();
-        } 
+        }
+
+        [HttpPost]
+        public async void recordNonMessageNotificationsAsSeen()
+        {
+            String user_id = null;
+
+            if (Request.Cookies["idToken"] == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return;
+            }
+            else
+            {
+                var userRecord = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(Request.Cookies["idToken"]);
+                if (userRecord == null)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return;
+                }
+                user_id = userRecord.Uid;
+            }
+
+            _psql.notification
+                .Where(n => n.receiver_id.Equals(user_id) && n.type != NotificationEnum.Message)
+                .ToList().ForEach(n => n.seen = true);
+            _psql.SaveChanges();
+        }
     }
 }

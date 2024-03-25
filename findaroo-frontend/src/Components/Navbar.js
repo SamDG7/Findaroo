@@ -11,7 +11,6 @@ import { Notification } from './Notification';
 
 const Navbar = () => {
     const navigate = useNavigate();
-    
 
     return (
         <nav className="fixed w-full z-10 top-0 drop-shadow-xl">
@@ -43,7 +42,13 @@ const Navbar = () => {
                         }}/>
                     }
                 </li>
-                <Notification></Notification>
+                <li style={{float: "right"}}>
+                    {
+                        GlobalVariables.authenticated ?
+                        <Notification></Notification> : 
+                        <div></div>
+                    }
+                </li>
                 <li style={{float: "right"}}>
                     <Link to="/Profile">
                         <ButtonTransparent text={"Profile"}/>
