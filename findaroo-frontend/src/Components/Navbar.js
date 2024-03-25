@@ -48,8 +48,8 @@ const Navbar = () => {
                     </Link>
                 </li>
                 <li style={{float: "right"}}>
-                    <Link to="/Messages">
-                        <ButtonTransparent text={"Messages"}/>
+                    <Link to="/Conversations">
+                        <ButtonTransparent text={"Conversations"}/>
                     </Link>
                 </li>
                 <li style={{float: "right"}}>

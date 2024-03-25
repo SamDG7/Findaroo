@@ -116,6 +116,7 @@ export function PersonInfoSmall({personDict}) {
                 {personDict.rating >= 0 ? personDict.rating + "/5" : "Unrated"}
                 <div className="p-[1vw]"/>
                 <ButtonImportant text={"Add Connection"} onClickFunction={addConnection}></ButtonImportant>
+                <ButtonImportant text={"Start Conversation"} onClickFunction={startConversation}></ButtonImportant>
             </h3>
         </div>
     );
@@ -127,6 +128,16 @@ export function PersonInfoSmall({personDict}) {
                 'Content-type': 'application/json; charset=UTF-8'
             },
             body: JSON.stringify({"sender_id": auth.currentUser.uid, "receiver_id": personDict.user_id})
+        }).catch(error => console.log(error));
+    }
+
+    async function startConversation() {
+        await fetch(GlobalVariables.backendURL + "", {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify([auth.currentUser.uid, personDict.user_id])
         }).catch(error => console.log(error));
     }
 }
