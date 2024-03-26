@@ -9,6 +9,7 @@ namespace Findaroo.Server.Model.TableModel
     {
         public string message_id { get; set; }
         public string user_id { get; set; }
+        public string conversation_id { get; set; }
         public string message_text { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime date_created { get; set; }
