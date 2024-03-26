@@ -13,13 +13,20 @@ import { signOut } from "firebase/auth";
 
 export default function User() {
     // This redirects to the login page if not logged in
-
+    const [loggedInUser, setLoggedInUser] = useState(null)
     const [userData, setUserData] = useState(null);
     const { uid } = useParams();
 
     useEffect(() => {
 
         console.log("GET Call")
+        fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setLoggedInUser(data);
+            }).catch(error => console.error(error));
+
         fetch('http://localhost:5019/User?user_id=' + uid)
             .then(response => response.json())
             .then(data => {
@@ -28,7 +35,40 @@ export default function User() {
             }).catch(error => console.error(error));
 
     }, []);
-
+    const BlockUser = async () => {
+        console.log(loggedInUser.blocked_users)
+        console.log("PUT Call")
+        var copy = null
+        
+        if(loggedInUser.blocked_users == null) {
+            // loggedInUser.blocked_users = [userData.user_id]
+            copy = [userData.user_id]
+        } else {
+            copy = loggedInUser.blocked_users
+            copy.push(userData.user_id)
+        }
+        console.log(copy)
+        
+        try {
+            const form = {
+                user_id: GlobalVariables.userCredential.uid,
+                blocked_users: copy
+            }
+            await fetch('http://localhost:5019/User', {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(form)
+			}).then(response => {
+                console.log("HERE")
+				return response.text()
+			  });
+        } catch (err) {
+            console.log(err)
+            
+        }
+    }
     return (
         <div className="Page">
             <Navbar />
@@ -36,6 +76,7 @@ export default function User() {
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
                     <PersonInfo personDict={userData} />
+                    <ButtonImportant text="Block User" onClickFunction={BlockUser}/>
                 </div>
             </div>
         </div>
