@@ -4,6 +4,7 @@
 .InputStandard {
     background-color: var(--default-grey);
     color: var(--default-black);
+    width: 100%;
     font-size: 1vw;
     padding: 0.5vw;
 }

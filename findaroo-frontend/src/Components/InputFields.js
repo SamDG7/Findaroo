@@ -8,7 +8,7 @@ import { eye } from 'react-icons-kit/feather/eye'
 export default function InputStandard({ name, defaultValue, onChangeFunction }) {
     return (
         <div className="Row">
-            <h3>
+            <h3 style={{width: "10vw", textAlign: "right"}}>
                 {name}
             </h3>
             <input
@@ -39,7 +39,7 @@ export function InputPassword({ name, defaultValue, onChangeFunction }) {
 
     return (
         <div className="Row">
-            <h3>
+            <h3 style={{ width: "10vw", textAlign: "right" }}>
                 {name}
             </h3>
             <input
@@ -60,7 +60,7 @@ export function InputPassword({ name, defaultValue, onChangeFunction }) {
 export function InputImportant({ name, defaultValue, onChangeFunction }) {
     return (
         <div className="Row">
-            <h3>
+            <h3 style={{ width: "10vw", textAlign: "right" }}>
                 {name}
             </h3>
             <input className="InputImportant" name={name} value={defaultValue} onChange={onChangeFunction}
@@ -72,7 +72,7 @@ export function InputImportant({ name, defaultValue, onChangeFunction }) {
 export function InputBox({ name, defaultValue, onChangeFunction }) {
     return (
         <div className="Row Start">
-            <h3>
+            <h3 style={{ width: "10vw", textAlign: "right" }}>
                 {name}
             </h3>
             <textarea className="InputBox" name={name} value={defaultValue} onChange={onChangeFunction}
