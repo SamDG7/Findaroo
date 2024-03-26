@@ -6,6 +6,7 @@
         ConnectionRequest = 1,
         ConnectionRequestAccepted = 2,
         RoommateInvitation = 3,
-        RoommateInvitationAccepted = 4
+        RoommateInvitationAcceptedBySender = 4,
+        RoommateInvitationAcceptedByReceiver = 5
     }
 }

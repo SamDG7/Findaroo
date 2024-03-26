@@ -93,9 +93,31 @@ namespace Findaroo.Server.Controllers
                 userId = userRecord.Uid;
             }
 
+            // Check if sender is in the room.
             if (_psql.roommate
                 .Where(rm => rm.roommate_id.Equals(userId) && rm.room_id.Equals(sendRoommateInvitationRequest.room_id))
                 .FirstOrDefault() == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+
+            //Check if invitation is already made.
+            if (_psql.roommate_invitation
+                .Where(rm => rm.sender_id.Equals(userId) 
+                    && rm.receiver_id.Equals(sendRoommateInvitationRequest.receiver_id)
+                    && rm.room_id.Equals(sendRoommateInvitationRequest.room_id))
+                .FirstOrDefault() != null) 
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+
+            //Check if receiver is already in the room.
+            if (_psql.roommate
+                .Where(rm => rm.roommate_id.Equals(sendRoommateInvitationRequest.receiver_id) 
+                    && rm.room_id.Equals(sendRoommateInvitationRequest.room_id))
+                .FirstOrDefault() != null)
             {
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return;
@@ -188,13 +210,23 @@ namespace Findaroo.Server.Controllers
                 return;
             }
 
+
             _psql.roommate_invitation
                 .Where(rm => rm.sender_id.Equals(acceptRoommateInvitationRequest.sender_id)
                     && rm.receiver_id.Equals(acceptRoommateInvitationRequest.receiver_id)
                     && rm.room_id.Equals(acceptRoommateInvitationRequest.room_id)).ExecuteDelete();
             Roommate newRoommate = new Roommate(acceptRoommateInvitationRequest.room_id, acceptRoommateInvitationRequest.receiver_id);
 
-            _notificationManager.recordNotification(acceptRoommateInvitationRequest.receiver_id, userId,  NotificationEnum.RoommateInvitationAccepted);
+            if (userId.Equals(acceptRoommateInvitationRequest.receiver_id))
+            {
+                _notificationManager.recordNotification(acceptRoommateInvitationRequest.receiver_id, 
+                    userId, NotificationEnum.RoommateInvitationAcceptedByReceiver);
+            } else
+            {
+                _notificationManager.recordNotification(acceptRoommateInvitationRequest.receiver_id, 
+                    userId, NotificationEnum.RoommateInvitationAcceptedBySender);
+            }
+            
 
             _psql.roommate.Add(newRoommate);
             _psql.SaveChanges();

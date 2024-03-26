@@ -70,6 +70,8 @@ export function Notification() {
             idList.push(element["sender_id"])
         });
 
+        var filteredIdList = Array.from(new Set(idList));
+
         var imageList = [];
 
         for (const id of idList) {
@@ -80,15 +82,20 @@ export function Notification() {
 
         var nameList = await fetch(GlobalVariables.backendURL + "/User/idsFromNames", {
             method: 'POST',
-            body: JSON.stringify({"ids": idList}),
+            body: JSON.stringify({"ids": filteredIdList}),
             headers: {
                 "Content-Type": "application/json"
             }
         }).then(response => response.json());
+        
+        var nameDict = {}
+        filteredIdList.forEach((id, i) => {
+            nameDict[id] = nameList[i];
+        })
 
         setNotificationData(data.map((d, i) => ({
             'notification': d,
-            'name': nameList[i],
+            'name': nameDict[d.sender_id],
             'image': imageList[i]
         })))
     }
@@ -108,10 +115,10 @@ function NotificationItem({prop}) {
             <div className={`Row Start notification-item ${prop.notification.seen ? 'seen' : 'not-seen'}`}>
                 <img src={prop.image}></img>
                 <div className='Column Start'>
-                    <h2>{getMessage(prop.name, prop.notification.type)}</h2>
-                    <h3>{prop.notification.date_created    
+                    <h3>{getMessage(prop.name, prop.notification.type)}</h3>
+                    <h4>{prop.notification.date_created    
                             .substring(0, prop.notification.date_created.indexOf('T'))}
-                    </h3>
+                    </h4>
                 </div>
             </div>
         </li>
@@ -123,7 +130,8 @@ function NotificationItem({prop}) {
             ConnectionRequest: 1,
             ConnectionRequestAccepted: 2,
             RoommateInvitation: 3,
-            RoommateInvitationAccepted: 4
+            RoommateInvitationAcceptedBySender: 4,
+            RoommateInvitationAcceptedByReceiver: 5
         }
 
         switch(type) {
@@ -133,8 +141,10 @@ function NotificationItem({prop}) {
                 return `${name} accepted your connection request.`
             case notificationType.RoommateInvitation:
                 return `${name} sent you a roommate invitation.`
-            case notificationType.RoommateInvitationAccepted:
+            case notificationType.RoommateInvitationAcceptedByReceiver:
                 return `${name} accepted your roommate invitation.`
+            case notificationType.RoommateInvitationAcceptedBySender:
+                return `You now belong to a room with ${name}.`
             default:
                 return 'Invalid notification type.'
         }

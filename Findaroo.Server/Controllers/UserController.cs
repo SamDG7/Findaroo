@@ -53,9 +53,7 @@ namespace Findaroo.Server.Controllers
         public User[] GetAllUsers()
         {
             User[] users = _psql.user.Where(row => row.status).ToArray();
-
             return users;
-
         }
         
 

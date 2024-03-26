@@ -42,7 +42,7 @@ namespace Findaroo.Server.Controllers
 
             return _psql.notification
                 .Where(n => n.receiver_id.Equals(user_id) && n.type != NotificationEnum.Message)
-                .OrderBy(n => n.date_created)
+                .OrderByDescending(n => n.date_created)
                 .Skip(offset)
                 .Take(10)
                 .ToList();
