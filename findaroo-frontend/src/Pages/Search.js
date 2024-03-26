@@ -11,7 +11,7 @@ import Selector from "../Components/Selector";
 export default function Search() {
     // This redirects to the login page if not logged in
     const navigate = useNavigate();
-
+    const [blockedUsers, setBlockedUsers] = useState([])
     const [sortType, setSortType] = useState("Default");
     const [allUsers, setAllUsers] = useState([]);
 
@@ -26,8 +26,13 @@ export default function Search() {
         console.log("GET Call")
         fetch('http://localhost:5019/User/All')
             .then(response => response.json())
-            .then(data => {console.log(data); setAllUsers(data);})
+            .then(data => {console.log(data); 
+                setAllUsers(data); 
+                setBlockedUsers(data[data.findIndex(obj => obj.user_id == GlobalVariables.userCredential.uid)].blocked_users);
+                
+            })
             .catch(error => console.error(error));
+        
     }, []);
 
     return (
@@ -39,14 +44,27 @@ export default function Search() {
                         <Selector name="Sort By" values={["Score", "A-Z", "Z-A"]} onChangeFunction={(e) => setSortType(e.target.value)} />
                     </div>
                     {
-                        GetSortedPersons(allUsers, sortType)
+                        allUsers != null && GetSortedPersons(allUsers, sortType)
+                        
                     }
                 </div>
             </div>
         </div>
     );
+    function filterBlockedUsers(data) {
+        
+        for (let i = 0; i < data.length; i++) {
+            if(blockedUsers.includes(data[i].user_id)) {
+                data.splice(i, 1)
+                i--
+            }
+        }
 
+        return data
+    }
     function GetSortedPersons(data, sortTypeName) {
+        data = filterBlockedUsers(data)
+
         const sortFunction = GetSort(sortTypeName);
         const sortedData = data.sort(sortFunction);
 
