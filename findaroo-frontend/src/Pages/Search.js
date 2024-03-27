@@ -57,7 +57,7 @@ export default function Search() {
     );
     function filterBlockedUsers(data) {
         if(blockedUsers == null) {
-            return
+            return data
         }
         for (let i = 0; i < data.length; i++) {
             if(blockedUsers.includes(data[i].user_id)) {
