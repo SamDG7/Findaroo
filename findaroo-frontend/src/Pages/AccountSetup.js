@@ -50,7 +50,7 @@ export default function AccountSetup() {
 			}).then(response => {
 				return response.text()
 			  });
-        }catch (err) {
+        } catch (err) {
             console.log(err)
         }
         

@@ -6,11 +6,11 @@ import {Link} from "react-router-dom";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {useNavigate} from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
+import { Notification } from './Notification';
 
 
 const Navbar = () => {
     const navigate = useNavigate();
-    
 
     return (
         <nav className="fixed w-full z-10 top-0 drop-shadow-xl">
@@ -40,6 +40,13 @@ const Navbar = () => {
                         <ButtonTransparent text={"Log In"} onClickFunction={() => {
                             navigate("/Login");
                         }}/>
+                    }
+                </li>
+                <li style={{float: "right"}}>
+                    {
+                        GlobalVariables.authenticated ?
+                        <Notification></Notification> : 
+                        <div></div>
                     }
                 </li>
                 <li style={{float: "right"}}>
