@@ -17,6 +17,8 @@ namespace Findaroo.Server.Model.TableModel
         public DateTime date_created { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public bool seen {  get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int count { get; set; }
 
         public Notification(string sender_id, string receiver_id, NotificationEnum type)
         {
