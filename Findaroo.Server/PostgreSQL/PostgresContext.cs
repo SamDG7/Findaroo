@@ -20,6 +20,18 @@ namespace Findaroo.Server.PostgreSQL
             modelBuilder.Entity<User>()
                 .Property(x => x.date_modified)
                 .HasDefaultValueSql("current_timestamp");
+            modelBuilder.Entity<Conversation>()
+                .Property(x => x.conversation_id)
+                .HasDefaultValueSql("gen_random_uuid()");
+            modelBuilder.Entity<Conversation>()
+                .Property(x => x.date_modified)
+                .HasDefaultValueSql("current_timestamp");
+            modelBuilder.Entity<ConversationMessage>()
+                .Property(x => x.message_id)
+                .HasDefaultValueSql("gen_random_uuid()");
+            modelBuilder.Entity<ConversationMessage>()
+                .Property(x => x.message_id)
+                .HasDefaultValueSql("current_timestamp");
         }
     }
 }

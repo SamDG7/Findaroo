@@ -10,6 +10,7 @@ import reportWebVitals from './reportWebVitals';
 // All pages should be imported here:
 import Home from "./Pages/Home"
 import Conversations from "./Pages/Conversations"
+import Conversation from "./Pages/Conversation"
 import Search from "./Pages/Search"
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
@@ -62,6 +63,11 @@ const router = createBrowserRouter(
         {
             path: "/Conversations",
             element: <Conversations />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Conversations/:cid",
+            element: <Conversation />,
             errorElement: <Error />,
         },
         {

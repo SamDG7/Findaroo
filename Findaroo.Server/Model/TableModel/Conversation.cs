@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Findaroo.Server.Model.TableModel
 {
-    [PrimaryKey(nameof(conversation_id))]
     public class Conversation
     {
+        [Key]
         public string conversation_id { get; set; }
         public string[] user_ids { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

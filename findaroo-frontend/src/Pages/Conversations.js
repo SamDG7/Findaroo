@@ -23,7 +23,7 @@ export default function Conversations() {
     useEffect(() => {
         //REPLACE THIS WITH USER_ID
         console.log("GET Call")
-        fetch('http://localhost:5019/Conversation/all?user_id=' + GlobalVariables.userCredential.uid)
+        fetch(GlobalVariables.backendURL+ '/Conversation/all?user_id=' + GlobalVariables.userCredential.uid)
             .then(response => response.json())
             .then(data => {console.log(data); setConversationsData(data);})
             .catch(error => console.error(error));

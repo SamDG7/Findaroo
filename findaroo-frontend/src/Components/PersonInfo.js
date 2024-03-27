@@ -65,6 +65,7 @@ export default function PersonInfo({personDict}) {
 export function PersonInfoSmall({personDict}) {
     const navigate = useNavigate();
     const [image, setImage] = useState();
+    const [connected, setConnected] = useState(false);
 
     const auth = getAuth();
 
@@ -73,6 +74,19 @@ export function PersonInfoSmall({personDict}) {
             GetImage(personDict);
         }
     }, [personDict]);
+
+    // Check if the person is a connection
+    useEffect(() => {
+        if (!personDict.user_id) {
+            return
+        }
+        console.log("GET Call")
+        fetch('http://localhost:5019/Connection/check?user_id1=' + GlobalVariables.userCredential.uid + "&user_id2=" + personDict.user_id)
+            .then(response => response.json())
+            .then(data => {
+                setConnected(data);
+            }).catch(error => console.error(error));
+    }, [personDict.user_id]);
 
     const GetImage = async function() {
         const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + personDict.user_id);
@@ -116,7 +130,7 @@ export function PersonInfoSmall({personDict}) {
                 {personDict.rating >= 0 ? personDict.rating + "/5" : "Unrated"}
                 <div className="p-[1vw]"/>
                 <ButtonImportant text={"Add Connection"} onClickFunction={addConnection}></ButtonImportant>
-                <ButtonImportant text={"Start Conversation"} onClickFunction={startConversation}></ButtonImportant>
+                {connected && <ButtonImportant text={"Start Conversation"} onClickFunction={startConversation}></ButtonImportant>}
             </h3>
         </div>
     );
@@ -132,12 +146,14 @@ export function PersonInfoSmall({personDict}) {
     }
 
     async function startConversation() {
-        await fetch(GlobalVariables.backendURL + "", {
+        console.log([auth.currentUser.uid, personDict.user_id])
+        await fetch(GlobalVariables.backendURL + "/Conversation", {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json; charset=UTF-8'
             },
             body: JSON.stringify([auth.currentUser.uid, personDict.user_id])
         }).catch(error => console.log(error));
+        navigate("/conversations")
     }
 }

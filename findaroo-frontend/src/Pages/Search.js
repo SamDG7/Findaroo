@@ -26,7 +26,7 @@ export default function Search() {
         console.log("GET Call")
         fetch('http://localhost:5019/User/All')
             .then(response => response.json())
-            .then(data => {console.log(data); setAllUsers(data);})
+            .then(data => {setAllUsers(data);})
             .catch(error => console.error(error));
     }, []);
 
