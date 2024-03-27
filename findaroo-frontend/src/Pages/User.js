@@ -18,6 +18,7 @@ export default function User() {
     const [userData, setUserData] = useState(null);
     const [show, setShow] = useState(false)
     const [rating, setRating] = useState()
+    const [message, setMessage] = useState()
     const { uid } = useParams();
 
     useEffect(() => {
@@ -75,11 +76,14 @@ export default function User() {
     const SubmitRating = () => {
         if(isNaN(rating)  ) {
             console.log("HERE")
+            setMessage("Enter a Number 0-5")
             return
         } else if(Number(rating) >5 || Number(rating) < 0) {
+            setMessage("Enter a Number 0-5")
             console.log("WRONG")
             return
         }
+        setMessage()
     }
     function ShowForm() {
         if(show) {
@@ -89,8 +93,14 @@ export default function User() {
                     <div className="Row space-x-[2vw]">
                             <InputStandard autofocus name="Rate User 0-5" defaultValue={rating} onChangeFunction={(e) => setRating(e.target.value)}/>
                             <ButtonImportant text="Submit" onClickFunction={SubmitRating} />
+                            
                         
-                        </div>    
+                    </div>  
+                    {message !== "" ?
+                                <h4 className="TextError p-0 m-0">
+                                    {message}
+                                </h4> : ""
+                    }  
                 </div>
             )
         }
