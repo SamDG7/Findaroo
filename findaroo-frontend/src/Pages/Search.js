@@ -37,6 +37,10 @@ export default function Search() {
                 <div className="Column">
                     <div className="Column Start" >
                         <Selector name="Sort By" values={["Score", "A-Z", "Z-A"]} onChangeFunction={(e) => setSortType(e.target.value)} />
+                        
+                    </div>
+                    <div className="Column End">
+                        <p>Showing {allUsers.length} Potential Roomates</p>
                     </div>
                     {
                         GetSortedPersons(allUsers, sortType)

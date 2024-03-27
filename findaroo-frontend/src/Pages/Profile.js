@@ -10,6 +10,8 @@ import { getAuth, deleteUser } from "firebase/auth";
 import PersonInfo from "../Components/PersonInfo";
 import Popup from "../Components/Popup";
 import { signOut } from "firebase/auth";
+import SettingsButton from "../Components/SettingsButton";
+import emailjs from 'emailjs-com';
 
 export default function Profile() {
     // This redirects to the login page if not logged in
@@ -27,6 +29,18 @@ export default function Profile() {
 
 
     const [userData, setUserData] = useState(null);
+
+    const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
+    const [isReportFormOpen, setIsReportFormOpen] = useState(false);
+    const openSettingsMenu = () => setIsSettingsMenuOpen(true);
+    const closeSettingsMenu = () => setIsSettingsMenuOpen(false);
+
+    const openReportForm = () => {
+        setIsSettingsMenuOpen(false); // Close settings menu
+        setIsReportFormOpen(true); // Open report form
+      };
+
+    const closeReportForm = () => setIsReportFormOpen(false);
 
     useEffect(() => {
 
@@ -73,6 +87,66 @@ export default function Profile() {
         }
     }
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const subject = formData.get('subject');
+        const message = formData.get('message');
+        const from_name = formData.get('from_name');
+
+
+        const templateParams = {
+            subject, 
+            message, 
+            from_name,
+        };
+        try {
+            const response = await emailjs.send('service_ch4bzfr', 'template_s92oqad', templateParams, '5olGsbDDVqcfNCftk');
+            console.log('Email successfully sent!', response.status, response.text);
+            alert("Issue reported. Thank you!");
+            closeReportForm();
+          } catch (error) {
+            console.error('Failed to send email. Error: ', error);
+            alert("Failed to send the report. Please try again.");
+          }
+      };
+
+      const menuStyle = {
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: '#fff',
+        padding: '40px',
+        borderRadius: '10px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        zIndex: 1000,
+      };
+      const closeButtonStyle = {
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        cursor: 'pointer',
+        border: 'none',
+        background: 'none',
+        fontSize: '24px',
+      };
+      const inputStyle = {
+        marginBottom: '10px',
+        padding: '10px',
+        fontSize: '16px',
+        border: '1px solid #ccc',
+      };
+      const submitStyle = {
+        cursor: 'pointer',
+        padding: '10px 20px',
+        fontSize: '16px',
+        backgroundColor: '#4CAF50',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+      };
+
     return (
         <div className="Page">
             <Navbar/>
@@ -117,12 +191,52 @@ export default function Profile() {
                         <div className="Row space-x-[2vw]">
                             <ButtonDelete text="Disable Account" onClickFunction={togglePopup}/>
                             <ButtonDelete text="Delete Account" onClickFunction={DeleteAccountCall}/>
+                            <div>
+                                <SettingsButton onClick={openSettingsMenu}/>
+                                {isSettingsMenuOpen && (
+                                    <div style={{
+                                    position: 'fixed',
+                                    top: '20%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    backgroundColor: '#fff',
+                                    padding: '30px',
+                                    borderRadius: '5px',
+                                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                                    zIndex: 1000, // Ensure the menu is above other content
+                                    }}>
+                                    <button onClick={closeSettingsMenu} style={{
+                                        position: 'absolute',
+                                        top: '5px',
+                                        right: '5px',
+                                        cursor: 'pointer',
+                                        border: 'none',
+                                        background: 'none',
+                                        fontSize: '24px',
+                                    }}>×</button>
+                                        <ButtonStandard text="Report an Issue" onClickFunction={openReportForm}/>
+                                    </div>
+                                )}
+                                {isReportFormOpen && (
+                                    <div style={menuStyle}>
+                                    <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
+                                        <button onClick={closeReportForm} style={closeButtonStyle}>×</button>
+                                        <input type="text" name="from_name" placeholder="Email" required style={inputStyle} />
+                                        <input type="text" name="subject" placeholder="Subject" required style={inputStyle} />
+                                        <textarea name="message" placeholder="Message" required style={{...inputStyle, height: '100px'}}></textarea>
+                                        <button type="submit" style={submitStyle}>Submit</button>
+                                    </form>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     );
+
+    
 
     async function ConnectionRequestsCount() {
         const response = await fetch(GlobalVariables.backendURL + "/ConnectionRequest/received?user_id=" + auth.currentUser.uid);
