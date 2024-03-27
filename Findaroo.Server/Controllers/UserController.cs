@@ -104,10 +104,13 @@ namespace Findaroo.Server.Controllers
             }
 
             _psql.connection
-                .Where(u => u.user_1_id.Equals(deleteUserRequest) || u.user_2_id.Equals(deleteUserRequest))
+                .Where(u => u.user_1_id.Equals(deleteUserRequest.user_id) || u.user_2_id.Equals(deleteUserRequest.user_id))
                 .ExecuteDelete();
             _psql.connection_request
-                .Where(u => u.sender_id.Equals(deleteUserRequest) || u.receiver_id.Equals(deleteUserRequest))
+                .Where(u => u.sender_id.Equals(deleteUserRequest.user_id) || u.receiver_id.Equals(deleteUserRequest.user_id))
+                .ExecuteDelete();
+            _psql.roommate
+                .Where(rm => rm.roommate_id.Equals(deleteUserRequest.user_id))
                 .ExecuteDelete();
             _psql.user.Remove(toBeDeleted);
             _psql.SaveChanges();

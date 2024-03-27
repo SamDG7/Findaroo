@@ -10,6 +10,9 @@ namespace Findaroo.Server.PostgreSQL
         public DbSet<User> user { get; set; }
         public DbSet<Connection> connection { get; set; }
         public DbSet<ConnectionRequest> connection_request { get; set; }
+        public DbSet<Room> room { get; set; }
+        public DbSet<Roommate> roommate {  get; set; }
+        public DbSet<RoommateInvitation> roommate_invitation {  get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
