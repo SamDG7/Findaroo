@@ -24,6 +24,15 @@ namespace Findaroo.Server.Controllers
                 .FromSql($"SELECT * from connection where user_1_id = {user_id} or user_2_id = {user_id}")
                 .ToList();
         }
+        
+        [HttpGet]
+        [Route("check")]
+        public bool checkConnection(String user_id1, String user_id2)
+        {
+            return _psql.connection
+                .FromSql($"SELECT * from connection where (user_1_id = {user_id1} and user_2_id = {user_id2}) or (user_1_id = {user_id2} and user_2_id = {user_id1})")
+                .ToList().Count > 0;
+        }
 
         [HttpDelete]
         public void deleteConnection([FromBody] DeleteConnectionRequest deleteConnectionRequest)

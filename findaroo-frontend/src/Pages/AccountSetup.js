@@ -52,7 +52,7 @@ export default function AccountSetup() {
                 console.log("HERE")
 				return response.text()
 			  });
-        }catch (err) {
+        } catch (err) {
             console.log(err)
         }
         

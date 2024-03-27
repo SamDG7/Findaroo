@@ -98,8 +98,10 @@ export default function Login() {
                 GlobalVariables.userCredential = userCredential.user;
                 console.log("Logged in as " + GlobalVariables.userCredential.email + "with uid " + GlobalVariables.userCredential.uid);
                 GlobalVariables.authenticated = true;
+                document.cookie = "idToken=\"\"; max-age=0";
                 document.cookie = `idToken=${userCredential._tokenResponse.idToken};` + 
-                    `max-age=${userCredential._tokenResponse.expiresIn};`;
+                    `max-age=${userCredential._tokenResponse.expiresIn};` + 
+                    `path=/;`;
                 // Get status
                 fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid).then(response => response.json()).then((userData) => {
                     //console.log(userData)
@@ -133,8 +135,10 @@ export default function Login() {
             GlobalVariables.userCredential = result.user;
             console.log("Logged in as " + GlobalVariables.userCredential.email);
             GlobalVariables.authenticated = true;
+            document.cookie = "idToken=\"\"; max-age=0";
             document.cookie = `idToken=${result._tokenResponse.idToken};` + 
-                `max-age=${result._tokenResponse.expiresIn};`;
+                `max-age=${result._tokenResponse.expiresIn};`+ 
+                `path=/;`;
             navigate("/");
         }).catch((error) => {
             const errorCode = error.code;
