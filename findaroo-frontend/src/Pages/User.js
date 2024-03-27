@@ -10,11 +10,14 @@ import { getAuth, deleteUser } from "firebase/auth";
 import PersonInfo from "../Components/PersonInfo";
 import Popup from "../Components/Popup";
 import { signOut } from "firebase/auth";
+import InputStandard from "../Components/InputFields";
 
 export default function User() {
     // This redirects to the login page if not logged in
     const [loggedInUser, setLoggedInUser] = useState(null)
     const [userData, setUserData] = useState(null);
+    const [show, setShow] = useState(false)
+    const [rating, setRating] = useState()
     const { uid } = useParams();
 
     useEffect(() => {
@@ -69,6 +72,29 @@ export default function User() {
             
         }
     }
+    const SubmitRating = () => {
+        if(isNaN(rating)  ) {
+            console.log("HERE")
+            return
+        } else if(Number(rating) >5 || Number(rating) < 0) {
+            console.log("WRONG")
+            return
+        }
+    }
+    function ShowForm() {
+        if(show) {
+            return (
+                <div className="Column">
+                    
+                    <div className="Row space-x-[2vw]">
+                            <InputStandard autofocus name="Rate User 0-5" defaultValue={rating} onChangeFunction={(e) => setRating(e.target.value)}/>
+                            <ButtonImportant text="Submit" onClickFunction={SubmitRating} />
+                        
+                        </div>    
+                </div>
+            )
+        }
+    }
     return (
         <div className="Page">
             <Navbar />
@@ -76,7 +102,13 @@ export default function User() {
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
                     <PersonInfo personDict={userData} />
+                    <div className="Row space-x-[2vw]">
                     <ButtonImportant text="Block User" onClickFunction={BlockUser}/>
+                    <ButtonImportant text="Rate User" onClickFunction={() => {setShow(!show)}}/>
+                    
+                    </div>
+                    <ShowForm />
+
                 </div>
             </div>
         </div>
