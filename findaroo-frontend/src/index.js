@@ -27,6 +27,7 @@ import User from './Pages/User';
 import MyRooms from './Pages/MyRooms';
 import RoommateAgreement from './Pages/RoommateAgreement';
 import RoommateInvitation from './Pages/RoommateInvitations';
+import BlockedUsers from './Pages/BlockedUsers';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -141,6 +142,11 @@ const router = createBrowserRouter(
         {
             path: "Profile/MyRooms/RoommateInvitations",
             element: <RoommateInvitation/>,
+            errorElement: <Error />,
+        },
+        {
+            path: "Profile/BlockedUsers",
+            element: <BlockedUsers/>,
             errorElement: <Error />,
         }
     ]

@@ -185,7 +185,7 @@ export default function Profile() {
                             </Link>
                             <ButtonStandard text="My Connections" onClickFunction={() => {navigate("/Profile/MyConnections");}}/>
                             <ButtonWithNotification text="Connection Requests" count={requestCount} onClickFunction={() => {navigate("/Profile/MyConnectionRequests");}}/>
-                            <ButtonStandard text="Blocked Users"/>
+                            <ButtonStandard text="Blocked Users" onClickFunction={() => {navigate("/Profile/BlockedUsers");}}/>
                             <ButtonStandard text="My Reviews"/>
                         </div>
                         <div className="Row space-x-[2vw]">
