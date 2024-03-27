@@ -57,5 +57,22 @@ namespace Findaroo.Server.Controllers
 
             return ratings.user_id;
         }
+        
+        [HttpPut]
+        public void updateUser(string user_id, string to_user, int rating)
+        {
+            if (user_id == null)
+            {
+                Response.StatusCode = 404;
+                return;
+            }
+
+            Ratings ratings = _psql.ratings.Find(user_id, to_user);
+
+            ratings.rating = rating;
+
+            _psql.ratings.Update(ratings);
+            _psql.SaveChanges();
+        }
     }
 }
