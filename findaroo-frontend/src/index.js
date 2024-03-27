@@ -24,6 +24,9 @@ import AccountSetup from "./Pages/AccountSetup";
 import EditPhoto from "./Pages/EditPhoto";
 import MyConnectionRequests from './Pages/MyConnectionRequest';
 import User from './Pages/User';
+import MyRooms from './Pages/MyRooms';
+import RoommateAgreement from './Pages/RoommateAgreement';
+import RoommateInvitation from './Pages/RoommateInvitations';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -123,6 +126,21 @@ const router = createBrowserRouter(
         {
             path: "/Profile/MyConnectionRequests",
             element: <MyConnectionRequests />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/MyRooms",
+            element: <MyRooms/>,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/MyRooms/RoommateAgreement",
+            element: <RoommateAgreement/>,
+            errorElement: <Error />,
+        },
+        {
+            path: "Profile/MyRooms/RoommateInvitations",
+            element: <RoommateInvitation/>,
             errorElement: <Error />,
         }
     ]

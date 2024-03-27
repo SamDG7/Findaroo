@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Linq;
+using Findaroo.Server.Utilities;
+using Findaroo.Server.Enums;
 
 namespace Findaroo.Server.Controllers
 {
@@ -14,9 +16,11 @@ namespace Findaroo.Server.Controllers
     public class ConnectionRequestController : ControllerBase
     {
         PostgresContext _psql;
+        NotificationManager _notificationManager;
         public ConnectionRequestController(PostgresContext psql)
         {
             _psql = psql;
+            _notificationManager = new NotificationManager(_psql);
         }
 
         [HttpGet]
@@ -46,8 +50,28 @@ namespace Findaroo.Server.Controllers
             newConnectionRequest.sender_id = sendConnectionRequest.sender_id;
             newConnectionRequest.receiver_id = sendConnectionRequest.receiver_id;
 
+            ConnectionRequest? crExist = _psql.connection_request
+                .Where(cr => (sendConnectionRequest.sender_id.Equals(cr.sender_id) && sendConnectionRequest.receiver_id.Equals(cr.receiver_id))
+                    || (sendConnectionRequest.sender_id.Equals(cr.receiver_id) && sendConnectionRequest.receiver_id.Equals(cr.sender_id)))
+                .FirstOrDefault();
+            Connection? cExist = _psql.connection
+                .Where(c => (c.user_1_id.Equals(sendConnectionRequest.sender_id) && c.user_2_id.Equals(sendConnectionRequest.receiver_id))
+                    || (c.user_2_id.Equals(sendConnectionRequest.sender_id) && c.user_1_id.Equals(sendConnectionRequest.receiver_id)))
+                .FirstOrDefault();
+
+            if (cExist != null || crExist != null) 
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+
             try
             {
+                _notificationManager.recordNotification(
+                    sendConnectionRequest.receiver_id, 
+                    sendConnectionRequest.sender_id, 
+                    NotificationEnum.ConnectionRequest
+                );
                 _psql.connection_request.Add(newConnectionRequest);
                 _psql.SaveChanges();
             }
@@ -62,7 +86,7 @@ namespace Findaroo.Server.Controllers
         public void acceptConnectionRequests([FromBody] ConnectionRequestRequest acceptConnectionRequest)
         {
             ConnectionRequest? crExist = _psql.connection_request
-                .Where(cr => acceptConnectionRequest.sender_id == cr.sender_id && acceptConnectionRequest.receiver_id == cr.receiver_id)
+                .Where(cr => acceptConnectionRequest.sender_id.Equals(cr.sender_id) && acceptConnectionRequest.receiver_id.Equals(cr.receiver_id))
                 .FirstOrDefault();
 
             if (crExist == null) 
@@ -77,6 +101,11 @@ namespace Findaroo.Server.Controllers
         
             try
             {
+                _notificationManager.recordNotification(
+                    acceptConnectionRequest.sender_id,
+                    acceptConnectionRequest.receiver_id,
+                    NotificationEnum.ConnectionRequestAccepted
+                );
                 _psql.connection.Add(newConnection);
                 _psql.connection_request.Remove(crExist);
                 _psql.SaveChanges();
