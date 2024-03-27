@@ -56,7 +56,9 @@ export default function BlockedUsers() {
         </div>
     );
     function filterBlockedUsers(data) {
-        
+        if(blockedUsers == null) {
+            return 
+        }
         for (let i = 0; i < data.length; i++) {
             if(!blockedUsers.includes(data[i].user_id)) {
                 data.splice(i, 1)
