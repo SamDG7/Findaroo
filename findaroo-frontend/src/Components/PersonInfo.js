@@ -62,7 +62,7 @@ export default function PersonInfo({personDict}) {
 
 
 
-export function PersonInfoSmall({personDict}) {
+export function PersonInfoSmall({personDict, similarityOutput}) {
     const navigate = useNavigate();
     const [image, setImage] = useState();
     const [connected, setConnected] = useState(false);
@@ -138,7 +138,7 @@ export function PersonInfoSmall({personDict}) {
                 </h4>
             </div>
             <h3 className="Column End">
-                {"Similarity: "+ calculateSimilarity() + "/5"}
+                {"Similarity: " + similarityOutput + "/5"}
                 <div className="p-[1vw]"/>
                 <ButtonImportant text={"Add Connection"} onClickFunction={addConnection}></ButtonImportant>
                 {connected && <ButtonImportant text={"Start Conversation"} onClickFunction={startConversation}></ButtonImportant>}
@@ -147,45 +147,54 @@ export function PersonInfoSmall({personDict}) {
     );
 
 
-    function calculateSimilarity() {
-        var total_sim = 5;
-        if (userData != null) {
-            if (personDict.min_price != null && userData.min_price != null) {
-                if (Math.abs(personDict.min_price - userData.min_price) > 500) {
-                    total_sim -= 0.5;
-                }
-            }
-            if (personDict.max_price != null && userData.max_price != null) {
-                if (Math.abs(personDict.max_price - userData.max_price) > 500) {
-                    total_sim -= 0.5;
-                }
-            }
-            if (personDict.school != null && userData.school != null) {
-                if (personDict.school != userData.school) {
-                    total_sim -= 1;
-                }
-            }
-            if (personDict.state != null && userData.state != null) {
-                if (personDict.state != userData.state) {
-                    total_sim -= 0.5;
-                }
-            }
-            if (personDict.rating) {
-                if (personDict.rating < 3) {
-                    total_sim -= 0.5;
-                }
-            }
-            //TODO: CONSIDER LIFESTYLE PREFERENCES
-        }
-        
-        //TODO: set total_sim as person rating
-        if (total_sim < 0) {
-            total_sim = 0;
-        }
+    // function calculateSimilarity() {
+    //     var total_sim = 5;
+    //     if (userData != null) {
 
-        personDict.rating = total_sim;
-        return total_sim;
-    }
+    //         if (userData.min_price == null && userData.max_price == null) {
+    //             return "Please fill out preferences to view similarity";
+    //         }
+    //         if (personDict.age != null && userData.age != null) {
+    //             if (Math.abs(personDict.min_price - userData.min_price) > 5) {
+    //                 total_sim -= 0.35;
+    //             }
+    //         }
+
+    //         if (personDict.min_price != null && userData.min_price != null) {
+    //             if (Math.abs(personDict.min_price - userData.min_price) > 500) {
+    //                 total_sim -= 0.5;
+    //             }
+    //         }
+    //         if (personDict.max_price != null && userData.max_price != null) {
+    //             if (Math.abs(personDict.max_price - userData.max_price) > 500) {
+    //                 total_sim -= 0.5;
+    //             }
+    //         }
+    //         if (personDict.school != null && userData.school != null) {
+    //             if (personDict.school != userData.school) {
+    //                 total_sim -= 1;
+    //             }
+    //         }
+    //         if (personDict.state != null && userData.state != null) {
+    //             if (personDict.state != userData.state) {
+    //                 total_sim -= 0.5;
+    //             }
+    //         }
+    //         if (personDict.rating) {
+    //             if (personDict.rating < 3) {
+    //                 total_sim -= 0.5;
+    //             }
+    //         }
+    //         //TODO: CONSIDER LIFESTYLE PREFERENCES
+    //     }
+        
+    //     //TODO: set total_sim as person rating
+    //     if (total_sim < 0) {
+    //         total_sim = 0;
+    //     }
+        
+    //     return Math.round(total_sim * 100) / 100;
+    // }
 
     async function addConnection() {
         await fetch(GlobalVariables.backendURL + "/ConnectionRequest/send", {
