@@ -88,7 +88,7 @@ export default function User() {
                 user_id: GlobalVariables.userCredential.uid,
                 blocked_users: copy
             }
-            await fetch('http://localhost:5019/Ratings?user_id='+GlobalVariables.userCredential.uid +'&to_user='+uid, {
+            await fetch('http://localhost:5019/User', {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
