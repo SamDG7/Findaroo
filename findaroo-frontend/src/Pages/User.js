@@ -290,7 +290,7 @@ export default function User() {
                     <h2>{(!(avgRating === null ) ? "User Average Rating: " + avgRating: "")}
                     </h2>
 
-                    <h2>Compatibility Score: {calculateSimilarity} </h2>
+                    {/* <h2>Compatibility Score: {calculateSimilarity} </h2> */}
                     
                     <div className="Row space-x-[2vw]">
                                      
