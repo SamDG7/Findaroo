@@ -51,39 +51,44 @@ function CreateEventForm({ onSubmit }) {
     };
 
     return (
-            <form onSubmit={handleSubmit}>
-                <div className="Column Center">
-                    <input
-                    type="text"
-                    placeholder="Event Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    />
-                    <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    />
-                    <input
-                    type="text"
-                    placeholder="Description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <button type="submit">Add Event</button>
-                </div>
-            </form>
-        );
+        <form onSubmit={handleSubmit}>
+            <div className="Column Center">
+                <input
+                type="text"
+                placeholder="Event Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                />
+                <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                />
+                <input
+                type="text"
+                placeholder="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                />
+                <button type="submit">Add Event</button>
+            </div>
+        </form>
+    );
 }
 
 function Event({ event }) {
 
+    const [isEditing, setEditing] = useState(false);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
 
-    const modifyEvent = () => {
+    const toggleEditing = () => {
+        setEditing(!isEditing);
+    };
 
+    const modifyEvent = () => {
+        setEditing(true);
     };
 
     const deleteEvent = () => {
@@ -98,8 +103,45 @@ function Event({ event }) {
         }
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        event.name = name;
+        event.date = date;
+        event.description = description;
+        toggleEditing();
+    };
+
     return (
         <div>
+            <Popup isOpen={isEditing} closePopup={toggleEditing}>
+                <h2>Modify Event</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="Column Center">
+                        <input
+                        type="text"
+                        placeholder="Event Name"
+                        value={name}
+                        defaultValue={event.name}
+                        onChange={(e) => setName(e.target.value)}
+                        />
+                        <input
+                        type="date"
+                        value={date}
+                        defaultValue={event.date}
+                        onChange={(e) => setDate(e.target.value)}
+                        />
+                        <input
+                        type="text"
+                        placeholder="Description"
+                        value={description}
+                        defaultValue={event.description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        />
+                        <button type="submit">Modify Event</button>
+                    </div>
+                </form>
+            </Popup>
+
             <li className="flex items-center px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
                 <img
                 src={event.imageUrl}
@@ -181,6 +223,12 @@ export default function CalendarPage() {
         setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'));
     }
 
+    const [isEditing, setEditing] = useState(false);
+
+    const toggleEditing = () => {
+        setEditing(!isEditing);
+    };
+
     const addNewEvent = ({ name, description, date }) => {
         const newEvent = {
             id: events.length + 1,
@@ -209,6 +257,10 @@ export default function CalendarPage() {
         }}
         >
             <Navbar/>
+
+            <Popup isOpen={isEditing} closePopup={toggleEditing}>
+                <h2>Editing</h2>
+            </Popup>
 
             <div className="pt-16">
                 <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
