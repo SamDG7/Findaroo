@@ -8,4 +8,5 @@ export default class GlobalVariables {
     static userCredential;
     static email;
     static isActivated;
+    static isMod = false;
 }

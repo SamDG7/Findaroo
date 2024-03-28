@@ -24,7 +24,7 @@ export default function User() {
     const { uid } = useParams();
 
     useEffect(() => {
-
+        console.log(GlobalVariables.isMod)
         console.log("GET Call")
         fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
             .then(response => response.json())
@@ -155,12 +155,14 @@ export default function User() {
     }
     function ShowForm() {
         if(show) {
+            
             return (
                 <div className="Column">
                     
                     <div className="Row space-x-[2vw]">
                             <InputStandard autofocus name="Rate User 0-5" defaultValue={rating} onChangeFunction={(e) => setRating(e.target.value)}/>
                             <ButtonImportant text="Submit" onClickFunction={SubmitRating} />
+                            
                             
                         
                     </div>  
@@ -173,7 +175,22 @@ export default function User() {
             )
         }
     }
+    const DeleteAccount = async () => {
+        let answer = window.confirm("This record will be removed from Findaroo. Are you sure?");
+        if (!answer) return;
+        await fetch(GlobalVariables.backendURL + "/User", {
+            mode: 'cors',
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'Access-Control-Allow-Origin': 'http://localhost:3000'
+            },
+            body: JSON.stringify({"user_id": uid})
+        })
+        .catch(error => console.error(error));
+    }
     return (
+        
         <div className="Page">
             <Navbar />
 
@@ -187,6 +204,7 @@ export default function User() {
                     
                     <ButtonImportant text="Block User" onClickFunction={BlockUser}/>
                     <ButtonImportant text="Rate User" onClickFunction={() => {setShow(!show)}}/>
+                    {GlobalVariables.isMod ? <ButtonImportant text="Delete Account" onClickFunction={DeleteAccount}/>: ""}
                     
                     
                     </div>
