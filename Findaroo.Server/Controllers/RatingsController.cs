@@ -9,6 +9,7 @@ using Findaroo.Server.Authentication;
 using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Findaroo.Server.Model.RequestModel.Room;
+using Findaroo.Server.Model.RequestModel.User;
 
 namespace Findaroo.Server.Controllers
 {
@@ -53,6 +54,7 @@ namespace Findaroo.Server.Controllers
         [Route("avg")]
         public double aggRating(string user)
         {
+            double rating = _psql.ratings.Where(rt => rt.to_user == user).Average(rt => rt.rating);
             return _psql.ratings.Where(rt => rt.to_user == user).Average(rt => rt.rating);
         }
         
@@ -78,6 +80,7 @@ namespace Findaroo.Server.Controllers
                 Response.StatusCode = 404;
                 return;
             }
+
             _psql.ratings.Update(ratings);
             _psql.SaveChanges();
         }

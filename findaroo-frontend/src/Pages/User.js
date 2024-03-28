@@ -18,6 +18,7 @@ export default function User() {
     const [userData, setUserData] = useState(null);
     const [show, setShow] = useState(false)
     const [rating, setRating] = useState()
+    const [avgRating, setAvgRating] = useState(null)
     const [message, setMessage] = useState()
     const [reviewed, setReviewed] = useState(false)
     const { uid } = useParams();
@@ -48,8 +49,22 @@ export default function User() {
                     }
                 }
             })
+        fetch('http://localhost:5019/Ratings/avg?user=' + uid)
+            .then(response => response.json())
+            .then(data => {
+                setAvgRating(data)
+                console.log(data)
+            })
 
     }, []);
+    useEffect(() => {
+        fetch('http://localhost:5019/Ratings/avg?user=' + uid)
+            .then(response => response.json())
+            .then(data => {
+                setAvgRating(data)
+                console.log(data)
+            })
+    }, [rating])
     const BlockUser = async () => {
         console.log(loggedInUser.blocked_users)
         console.log("PUT Call")
@@ -86,12 +101,10 @@ export default function User() {
     }
     const SubmitRating = async () => {
         if(rating == null || isNaN(rating)  ) {
-            console.log("HERE")
             setMessage("Enter a Number 0-5")
             return
         } else if(Number(rating) >5 || Number(rating) < 0) {
             setMessage("Enter a Number 0-5")
-            console.log("WRONG")
             return
         }
         setMessage()
@@ -110,6 +123,7 @@ export default function User() {
                     body: JSON.stringify(form)
                 }).then(response => {
                     console.log("SUCCESS")
+                    setRating("")
                     return response.text()
                   });
             } catch (err) {
@@ -131,6 +145,7 @@ export default function User() {
                     body: JSON.stringify(form)
                 }).then(response => {
                     console.log("SUCCESS")
+                    setRating("")
                     return response.text()
                   });
             } catch (err) {
@@ -166,9 +181,12 @@ export default function User() {
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
                     <PersonInfo personDict={userData} />
+                    <h2>User Average Rating: {avgRating}</h2>
                     <div className="Row space-x-[2vw]">
+                    
                     <ButtonImportant text="Block User" onClickFunction={BlockUser}/>
                     <ButtonImportant text="Rate User" onClickFunction={() => {setShow(!show)}}/>
+                    
                     
                     </div>
                     <ShowForm />
