@@ -14,11 +14,14 @@ export default function Search() {
     const [blockedUsers, setBlockedUsers] = useState([])
     const [sortType, setSortType] = useState("Default");
     const [allUsers, setAllUsers] = useState([]);
+    const [userData, setUserData] = useState(null);
 
     useEffect(() => {
         if (!GlobalVariables.authenticated) {
             navigate("/Login");
         }
+
+        
     }, []);
 
     useEffect(() => {
@@ -33,6 +36,16 @@ export default function Search() {
             })
             .catch(error => console.error(error));
         
+    }, []);
+
+    useEffect(() => {
+        console.log("GET Call for new added user in search")
+        fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);    
+                setUserData(data);
+            }).catch(error => console.error(error));
     }, []);
 
     return (
@@ -74,18 +87,77 @@ export default function Search() {
         const sortFunction = GetSort(sortTypeName);
         const sortedData = data.sort(sortFunction);
 
+
         return (
             sortedData.map((person, index) => (
-                <PersonInfoSmall key={index} personDict={person}/>
+                //Potentially calculate compatibility here
+                <PersonInfoSmall key={index} personDict={person} similarityOutput={calculateSimilarity(person)}/>
             ))
         );
     }
 
+    function calculateSimilarity(personDict) {
+            var total_sim = 5;
+            if (userData != null) {
+    
+                // if (userData.min_price == null && userData.max_price == null) {
+                //     return "Please fill out preferences to view similarity";
+                // }
+
+                // if (personDict.min_price == null && personDict.max_price == null) {
+                //     return "This user has not filled out their preferences";
+                // }
+
+                if (personDict.age != null && userData.age != null) {
+                    if (Math.abs(personDict.min_price - userData.min_price) > 5) {
+                        total_sim -= 0.35;
+                    }
+                }
+    
+                if (personDict.min_price != null && userData.min_price != null) {
+                    if (Math.abs(personDict.min_price - userData.min_price) > 500) {
+                        total_sim -= 0.5;
+                    }
+                }
+                if (personDict.max_price != null && userData.max_price != null) {
+                    if (Math.abs(personDict.max_price - userData.max_price) > 500) {
+                        total_sim -= 0.5;
+                    }
+                }
+                if (personDict.school != null && userData.school != null) {
+                    if (personDict.school != userData.school) {
+                        total_sim -= 1;
+                    }
+                }
+                if (personDict.state != null && userData.state != null) {
+                    if (personDict.state != userData.state) {
+                        total_sim -= 0.5;
+                    }
+                }
+                if (personDict.rating) {
+                    if (personDict.rating < 3) {
+                        total_sim -= 0.5;
+                    }
+                }
+                //TODO: CONSIDER LIFESTYLE PREFERENCES
+            }
+            
+            //TODO: set total_sim as person rating
+            if (total_sim < 0) {
+                total_sim = 0;
+            }
+            
+            return Math.round(total_sim * 100) / 100;
+        }
     function GetSort(sortTypeName) {
         switch (sortTypeName) {
             default:
             case "Score":
-                return function(a,b) {return b.rating - a.rating}
+                return function(a,b) {
+                    if (typeof calculateSimilarity(a) === 'string' || typeof calculateSimilarity(b) === 'string' ) {
+                        return calculateSimilarity(a) - calculateSimilarity(b)
+                    }
+                    return calculateSimilarity(b) - calculateSimilarity(a)};
             case "A-Z":
                 return function(a,b) {return a.first_name === b.first_name ? a.last_name.localeCompare(b.last_name) : a.first_name.localeCompare(b.first_name)};
             case "Z-A":
