@@ -166,12 +166,12 @@ function Event({ event }) {
                 <div
                   onClick={modifyEvent}
                 >
-                  E
+                  Edit
                 </div>
                 <div
                   onClick={deleteEvent}
                 >
-                  D
+                  Delete
                 </div>
             </li>
         </div>
@@ -278,14 +278,14 @@ export default function CalendarPage() {
                                 onClick={previousMonth}
                                 className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
                             >
-                                <span className="sr-only">Previous month</span>
+                                <p>&larr;</p>
                             </button>
                             <button
                                 onClick={nextMonth}
                                 type="button"
                                 className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
                             >
-                                <span className="sr-only">Next month</span>
+                                <p>&rarr;</p>
                             </button>
                             </div>
                             <div className="grid grid-cols-7 mt-10 text-xs leading-6 text-center text-gray-500">
