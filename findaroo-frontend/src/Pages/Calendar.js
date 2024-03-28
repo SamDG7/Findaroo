@@ -17,6 +17,7 @@ import {
     parseISO,
     startOfToday,
 } from 'date-fns';
+import Popup from "../Components/Popup";
 
 let events = [
     // ... (Your existing events data)
@@ -76,6 +77,27 @@ function CreateEventForm({ onSubmit }) {
 }
 
 function Event({ event }) {
+
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [date, setDate] = useState('');
+
+    const modifyEvent = () => {
+
+    };
+
+    const deleteEvent = () => {
+        var index = events.indexOf(event);
+        if (index != -1)
+        {
+            events.splice(index, 1);
+        }
+        else
+        {
+            console.log("Attempt to delete an event that does not exist");
+        }
+    };
+
     return (
         <div>
             <li className="flex items-center px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
@@ -87,6 +109,16 @@ function Event({ event }) {
                 <div className="flex-auto">
                     <b className="text-black-1000">{event.name}</b>
                     <p className="text-gray-400">{event.description}</p>
+                </div>
+                <div
+                  onClick={modifyEvent}
+                >
+                  E
+                </div>
+                <div
+                  onClick={deleteEvent}
+                >
+                  D
                 </div>
             </li>
         </div>
@@ -151,15 +183,19 @@ export default function CalendarPage() {
 
     const addNewEvent = ({ name, description, date }) => {
         const newEvent = {
-        id: events.length + 1,
-        name: name,
-        description: description,
-        imageUrl: 'https://via.placeholder.com/256',
-        startDatetime: date,
-        endDatetime: date,
+            id: events.length + 1,
+            name: name,
+            description: description,
+            imageUrl: 'https://via.placeholder.com/256',
+            startDatetime: date,
+            endDatetime: date,
         };
         events = [...events, newEvent];
         setShowCreateEventForm(false); // Hide form after submission
+    };
+
+    const closeEditPopup = () => {
+        isEditing = false;
     };
 
     return (
@@ -177,6 +213,11 @@ export default function CalendarPage() {
         }}
         >
             <Navbar/>
+
+            <Popup isOpen={isEditing} closePopup={closeEditPopup}>
+                <h2>Modifying Event</h2>
+            </Popup>
+
             <div className="pt-16">
                 <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
                     <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
