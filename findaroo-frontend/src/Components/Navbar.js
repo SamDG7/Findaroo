@@ -31,6 +31,7 @@ const Navbar = () => {
                         GlobalVariables.authenticated ?
                         <ButtonTransparent text={"Log Out"} onClickFunction={() => {
                             GlobalVariables.authenticated = false;
+                            GlobalVariables.isMod = false;
                             const auth = getAuth();
                             signOut(auth);
                             document.cookie = "idToken=\"\"; max-age=0; path=/";

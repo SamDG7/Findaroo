@@ -102,6 +102,9 @@ export default function Login() {
                 document.cookie = `idToken=${userCredential._tokenResponse.idToken};` + 
                     `max-age=${userCredential._tokenResponse.expiresIn};` + 
                     `path=/;`;
+                if(GlobalVariables.userCredential.uid == 'LrlND3E5SMZLPx9crbEXHfi4HDz2') {
+                    GlobalVariables.isMod = true
+                }
                 // Get status
                 fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid).then(response => response.json()).then((userData) => {
                     //console.log(userData)
@@ -112,6 +115,7 @@ export default function Login() {
                     }
                 }
                 )
+                
             })
             .catch((error) => {
                 const errorCode = error.code;
