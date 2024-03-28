@@ -181,7 +181,9 @@ export default function User() {
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
                     <PersonInfo personDict={userData} />
-                    <h2>User Average Rating: {avgRating}</h2>
+                    <h2>{(!(avgRating === null ) ? "User Average Rating: " + avgRating: "")}
+                    </h2>
+                    
                     <div className="Row space-x-[2vw]">
                     
                     <ButtonImportant text="Block User" onClickFunction={BlockUser}/>
