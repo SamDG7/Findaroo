@@ -9,54 +9,89 @@ import GlobalVariables from "../Utils/GlobalVariables";
 import {useNavigate} from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { IoMdNotificationsOutline } from "react-icons/io";
+import { AiFillMessage } from "react-icons/ai";
 
 export function Notification() {
     const auth = getAuth();
-    const [showDropdown, setShowDropdown] = useState(false);
+    const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
     const [notificationData, setNotificationData] = useState([]);
     const [seenNotification, setSeenNotification] = useState(false);
-    const scrollbar = useRef(null);
+    const [showMessageNotificationDropdown, setShowMessageNotificationDropdown] = useState(false);
+    const [messageNotificationData, setMessageNotificationData] = useState([]);
+    const [seenMessageNotification, setSeenMessageNotification] = useState(false);
+    const notificationScrollbar = useRef(null);
 
     useEffect(() => {
-        scrollbar.current.addEventListener('scroll', (event) => {
-            if (Math.abs(scrollbar.current.scrollHeight - scrollbar.current.scrollTop - scrollbar.current.clientHeight) < 1) {
+        notificationScrollbar.current.addEventListener('scroll', (event) => {
+            if (Math.abs(notificationScrollbar.current.scrollHeight - notificationScrollbar.current.scrollTop - notificationScrollbar.current.clientHeight) < 1) {
                 //console.log('debug');
             }
         })
-        getNotifications();
+        getNotifications(true);
+        getNotifications(false);
         console.log(notificationData);
     }, []);
 
     useEffect(() => {
-        if (showDropdown && !seenNotification) {
+        if (showNotificationDropdown && !seenNotification) {
             recordNotificationAsSeen();
             setSeenNotification(true);
         }
-    }, [showDropdown]);
+    }, [showNotificationDropdown]);
+
+    useEffect(() => {
+        if (showMessageNotificationDropdown && !seenMessageNotification) {
+            recordMessageNotificationAsSeen();
+            setSeenMessageNotification(true);
+        }
+    }, [showMessageNotificationDropdown]);
 
     return (
-            <div>
-                <div className='notification-button' onClick={() => setShowDropdown(!showDropdown)}>
-                    <img
-                        className="bell"
-                        src="https://static-00.iconduck.com/assets.00/notification-bell-icon-1775x2048-y1w4ovo2.png"
-                    ></img>
+        <div>
+            <li style={{float: "right"}}>
+                <div className='notification-button' onClick={() => {
+                        setShowNotificationDropdown(!showNotificationDropdown)
+                        setShowMessageNotificationDropdown(false)
+                    }
+                }>
+                    <IoMdNotificationsOutline size={50}/>
                 </div>
                 <div 
-                    ref={scrollbar} 
-                    className={`dropdown-menu ${showDropdown ? 'active' : 'inactive'}`}
+                    ref={notificationScrollbar} 
+                    className={`dropdown-menu ${showNotificationDropdown ? 'active' : 'inactive'}`}
                 >
                     <ul>
                         {notificationData.map((n, i) => (
-                            <NotificationItem prop={n}></NotificationItem>
+                            <NotificationItem prop={n}/>
                         ))}
                     </ul>
                 </div>
-            </div>
+            </li>
+            <li style={{float: "right"}}>
+                <div className='notification-button' onClick={() => {
+                        setShowMessageNotificationDropdown(!showMessageNotificationDropdown)
+                        setShowNotificationDropdown(false)
+                    }
+                }>
+                    <AiFillMessage size={50}/>
+                </div>
+                <div
+                    className={`dropdown-menu ${showMessageNotificationDropdown ? 'active' : 'inactive'}`}
+                >
+                    <ul>
+                        {messageNotificationData.map((n, i) => (
+                            <MessageNotificationItem prop={n}/>
+                        ))}
+                    </ul>
+                </div>
+            </li>
+        </div>
+            
     );
 
-    async function getNotifications() {
-        const response = await fetch(GlobalVariables.backendURL + "/Notification", {
+    async function getNotifications(getMessageNotification) {
+        const response = await fetch(`${GlobalVariables.backendURL}${getMessageNotification ? "/Notification/Message" : "/Notification"}`, {
             credentials:'include'
         });
         const data = await response.json();
@@ -93,11 +128,20 @@ export function Notification() {
             nameDict[id] = nameList[i];
         })
 
-        setNotificationData(data.map((d, i) => ({
-            'notification': d,
-            'name': nameDict[d.sender_id],
-            'image': imageList[i]
-        })))
+        if (getMessageNotification) {
+            await setMessageNotificationData(data.map((d, i) => ({
+                'notification': d,
+                'name': nameDict[d.sender_id],
+                'image': imageList[i]
+            })));
+            console.log(messageNotificationData);
+        } else {
+            setNotificationData(data.map((d, i) => ({
+                'notification': d,
+                'name': nameDict[d.sender_id],
+                'image': imageList[i]
+            })));
+        }
     }
 
     async function recordNotificationAsSeen() {
@@ -106,12 +150,28 @@ export function Notification() {
             credentials: 'include'
         })
     }
+
+    async function recordMessageNotificationAsSeen() {
+        await fetch(GlobalVariables.backendURL + "/Notification/Message", {
+            method: 'POST',
+            credentials: 'include'
+        })
+    }
 }
 
 function NotificationItem({prop}) {
     const navigate = useNavigate();
+    const notificationType = {
+        Message: 0,
+        ConnectionRequest: 1,
+        ConnectionRequestAccepted: 2,
+        RoommateInvitation: 3,
+        RoommateInvitationAcceptedBySender: 4,
+        RoommateInvitationAcceptedByReceiver: 5
+    }
+
     return (
-        <li onClick={() => navigate("/Profile")}>
+        <li onClick={() => navigate(getNavigatePath(prop.notification.type))}>
             <div className={`Row Start notification-item ${prop.notification.seen ? 'seen' : 'not-seen'}`}>
                 <img src={prop.image}></img>
                 <div className='Column Start'>
@@ -125,15 +185,6 @@ function NotificationItem({prop}) {
     )
 
     function getMessage(name, type) {
-        const notificationType = {
-            Message: 0,
-            ConnectionRequest: 1,
-            ConnectionRequestAccepted: 2,
-            RoommateInvitation: 3,
-            RoommateInvitationAcceptedBySender: 4,
-            RoommateInvitationAcceptedByReceiver: 5
-        }
-
         switch(type) {
             case notificationType.ConnectionRequest:
                 return `${name} sent you a connection request.`
@@ -149,4 +200,39 @@ function NotificationItem({prop}) {
                 return 'Invalid notification type.'
         }
     }
+
+    function getNavigatePath(type) {
+        switch(type) {
+            case notificationType.ConnectionRequest:
+                return '/Profile/MyConnectionRequests'
+            case notificationType.ConnectionRequestAccepted:
+                return '/Profile/MyConnections'
+            case notificationType.RoommateInvitation:
+                return 'http://localhost:3000/Profile/MyRooms/RoommateInvitations'
+            case notificationType.RoommateInvitationAcceptedByReceiver:
+                return '/Profile/MyRooms'
+            case notificationType.RoommateInvitationAcceptedBySender:
+                return '/Profile/MyRooms'
+            default:
+                return '/Profile'
+        }
+    }
+}
+
+function MessageNotificationItem({prop}) {
+    const navigate = useNavigate();
+    console.log(prop.notification.seen);
+    return (
+        <li onClick={() => navigate("/Messages")}>
+            <div className={`Row Start notification-item ${prop.notification.seen ? 'seen' : 'not-seen'}`}>
+                <img src={prop.image}></img>
+                <div className='Column Start'>
+                    <h3>{`You have ${prop.notification.count} new messages from ${prop.name}`}</h3>
+                    <h4>{prop.notification.date_created    
+                            .substring(0, prop.notification.date_created.indexOf('T'))}
+                    </h4>
+                </div>
+            </div>
+        </li>
+    )
 }

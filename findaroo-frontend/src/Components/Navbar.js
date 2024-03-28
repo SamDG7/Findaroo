@@ -43,13 +43,11 @@ const Navbar = () => {
                         }}/>
                     }
                 </li>
-                <li style={{float: "right"}}>
-                    {
-                        GlobalVariables.authenticated ?
-                        <Notification></Notification> : 
-                        <div></div>
-                    }
-                </li>
+                {
+                    GlobalVariables.authenticated ?
+                    <Notification></Notification> : 
+                    <div></div>
+                }
                 <li style={{float: "right"}}>
                     <Link to="/Profile">
                         <ButtonTransparent text={"Profile"}/>
