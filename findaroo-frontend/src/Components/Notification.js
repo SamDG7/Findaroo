@@ -91,10 +91,15 @@ export function Notification() {
     );
 
     async function getNotifications(getMessageNotification) {
-        const response = await fetch(`${GlobalVariables.backendURL}${getMessageNotification ? "/Notification/Message" : "/Notification"}`, {
+        const data = await fetch(`${GlobalVariables.backendURL}${getMessageNotification ? "/Notification/Message" : "/Notification"}`, {
             credentials:'include'
+        }).then(response => {
+            if (response.status == 200) {
+                return response.json();
+            } else {
+                return [];
+            }
         });
-        const data = await response.json();
 
         if (data.length == 0) {
             return;
