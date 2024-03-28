@@ -192,6 +192,24 @@ export default function User() {
         })
         .catch(error => console.error(error));
     }
+    const DeleteBiography = async () => {
+        let answer = window.confirm("This biography will be removed from Findaroo. Are you sure?");
+        if (!answer) return;
+        var copy = userData;
+        copy.preferences = ""
+        
+        setUserData(copy)
+        await fetch(GlobalVariables.backendURL + "/User", {
+            mode: 'cors',
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'Access-Control-Allow-Origin': 'http://localhost:3000'
+            },
+            body: JSON.stringify({"user_id": uid, "preferences": ""})
+        })
+        .catch(error => console.error(error));
+    }
 
 
     const handleSubmit = async (event) => {
@@ -276,7 +294,9 @@ export default function User() {
                         <ButtonImportant text="Block User" onClickFunction={BlockUser}/>
                         <ButtonImportant text="Rate User" onClickFunction={() => {setShow(!show)}}/>
                         <ButtonDelete text="Report User" onClickFunction={openReportingMenu}/>
-                        {GlobalVariables.isMod ? <ButtonImportant text="Delete Account" onClickFunction={DeleteAccount}/>: ""}
+                        {GlobalVariables.isMod ? <ButtonDelete text="Delete Account" onClickFunction={DeleteAccount}/>: ""}
+                        {GlobalVariables.isMod ? <ButtonDelete text="Delete Biography" onClickFunction={DeleteBiography}/>: ""}
+
                         <div>
                             {isReporting && (
                                 <div style={menuStyle}>
