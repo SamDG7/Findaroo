@@ -43,15 +43,27 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpGet]
+        [Route("all")]
+        public List<Ratings> getAllRatingsForUser(string to_user)
+        {
+            return _psql.ratings.Where(rt => rt.to_user == to_user).ToList();
+        }
+
+        [HttpGet]
         [Route("avg")]
         public double aggRating(string user)
         {
             return _psql.ratings.Where(rt => rt.to_user == user).Average(rt => rt.rating);
         }
+        
         [HttpPost]
-        public string postRating(string user_id, string to_user, int rating)
+        public string postRating([FromBody] Ratings ratings)
         {
-            Ratings ratings = new Ratings(user_id, to_user, rating);
+            if (ratings.user_id == null)
+            {
+                Response.StatusCode = 404;
+                return "Error";
+            }
             _psql.ratings.Add(ratings);
             _psql.SaveChanges();
 
@@ -59,18 +71,13 @@ namespace Findaroo.Server.Controllers
         }
         
         [HttpPut]
-        public void updateUser(string user_id, string to_user, int rating)
+        public void updateUser(Ratings ratings)
         {
-            if (user_id == null)
+            if (ratings.user_id == null)
             {
                 Response.StatusCode = 404;
                 return;
             }
-
-            Ratings ratings = _psql.ratings.Find(user_id, to_user);
-
-            ratings.rating = rating;
-
             _psql.ratings.Update(ratings);
             _psql.SaveChanges();
         }

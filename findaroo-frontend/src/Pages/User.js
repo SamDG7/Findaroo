@@ -19,6 +19,7 @@ export default function User() {
     const [show, setShow] = useState(false)
     const [rating, setRating] = useState()
     const [message, setMessage] = useState()
+    const [reviewed, setReviewed] = useState(false)
     const { uid } = useParams();
 
     useEffect(() => {
@@ -37,6 +38,16 @@ export default function User() {
                 console.log(data);
                 setUserData(data);
             }).catch(error => console.error(error));
+        
+        fetch('http://localhost:5019/Ratings/all?to_user=' + uid)
+            .then(response => response.json())
+            .then(data => {
+                for(let i = 0; i < data.length; i++) {
+                    if(data[i].user_id == GlobalVariables.userCredential.uid) {
+                        setReviewed(true)
+                    }
+                }
+            })
 
     }, []);
     const BlockUser = async () => {
@@ -58,7 +69,7 @@ export default function User() {
                 user_id: GlobalVariables.userCredential.uid,
                 blocked_users: copy
             }
-            await fetch('http://localhost:5019/User', {
+            await fetch('http://localhost:5019/Ratings?user_id='+GlobalVariables.userCredential.uid +'&to_user='+uid, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
@@ -73,8 +84,8 @@ export default function User() {
             
         }
     }
-    const SubmitRating = () => {
-        if(isNaN(rating)  ) {
+    const SubmitRating = async () => {
+        if(rating == null || isNaN(rating)  ) {
             console.log("HERE")
             setMessage("Enter a Number 0-5")
             return
@@ -84,6 +95,49 @@ export default function User() {
             return
         }
         setMessage()
+        if(!reviewed) {
+            try {
+                const form = {
+                    user_id: GlobalVariables.userCredential.uid,
+                    to_user: uid,
+                    rating: rating
+                }
+                await fetch('http://localhost:5019/Ratings', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(form)
+                }).then(response => {
+                    console.log("SUCCESS")
+                    return response.text()
+                  });
+            } catch (err) {
+                console.log(err)
+                
+            }
+        } else {
+            try {
+                const form = {
+                    user_id: GlobalVariables.userCredential.uid,
+                    to_user: uid,
+                    rating: rating
+                }
+                await fetch('http://localhost:5019/Ratings', {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(form)
+                }).then(response => {
+                    console.log("SUCCESS")
+                    return response.text()
+                  });
+            } catch (err) {
+                console.log(err)
+                
+            }
+        }
     }
     function ShowForm() {
         if(show) {
