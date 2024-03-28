@@ -11,6 +11,7 @@ import PersonInfo from "../Components/PersonInfo";
 import Popup from "../Components/Popup";
 import { signOut } from "firebase/auth";
 import InputStandard from "../Components/InputFields";
+import calculateSimilarity from "./Search.js";
 
 export default function User() {
     // This redirects to the login page if not logged in
@@ -22,6 +23,7 @@ export default function User() {
     const [message, setMessage] = useState()
     const [reviewed, setReviewed] = useState(false)
     const { uid } = useParams();
+    const [compScore, setCompScore] = useState(0)   
 
     useEffect(() => {
 
@@ -55,7 +57,8 @@ export default function User() {
                 setAvgRating(data)
                 console.log(data)
             })
-
+        
+        calculateSimilarity();
     }, []);
     useEffect(() => {
         fetch('http://localhost:5019/Ratings/avg?user=' + uid)
@@ -174,6 +177,7 @@ export default function User() {
         }
     }
     return (
+        
         <div className="Page">
             <Navbar />
 
@@ -182,6 +186,8 @@ export default function User() {
                     <PersonInfo personDict={userData} />
                     <h2>{(!(avgRating === null ) ? "User Average Rating: " + avgRating: "")}
                     </h2>
+
+                    <h2>Compatibility Score: {calculateSimilarity} </h2>
                     
                     <div className="Row space-x-[2vw]">
                     
@@ -196,6 +202,133 @@ export default function User() {
             </div>
         </div>
     );
+
+    function calculateSimilarity() {
+        var total_sim = 5;
+        if (userData != null) {
+
+            // if (userData.min_price == null && userData.max_price == null) {
+            //     return "Please fill out preferences to view similarity";
+            // }
+
+            // if (loggedInUser.min_price == null && loggedInUser.max_price == null) {
+            //     return "This user has not filled out their preferences";
+            // }
+
+            if (loggedInUser.age != null && userData.age != null) {
+                if (Math.abs(loggedInUser.min_price - userData.min_price) > 5) {
+                    total_sim -= 0.35;
+                }
+            }
+
+            if (loggedInUser.min_price != null && userData.min_price != null) {
+                if (Math.abs(loggedInUser.min_price - userData.min_price) > 500) {
+                    total_sim -= 0.5;
+                }
+            }
+            if (loggedInUser.max_price != null && userData.max_price != null) {
+                if (Math.abs(loggedInUser.max_price - userData.max_price) > 500) {
+                    total_sim -= 0.5;
+                }
+            }
+            if (loggedInUser.school != null && userData.school != null) {
+                if (loggedInUser.school != userData.school) {
+                    total_sim -= 1;
+                }
+            }
+            if (loggedInUser.state != null && userData.state != null) {
+                if (loggedInUser.state != userData.state) {
+                    total_sim -= 0.5;
+                }
+            }
+            if (loggedInUser.rating) {
+                if (loggedInUser.rating < 3) {
+                    total_sim -= 0.5;
+                }
+            }
+
+            var questions = loggedInUser.lifestyle_answers;
+            var userQuestions = userData.lifestyle_answers;
+
+            var lifestyle_sim = 0;
+
+            if (questions != null && userQuestions != null) {
+                lifestyle_sim += 10 - Math.abs(questions[0] - userQuestions[0]) * 5;
+
+                if (questions[1] == 1 || userQuestions[1] == 1) {
+                    if (questions[0] != userQuestions[0]) {
+                        lifestyle_sim *= 0;
+                    }
+                }
+
+                lifestyle_sim += 10 - Math.abs(questions[2] - userQuestions[2]) * 5;
+
+                if (questions[3] == 1 || userQuestions[3] == 1) {
+                    if (questions[2] != userQuestions[2]) {
+                        lifestyle_sim *= 0;
+                    }
+                }
+
+                lifestyle_sim += 10 - Math.abs(questions[4] - userQuestions[4]) * 5;
+
+                if (questions[5] == 1 || userQuestions[5] == 1) {
+                    if (questions[4] != userQuestions[4]) {
+                        lifestyle_sim *= 0;
+                    }
+                }
+
+                if (questions[6] == userQuestions[6]) {
+                    lifestyle_sim += 5;
+                }
+
+                if (questions[7] == 1) {
+                    if (userQuestions[6] == 0) {
+                        lifestyle_sim *= 0;
+                    }
+                }
+                if (userQuestions[7] == 1) {
+                    if (questions[6] == 0) {
+                        lifestyle_sim *= 0;
+                    }
+                }
+
+                if (questions[8] == userQuestions[8]) {
+                    lifestyle_sim += 5;
+                }
+
+                lifestyle_sim += 10 - Math.abs(questions[9] - userQuestions[9]) * 3.33;
+
+                lifestyle_sim += 20 - Math.abs(questions[10] - userQuestions[10]) * 10;
+
+                lifestyle_sim += 10 - Math.abs(questions[11] - userQuestions[11]) * 5;
+
+                lifestyle_sim += 20 - Math.abs(questions[12] - userQuestions[12]) * 10;
+
+                lifestyle_sim += 10 - Math.abs(questions[13] - userQuestions[13]) * 5;
+
+                lifestyle_sim += 20 - Math.abs(questions[14] - userQuestions[14]) * 10;
+
+                lifestyle_sim += 20 - Math.abs(questions[15] - userQuestions[15]) * 10;
+
+                lifestyle_sim += 20 - Math.abs(questions[16] - userQuestions[16]) * 10;
+
+            }
+        }
+
+        //TODO: set total_sim as person rating
+        if (lifestyle_sim + total_sim < 0) {
+            total_sim = 0;
+        }
+
+        total_sim *= 10;
+        total_sim = Math.round(total_sim * 100) / 100;
+
+        lifestyle_sim *= (50 / 170);
+        lifestyle_sim = Math.round(lifestyle_sim * 100) / 100;
+
+        setCompScore(total_sim + lifestyle_sim);
+        return total_sim + lifestyle_sim;
+    }
 
 
 }

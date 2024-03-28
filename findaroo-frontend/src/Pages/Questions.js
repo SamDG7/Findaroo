@@ -175,15 +175,15 @@ export default function Questions() {
 
                 <div className="text-lg font-semibold">Is it okay if your roommate has visitors over, and if so how often?</div>
                 <select id="roommateVisitors" name="roommateVisitors" className="form-select rounded-md border-gray-300 shadow-sm" value={roommateVisitors} onChange={(e) => setRoommateVisitors(e.target.value)}>
-                    <option value="0">Never</option>
-                    <option value="1">Sometimes</option>
-                    <option value="2">Often</option>
+                    <option value="0">Yes</option>
+                    <option value="1">No</option>
+                    <option value="2">Indifferent</option>
                 </select>
 
                 <div className="text-lg font-semibold">Do you have any pets?</div>
                 <select id="0" name="pets" className="form-select rounded-md border-gray-300 shadow-sm" value={pets} onChange={(e) => setPets(e.target.value)}>
+                    <option value="0">Yes</option>
                     <option value="1">No</option>
-                    <option value="2">Yes</option>
                 </select>
 
                 <div className="text-lg font-semibold">Is it okay if your roommate has pets?</div>

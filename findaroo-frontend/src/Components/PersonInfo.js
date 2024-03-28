@@ -172,7 +172,7 @@ export function PersonInfoSmall({personDict, similarityOutput}) {
                 </h4>
             </div>
             <h3 className="Column End">
-                {"Similarity: " + similarityOutput + "/5"}
+                {"Similarity: " + similarityOutput + "/100"}
                 <div className="p-[1vw]"/>
                 <ButtonImportant text={"Add Connection"} onClickFunction={addConnection}></ButtonImportant>
                 {connected && <ButtonImportant text={"Start Conversation"} onClickFunction={startConversation}></ButtonImportant>}
