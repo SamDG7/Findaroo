@@ -79,7 +79,7 @@ function CreateEventForm({ onSubmit }) {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         />
-                        <button type="submit">Add Event</button>
+                        <button type="submit">Submit</button>
                     </div>
                 </form>
             </Popup>
@@ -148,7 +148,7 @@ function Event({ event }) {
                         defaultValue={event.description}
                         onChange={(e) => setDescription(e.target.value)}
                         />
-                        <button type="submit">Modify Event</button>
+                        <button type="submit">Submit</button>
                     </div>
                 </form>
             </Popup>
