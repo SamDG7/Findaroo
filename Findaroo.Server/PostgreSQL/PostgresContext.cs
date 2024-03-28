@@ -14,6 +14,7 @@ namespace Findaroo.Server.PostgreSQL
         public DbSet<Roommate> roommate {  get; set; }
         public DbSet<RoommateInvitation> roommate_invitation {  get; set; }
         public DbSet<Notification> notification { get; set; }
+        public DbSet<CalendarEvent> calendar_event { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
