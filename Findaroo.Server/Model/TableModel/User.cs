@@ -33,7 +33,7 @@ namespace Findaroo.Server.Model.TableModel
         public bool status { get; set; }
         public int[]? lifestyle_answers { get; set; }
         public string? room_type { get; set; }
-        public string?[] social { get; set; }
+        public string?[]? social { get; set; }
         public string[]? blocked_users { get; set; }
 
         public User() { }
