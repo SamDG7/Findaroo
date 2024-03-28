@@ -9,7 +9,8 @@ import reportWebVitals from './reportWebVitals';
 
 // All pages should be imported here:
 import Home from "./Pages/Home"
-import Messages from "./Pages/Messages"
+import Conversations from "./Pages/Conversations"
+import Conversation from "./Pages/Conversation"
 import Search from "./Pages/Search"
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
@@ -27,6 +28,7 @@ import MyRooms from './Pages/MyRooms';
 import RoommateAgreement from './Pages/RoommateAgreement';
 import RoommateInvitation from './Pages/RoommateInvitations';
 import Calendar from './Pages/Calendar';
+import BlockedUsers from './Pages/BlockedUsers';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -64,8 +66,13 @@ const router = createBrowserRouter(
             errorElement: <Error />,
         },
         {
-            path: "/Messages",
-            element: <Messages />,
+            path: "/Conversations",
+            element: <Conversations />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Conversations/:cid",
+            element: <Conversation />,
             errorElement: <Error />,
         },
         {
@@ -141,6 +148,11 @@ const router = createBrowserRouter(
         {
             path: "Profile/MyRooms/RoommateInvitations",
             element: <RoommateInvitation/>,
+            errorElement: <Error />,
+        },
+        {
+            path: "Profile/BlockedUsers",
+            element: <BlockedUsers/>,
             errorElement: <Error />,
         }
     ]

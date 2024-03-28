@@ -20,5 +20,7 @@
         public string? preferences { get; set; }
         public string? room_type { get; set; }
         public string user_id { get; set; }
+        public string?[]? social { get; set; }
+        public string[]? blocked_users { get; set; }
     }
 }

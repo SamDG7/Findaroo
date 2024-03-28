@@ -31,6 +31,7 @@ const Navbar = () => {
                         GlobalVariables.authenticated ?
                         <ButtonTransparent text={"Log Out"} onClickFunction={() => {
                             GlobalVariables.authenticated = false;
+                            GlobalVariables.isMod = false;
                             const auth = getAuth();
                             signOut(auth);
                             document.cookie = "idToken=\"\"; max-age=0; path=/";
@@ -42,21 +43,19 @@ const Navbar = () => {
                         }}/>
                     }
                 </li>
-                <li style={{float: "right"}}>
-                    {
-                        GlobalVariables.authenticated ?
-                        <Notification></Notification> : 
-                        <div></div>
-                    }
-                </li>
+                {
+                    GlobalVariables.authenticated ?
+                    <Notification></Notification> : 
+                    <div></div>
+                }
                 <li style={{float: "right"}}>
                     <Link to="/Profile">
                         <ButtonTransparent text={"Profile"}/>
                     </Link>
                 </li>
                 <li style={{float: "right"}}>
-                    <Link to="/Messages">
-                        <ButtonTransparent text={"Messages"}/>
+                    <Link to="/Conversations">
+                        <ButtonTransparent text={"Conversations"}/>
                     </Link>
                 </li>
                 <li style={{float: "right"}}>

@@ -29,6 +29,7 @@ export default function AccountSetup() {
 
     const AccountSetupCall = async () => {
         console.log("POST Call")
+        console.log(GlobalVariables.userCredential)
         try {
             const form = {
                 user_id: GlobalVariables.userCredential.uid,
@@ -48,6 +49,7 @@ export default function AccountSetup() {
 				},
 				body: JSON.stringify(form)
 			}).then(response => {
+                console.log("HERE")
 				return response.text()
 			  });
         } catch (err) {

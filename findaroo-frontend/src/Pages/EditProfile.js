@@ -22,6 +22,7 @@ export default function EditProfile() {
     const [occupation, setOccupation] = useState();
     const [company, setCompany] = useState();
     const [school, setSchool] = useState();
+    const [social, setSocial] = useState([null, null, null, null]);
     // These two are not stored on the user right now
     const [interests, setInterests] = useState();
     const [biography, setBiography] = useState();
@@ -52,6 +53,7 @@ export default function EditProfile() {
                 if (data.occupation) setOccupation(data.occupation);
                 if (data.company) setCompany(data.company);
                 if (data.school) setSchool(data.school);
+                if (data.social) setSocial(data.social);
             }).catch(error => console.error(error));
 
     }, []);
@@ -77,7 +79,8 @@ export default function EditProfile() {
                 phone: phone,
                 occupation: occupation,
                 company: company,
-                school: school
+                school: school,
+                social: social
             }
             await fetch('http://localhost:5019/User', {
                 method: "PUT",
@@ -107,8 +110,13 @@ export default function EditProfile() {
                         <InputStandard name="Age" defaultValue={age} onChangeFunction={(e) => setAge(e.target.value)}/>
                         <InputStandard name="Phone Number" defaultValue={phone} onChangeFunction={(e) => setPhone(e.target.value)}/>
                         <h2 className="pt-[4vh]">About Me</h2>
+                        <InputStandard name="Facebook" defaultValue={social[0]} onChangeFunction={(e) => setSocial([e.target.value, social[1], social[2], social[3]])} />
+                        <InputStandard name="Instagram" defaultValue={social[1]} onChangeFunction={(e) => setSocial([social[0], e.target.value, social[2], social[3]])} />
+                        <InputStandard name="Twitter" defaultValue={social[2]} onChangeFunction={(e) => setSocial([social[0], social[1], e.target.value, social[3]])} />
+                        <InputStandard name="LinkedIn" defaultValue={social[3]} onChangeFunction={(e) => setSocial([social[0], social[1], social[2], e.target.value])} />
                         <InputBox name="Interests" defaultValue={interests} onChangeFunction={(e) => setInterests(e.target.value)}/>
                         <InputBox name="Biography" defaultValue={biography} onChangeFunction={(e) => setBiography(e.target.value)}/>
+                        
                     </div>
                     <div className="Column Start">
                         <h2>Work/School</h2>
