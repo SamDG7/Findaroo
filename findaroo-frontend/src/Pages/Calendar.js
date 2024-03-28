@@ -38,6 +38,8 @@ function classNames(...classes) {
 }
 
 function CreateEventForm({ onSubmit }) {
+
+    const [isAdding, setAdding] = useState(true);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
@@ -50,29 +52,38 @@ function CreateEventForm({ onSubmit }) {
         setDate('');
     };
 
+    const toggleAdding = () => {
+        setAdding(!isAdding);
+    };
+
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="Column Center">
-                <input
-                type="text"
-                placeholder="Event Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                />
-                <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                />
-                <input
-                type="text"
-                placeholder="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                />
-                <button type="submit">Add Event</button>
-            </div>
-        </form>
+        <div>
+            <Popup isOpen={isAdding} closePopup={toggleAdding}>
+                <h2>Add Event</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="Column Center">
+                        <input
+                        type="text"
+                        placeholder="Event Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        />
+                        <input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        />
+                        <input
+                        type="text"
+                        placeholder="Description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        />
+                        <button type="submit">Add Event</button>
+                    </div>
+                </form>
+            </Popup>
+        </div>
     );
 }
 
@@ -223,11 +234,7 @@ export default function CalendarPage() {
         setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'));
     }
 
-    const [isEditing, setEditing] = useState(false);
-
-    const toggleEditing = () => {
-        setEditing(!isEditing);
-    };
+    const [isAdding, setAdding] = useState(false);
 
     const addNewEvent = ({ name, description, date }) => {
         const newEvent = {
@@ -257,10 +264,6 @@ export default function CalendarPage() {
         }}
         >
             <Navbar/>
-
-            <Popup isOpen={isEditing} closePopup={toggleEditing}>
-                <h2>Editing</h2>
-            </Popup>
 
             <div className="pt-16">
                 <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
@@ -373,8 +376,6 @@ export default function CalendarPage() {
                     Add New Event
                 </button>
                 {showCreateEventForm && <CreateEventForm onSubmit={addNewEvent} />}
-
-                <p>...</p>
             </div>
         </div>
     );
