@@ -66,7 +66,7 @@ export function PersonInfoSmall({personDict}) {
     const navigate = useNavigate();
     const [image, setImage] = useState();
     const [connected, setConnected] = useState(false);
-
+    const [userData, setUserData] = useState(null);
     const auth = getAuth();
 
     useEffect(() => {
@@ -87,6 +87,17 @@ export function PersonInfoSmall({personDict}) {
                 setConnected(data);
             }).catch(error => console.error(error));
     }, [personDict.user_id]);
+
+    useEffect(() => {
+        console.log("GET Call for new added user in search")
+        fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);    
+                setUserData(data);
+            }).catch(error => console.error(error));
+    }, []);
+   
 
     const GetImage = async function() {
         const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + personDict.user_id);
@@ -127,13 +138,54 @@ export function PersonInfoSmall({personDict}) {
                 </h4>
             </div>
             <h3 className="Column End">
-                {personDict.rating >= 0 ? personDict.rating + "/5" : "Unrated"}
+                {"Similarity: "+ calculateSimilarity() + "/5"}
                 <div className="p-[1vw]"/>
                 <ButtonImportant text={"Add Connection"} onClickFunction={addConnection}></ButtonImportant>
                 {connected && <ButtonImportant text={"Start Conversation"} onClickFunction={startConversation}></ButtonImportant>}
             </h3>
         </div>
     );
+
+
+    function calculateSimilarity() {
+        var total_sim = 5;
+        if (userData != null) {
+            if (personDict.min_price != null && userData.min_price != null) {
+                if (Math.abs(personDict.min_price - userData.min_price) > 500) {
+                    total_sim -= 0.5;
+                }
+            }
+            if (personDict.max_price != null && userData.max_price != null) {
+                if (Math.abs(personDict.max_price - userData.max_price) > 500) {
+                    total_sim -= 0.5;
+                }
+            }
+            if (personDict.school != null && userData.school != null) {
+                if (personDict.school != userData.school) {
+                    total_sim -= 1;
+                }
+            }
+            if (personDict.state != null && userData.state != null) {
+                if (personDict.state != userData.state) {
+                    total_sim -= 0.5;
+                }
+            }
+            if (personDict.rating) {
+                if (personDict.rating < 3) {
+                    total_sim -= 0.5;
+                }
+            }
+            //TODO: CONSIDER LIFESTYLE PREFERENCES
+        }
+        
+        //TODO: set total_sim as person rating
+        if (total_sim < 0) {
+            total_sim = 0;
+        }
+
+        personDict.rating = total_sim;
+        return total_sim;
+    }
 
     async function addConnection() {
         await fetch(GlobalVariables.backendURL + "/ConnectionRequest/send", {

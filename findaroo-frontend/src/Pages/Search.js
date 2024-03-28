@@ -14,11 +14,14 @@ export default function Search() {
     const [blockedUsers, setBlockedUsers] = useState([])
     const [sortType, setSortType] = useState("Default");
     const [allUsers, setAllUsers] = useState([]);
+    
 
     useEffect(() => {
         if (!GlobalVariables.authenticated) {
             navigate("/Login");
         }
+
+        
     }, []);
 
     useEffect(() => {
