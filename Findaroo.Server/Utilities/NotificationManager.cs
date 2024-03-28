@@ -16,8 +16,27 @@ namespace Findaroo.Server.Utilities
         public void recordNotification(string receiver_id, string sender_id, NotificationEnum type)
         {
             Notification notification = new Notification(sender_id, receiver_id, type);
-            _psql.notification.Add(notification);
-            _psql.SaveChanges();
+            if (type == NotificationEnum.Message)
+            {
+                Notification? nExists = _psql.notification
+                    .Where(n => n.sender_id.Equals(sender_id) && n.receiver_id.Equals(receiver_id) && n.type == type)
+                    .FirstOrDefault();
+                if (nExists == null)
+                {
+                    _psql.notification.Add(new Notification(sender_id, receiver_id, type));
+                }
+                else
+                {
+                    nExists.count += 1;
+                    _psql.notification.Update(nExists);
+                }
+                _psql.SaveChanges();
+            }
+            else
+            {
+                _psql.notification.Add(notification);
+                _psql.SaveChanges();
+            }
         }
 
         public void recordMessageNotification(string receiver_id)

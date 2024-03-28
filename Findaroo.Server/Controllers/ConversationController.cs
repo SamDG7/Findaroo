@@ -1,9 +1,13 @@
 ﻿using Findaroo.Server.Model.RequestModel.Conversation;
 using Findaroo.Server.Model.TableModel;
 using Findaroo.Server.PostgreSQL;
+using Findaroo.Server.Utilities;
+using Findaroo.Server.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using FirebaseAdmin.Auth;
+using System.Net;
 
 namespace Findaroo.Server.Controllers
 {
@@ -12,9 +16,11 @@ namespace Findaroo.Server.Controllers
     public class ConversationController : ControllerBase
     {
         PostgresContext _psql;
+        NotificationManager _notificationManager;
         public ConversationController(PostgresContext psql)
         {
             _psql = psql;
+            _notificationManager = new NotificationManager(_psql);
         }
 
         [HttpGet]
@@ -75,7 +81,7 @@ namespace Findaroo.Server.Controllers
         
         [HttpPost]
         [Route("messages")]
-        public void makeMessage([FromBody] PostMessageRequest postMessageRequest)
+        public async void makeMessage([FromBody] PostMessageRequest postMessageRequest)
         {
             Console.Write(postMessageRequest.message_text);
             
@@ -90,6 +96,18 @@ namespace Findaroo.Server.Controllers
             Conversation conversation = getConversation(postMessageRequest.conversation_id);
             conversation.date_modified = reference.Entity.date_modified;
             _psql.conversation.Update(conversation);
+
+            // Kinda inefficient but makes it scalable if we wanna make group chat
+            for (int i = 0; i < conversation.user_ids.Length; i++)
+            {
+                string id = conversation.user_ids[i];
+                if (id.Equals(postMessageRequest.user_id)) continue;
+                _notificationManager.recordNotification(
+                    id,
+                    postMessageRequest.user_id,
+                    NotificationEnum.Message
+                );
+            }
             
             _psql.SaveChanges();
         }

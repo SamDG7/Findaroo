@@ -228,7 +228,7 @@ function MessageNotificationItem({prop}) {
     const navigate = useNavigate();
     console.log(prop.notification.seen);
     return (
-        <li onClick={() => navigate("/Messages")}>
+        <li onClick={() => navigate("/Conversations")}>
             <div className={`Row Start notification-item ${prop.notification.seen ? 'seen' : 'not-seen'}`}>
                 <img src={prop.image}></img>
                 <div className='Column Start'>
