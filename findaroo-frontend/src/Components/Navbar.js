@@ -60,6 +60,11 @@ const Navbar = () => {
                     </Link>
                 </li>
                 <li style={{float: "right"}}>
+                    <Link to="/Calendar">
+                        <ButtonTransparent text={"Calendar"}/>
+                    </Link>
+                </li>
+                <li style={{float: "right"}}>
                     <Link to="/Search">
                         <ButtonTransparent text={"Search"}/>
                     </Link>
