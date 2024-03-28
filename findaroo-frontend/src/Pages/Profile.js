@@ -173,17 +173,19 @@ export default function Profile() {
                                 <ButtonImportant text="Change Photo"/>
                             </Link>
                             <Link to="/Profile/Preferences">
-                            <ButtonImportant text="Edit Preferences"/>
+                                <ButtonImportant text="Edit Preferences"/>
                             </Link>
                             <Link to="/Profile/Questions">
                                 <ButtonImportant text="Compatibility Questions"/>
                             </Link>
                         </div>
                         <div className="Row space-x-[2vw]">
-                            <ButtonStandard text="View Roomies"/>
+                            <Link to="/Profile/MyRooms">
+                                <ButtonStandard text="My Rooms"/>
+                            </Link>
                             <ButtonStandard text="My Connections" onClickFunction={() => {navigate("/Profile/MyConnections");}}/>
                             <ButtonWithNotification text="Connection Requests" count={requestCount} onClickFunction={() => {navigate("/Profile/MyConnectionRequests");}}/>
-                            <ButtonStandard text="Blocked Users"/>
+                            <ButtonStandard text="Blocked Users" onClickFunction={() => {navigate("/Profile/BlockedUsers");}}/>
                             <ButtonStandard text="My Reviews"/>
                         </div>
                         <div className="Row space-x-[2vw]">

@@ -12,8 +12,6 @@ export function ConnectionRequestInfo({connectionDict}) {
         'receiver_id': auth.currentUser.uid
     }
 
-    console.log(requestBody)
-
     if (connectionDict == null){
         return;
     }

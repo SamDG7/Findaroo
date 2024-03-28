@@ -1,0 +1,37 @@
+@import "../Utils/Colors.css";
+
+.bell {
+    display: block;
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.dropdown-menu.active {
+    position:absolute;
+    top:75px;
+    right:50px;
+    background-color: #7e7e7b;
+    padding: 10px 10px;
+    border-radius: var(--border-radius);
+    width: 500px;
+    height:500px;
+    overflow-y: auto;
+}
+
+.dropdown-menu.inactive {
+    position:absolute;
+    visibility: hidden;
+}
+
+.notification-item img {
+    max-width:100px;
+    max-height:100px;
+}
+
+.notification-item.seen {
+    background-color: #a0a09e;
+}
+
+.notification-item.not-seen {
+    background-color: #eaf093;
+}

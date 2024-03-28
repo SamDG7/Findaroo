@@ -9,7 +9,8 @@ import reportWebVitals from './reportWebVitals';
 
 // All pages should be imported here:
 import Home from "./Pages/Home"
-import Messages from "./Pages/Messages"
+import Conversations from "./Pages/Conversations"
+import Conversation from "./Pages/Conversation"
 import Search from "./Pages/Search"
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
@@ -23,6 +24,10 @@ import AccountSetup from "./Pages/AccountSetup";
 import EditPhoto from "./Pages/EditPhoto";
 import MyConnectionRequests from './Pages/MyConnectionRequest';
 import User from './Pages/User';
+import MyRooms from './Pages/MyRooms';
+import RoommateAgreement from './Pages/RoommateAgreement';
+import RoommateInvitation from './Pages/RoommateInvitations';
+import BlockedUsers from './Pages/BlockedUsers';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -60,8 +65,13 @@ const router = createBrowserRouter(
             errorElement: <Error />,
         },
         {
-            path: "/Messages",
-            element: <Messages />,
+            path: "/Conversations",
+            element: <Conversations />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Conversations/:cid",
+            element: <Conversation />,
             errorElement: <Error />,
         },
         {
@@ -117,6 +127,26 @@ const router = createBrowserRouter(
         {
             path: "/Profile/MyConnectionRequests",
             element: <MyConnectionRequests />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/MyRooms",
+            element: <MyRooms/>,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Profile/MyRooms/RoommateAgreement",
+            element: <RoommateAgreement/>,
+            errorElement: <Error />,
+        },
+        {
+            path: "Profile/MyRooms/RoommateInvitations",
+            element: <RoommateInvitation/>,
+            errorElement: <Error />,
+        },
+        {
+            path: "Profile/BlockedUsers",
+            element: <BlockedUsers/>,
             errorElement: <Error />,
         }
     ]

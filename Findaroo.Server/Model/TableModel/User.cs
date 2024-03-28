@@ -34,6 +34,7 @@ namespace Findaroo.Server.Model.TableModel
         public int[]? lifestyle_answers { get; set; }
         public string? room_type { get; set; }
         public string?[] social { get; set; }
+        public string[]? blocked_users { get; set; }
 
         public User() { }
 
@@ -66,6 +67,7 @@ namespace Findaroo.Server.Model.TableModel
             this.room_type = pur.room_type;
             this.user_id = pur.user_id;
             this.social = pur.social;
+            this.blocked_users = pur.blocked_users;
         }
     }
 }

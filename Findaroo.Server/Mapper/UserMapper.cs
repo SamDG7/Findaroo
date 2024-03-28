@@ -30,6 +30,7 @@ namespace Findaroo.Server.Mapper
             if (updateUserRequest.lifestyle_answers != null) user.lifestyle_answers = updateUserRequest.lifestyle_answers;
             if (updateUserRequest.status != null) user.status = (bool)updateUserRequest.status;
             if (updateUserRequest.social != null) user.social = updateUserRequest.social;
+            if (updateUserRequest.blocked_users != null) user.blocked_users = updateUserRequest.blocked_users;
         }
     }
 }
