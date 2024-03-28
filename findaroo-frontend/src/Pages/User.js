@@ -91,7 +91,6 @@ export default function User() {
 				},
 				body: JSON.stringify(form)
 			}).then(response => {
-                console.log("HERE")
 				return response.text()
 			  });
         } catch (err) {
