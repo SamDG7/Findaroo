@@ -28,7 +28,7 @@ export function MessageStyle({messageInfo}){
 
     return(
         <div
-            className={"Column End drop-shadow-xl my-[1.5vh]" + (messageInfo.user_id === GlobalVariables.userCredential.uid ? " bg-blue-200 ml-auto" : " bg-gray-200 ")}>
+            className={"Column drop-shadow-xl my-[1.5vh]" + (messageInfo.user_id === GlobalVariables.userCredential.uid ? " End bg-blue-200 ml-auto" : " Start bg-gray-200  mr-auto")}>
             <div className="Row">
                 <h3>{userName}</h3>
                 <h3>{date.toLocaleString()}</h3>

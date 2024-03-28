@@ -54,7 +54,7 @@ export default function Conversations() {
             <Navbar />
 
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
-                <div className="Column End">
+                <div className="Column">
                     {conversationMessages.map((message, index) => (
                         <MessageStyle messageInfo={message} key={index}/>
                     ))}

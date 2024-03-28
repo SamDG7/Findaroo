@@ -11,6 +11,8 @@ import PersonInfo from "../Components/PersonInfo";
 import Popup from "../Components/Popup";
 import { signOut } from "firebase/auth";
 import InputStandard from "../Components/InputFields";
+import emailjs from "emailjs-com";
+import SettingsButton from "../Components/SettingsButton";
 
 export default function User() {
     // This redirects to the login page if not logged in
@@ -173,6 +175,71 @@ export default function User() {
             )
         }
     }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const subject = formData.get('subject');
+        const message = formData.get('message');
+        const from_name = formData.get('from_name');
+        const uid = GlobalVariables.userCredential.uid;
+
+        const templateParams = {
+            subject,
+            message,
+            from_name,
+            uid,
+        };
+        try {
+            const response = await emailjs.send('service_ch4bzfr', 'template_k36qghi', templateParams, '5olGsbDDVqcfNCftk');
+            console.log('Email successfully sent!', response.status, response.text);
+            alert("Issue reported. Thank you!");
+            closeReportingMenu();
+        } catch (error) {
+            console.error('Failed to send email. Error: ', error);
+            alert("Failed to send the report. Please try again.");
+        }
+    };
+    const [isReporting, setIsReporting] = useState(false);
+    const openReportingMenu = () => setIsReporting(true);
+    const closeReportingMenu = () => setIsReporting(false);
+
+    const menuStyle = {
+        position: 'fixed',
+        top: '75%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: '#fff',
+        padding: '40px',
+        borderRadius: '10px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        zIndex: 1000,
+    };
+    const closeButtonStyle = {
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        cursor: 'pointer',
+        border: 'none',
+        background: 'none',
+        fontSize: '24px',
+    };
+    const inputStyle = {
+        marginBottom: '10px',
+        padding: '10px',
+        fontSize: '16px',
+        border: '1px solid #ccc',
+    };
+    const submitStyle = {
+        cursor: 'pointer',
+        padding: '10px 20px',
+        fontSize: '16px',
+        backgroundColor: '#4CAF50',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+    };
+
     return (
         <div className="Page">
             <Navbar />
@@ -185,10 +252,22 @@ export default function User() {
                     
                     <div className="Row space-x-[2vw]">
                     
-                    <ButtonImportant text="Block User" onClickFunction={BlockUser}/>
-                    <ButtonImportant text="Rate User" onClickFunction={() => {setShow(!show)}}/>
-                    
-                    
+                        <ButtonImportant text="Block User" onClickFunction={BlockUser}/>
+                        <ButtonImportant text="Rate User" onClickFunction={() => {setShow(!show)}}/>
+                        <ButtonDelete text="Report User" onClickFunction={openReportingMenu}/>
+                        <div>
+                            {isReporting && (
+                                <div style={menuStyle}>
+                                    <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
+                                        <button onClick={closeReportingMenu} style={closeButtonStyle}>×</button>
+                                        <input type="text" name="from_name" placeholder="Email" required style={inputStyle} />
+                                        <input type="text" name="subject" placeholder="Reason" required style={inputStyle} />
+                                        <textarea name="message" placeholder="Details" required style={{...inputStyle, height: '100px'}}></textarea>
+                                        <button type="submit" style={submitStyle}>Submit</button>
+                                    </form>
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <ShowForm />
 
