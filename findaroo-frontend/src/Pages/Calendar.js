@@ -194,10 +194,6 @@ export default function CalendarPage() {
         setShowCreateEventForm(false); // Hide form after submission
     };
 
-    const closeEditPopup = () => {
-        isEditing = false;
-    };
-
     return (
         <div
         className="Page"
@@ -213,10 +209,6 @@ export default function CalendarPage() {
         }}
         >
             <Navbar/>
-
-            <Popup isOpen={isEditing} closePopup={closeEditPopup}>
-                <h2>Modifying Event</h2>
-            </Popup>
 
             <div className="pt-16">
                 <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
