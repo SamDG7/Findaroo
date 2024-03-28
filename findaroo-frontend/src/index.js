@@ -27,6 +27,7 @@ import User from './Pages/User';
 import MyRooms from './Pages/MyRooms';
 import RoommateAgreement from './Pages/RoommateAgreement';
 import RoommateInvitation from './Pages/RoommateInvitations';
+import Calendar from './Pages/Calendar';
 import BlockedUsers from './Pages/BlockedUsers';
 
 // Import the functions you need from the SDKs you need
@@ -77,6 +78,11 @@ const router = createBrowserRouter(
         {
             path: "/Search",
             element: <Search />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/Calendar",
+            element: <Calendar />,
             errorElement: <Error />,
         },
         {
