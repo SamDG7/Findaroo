@@ -3,10 +3,9 @@ import 'react-image-crop/dist/ReactCrop.css'
 import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {Link, useNavigate} from "react-router-dom";
-import ReactCrop, {} from 'react-image-crop';
 import {useEffect, useState} from "react";
-import ButtonStandard, {ButtonDelete, ButtonImportant} from "../Components/Buttons";
-import InputStandard, {InputImage} from "../Components/InputFields";
+import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
+import {InputImage} from "../Components/InputFields";
 import ImageCropper from "../Components/ImageCropper";
 
 export default function EditPhoto() {
@@ -21,6 +20,7 @@ export default function EditPhoto() {
 
     const [imageToCrop, setImageToCrop] = useState(undefined);
     const [croppedImage, setCroppedImage] = useState(undefined);
+    const [saveText, setSaveText] = useState(null);
 
     const onUploadFile = (event) => {
         if (event.target.files && event.target.files.length > 0) {
@@ -30,6 +30,7 @@ export default function EditPhoto() {
                 const image = reader.result;
 
                 setImageToCrop(image);
+                setCroppedImage(image);
             });
 
             reader.readAsDataURL(event.target.files[0]);
@@ -41,31 +42,36 @@ export default function EditPhoto() {
     }
 
     async function SavePhotoAsync() {
-        console.log("PUT Call");
+        console.log("POST Call");
         try {
-            //let imageBlob = await fetch(croppedImage).then(r => r.blob());
-            console.log(croppedImage);
-            //const imageObject = new File([croppedImage], "Profile.png");
-            //console.log(typeof imageObject);
-            //const imageBinary = atob(imageObject);
-
-            const form = {
-                user_id: GlobalVariables.userCredential.uid,
-                image_name: "Profile.png",
-                form_file: croppedImage
+            // croppedImage is a data URL
+            // convert it to a file
+            const imageData = atob(croppedImage.split(',')[1]);
+            const arrayBuffer = new ArrayBuffer(imageData.length);
+            const uint8Array = new Uint8Array(arrayBuffer);
+            for (let i = 0; i < imageData.length; i++) {
+                uint8Array[i] = imageData.charCodeAt(i);
             }
+            const blob = new Blob([arrayBuffer], { type: 'image/png' });
+            const file = new File([blob], 'canvas_image.png', { type: 'image/png' });
+            console.log(file);
+
+            // Setup the form
+            const form = new FormData();
+            form.append("user_id", GlobalVariables.userCredential.uid)
+            form.append("image_name", "Profile.png")
+            form.append("form_file", file)
 
             await fetch('http://localhost:5019/Image', {
                 method: "POST",
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
                 body: form
             }).then(response => {
+                setSaveText("Save Successful!");
                 return response.text()
             });
         }catch (err) {
             console.log(err)
+            setSaveText("Save Failed");
         }
     }
 
@@ -86,7 +92,7 @@ export default function EditPhoto() {
                             </h3>
                             <ImageCropper
                                 imageToCrop={imageToCrop}
-                                onImageCropped={(croppedImage) => setCroppedImage(croppedImage)}
+                                onImageCropped={(crop) => setCroppedImage(crop)}
                             />
                     </div>)}
                     {croppedImage  && (<div className="Column Start">
@@ -104,6 +110,9 @@ export default function EditPhoto() {
                         <Link to="/Profile">
                             <ButtonStandard text="Back"/>
                         </Link>
+                        {saveText && <h3>
+                            {saveText}
+                        </h3>}
                     </div>
                 </div>
             </div>

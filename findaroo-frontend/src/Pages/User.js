@@ -1,18 +1,13 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ButtonStandard, { ButtonDelete, ButtonImportant } from "../Components/Buttons";
-import { confirmAlert } from 'react-confirm-alert';
+import { ButtonDelete, ButtonImportant } from "../Components/Buttons";
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { getAuth, deleteUser } from "firebase/auth";
 import PersonInfo from "../Components/PersonInfo";
-import Popup from "../Components/Popup";
-import { signOut } from "firebase/auth";
 import InputStandard from "../Components/InputFields";
 import emailjs from "emailjs-com";
-import SettingsButton from "../Components/SettingsButton";
 
 export default function User() {
     // This redirects to the login page if not logged in
@@ -47,7 +42,7 @@ export default function User() {
             .then(response => response.json())
             .then(data => {
                 for(let i = 0; i < data.length; i++) {
-                    if(data[i].user_id == GlobalVariables.userCredential.uid) {
+                    if(data[i].user_id === GlobalVariables.userCredential.uid) {
                         setReviewed(true)
                     }
                 }
@@ -377,12 +372,12 @@ export default function User() {
                 }
             }
             if (loggedInUser.school != null && userData.school != null) {
-                if (loggedInUser.school != userData.school) {
+                if (loggedInUser.school !== userData.school) {
                     total_sim -= 1;
                 }
             }
             if (loggedInUser.state != null && userData.state != null) {
-                if (loggedInUser.state != userData.state) {
+                if (loggedInUser.state !== userData.state) {
                     total_sim -= 0.5;
                 }
             }
@@ -400,44 +395,44 @@ export default function User() {
             if (questions != null && userQuestions != null) {
                 lifestyle_sim += 10 - Math.abs(questions[0] - userQuestions[0]) * 5;
 
-                if (questions[1] == 1 || userQuestions[1] == 1) {
-                    if (questions[0] != userQuestions[0]) {
+                if (questions[1] === 1 || userQuestions[1] === 1) {
+                    if (questions[0] !== userQuestions[0]) {
                         lifestyle_sim *= 0;
                     }
                 }
 
                 lifestyle_sim += 10 - Math.abs(questions[2] - userQuestions[2]) * 5;
 
-                if (questions[3] == 1 || userQuestions[3] == 1) {
-                    if (questions[2] != userQuestions[2]) {
+                if (questions[3] === 1 || userQuestions[3] === 1) {
+                    if (questions[2] !== userQuestions[2]) {
                         lifestyle_sim *= 0;
                     }
                 }
 
                 lifestyle_sim += 10 - Math.abs(questions[4] - userQuestions[4]) * 5;
 
-                if (questions[5] == 1 || userQuestions[5] == 1) {
-                    if (questions[4] != userQuestions[4]) {
+                if (questions[5] === 1 || userQuestions[5] === 1) {
+                    if (questions[4] !== userQuestions[4]) {
                         lifestyle_sim *= 0;
                     }
                 }
 
-                if (questions[6] == userQuestions[6]) {
+                if (questions[6] === userQuestions[6]) {
                     lifestyle_sim += 5;
                 }
 
-                if (questions[7] == 1) {
-                    if (userQuestions[6] == 0) {
+                if (questions[7] === 1) {
+                    if (userQuestions[6] === 0) {
                         lifestyle_sim *= 0;
                     }
                 }
-                if (userQuestions[7] == 1) {
-                    if (questions[6] == 0) {
+                if (userQuestions[7] === 1) {
+                    if (questions[6] === 0) {
                         lifestyle_sim *= 0;
                     }
                 }
 
-                if (questions[8] == userQuestions[8]) {
+                if (questions[8] === userQuestions[8]) {
                     lifestyle_sim += 5;
                 }
 

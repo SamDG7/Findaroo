@@ -54,7 +54,11 @@ namespace Findaroo.Server.Controllers
         [Route("avg")]
         public double aggRating(string user)
         {
-            double rating = _psql.ratings.Where(rt => rt.to_user == user).Average(rt => rt.rating);
+            if (_psql.ratings.Where(rt => rt.to_user == user).FirstOrDefault() == null)
+            {
+                return -1;
+            }
+            
             return _psql.ratings.Where(rt => rt.to_user == user).Average(rt => rt.rating);
         }
         
