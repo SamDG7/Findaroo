@@ -236,9 +236,9 @@ export default function Search() {
             case "Z-A":
                 return function(a,b) {return a.first_name === b.first_name ? b.last_name.localeCompare(a.last_name) : b.first_name.localeCompare(a.first_name)};
             case "Rating (Descending)":
-                return function(a,b) {return a.rating - b.rating};
-            case "Rating (Ascending)":
                 return function(a,b) {return b.rating - a.rating};
+            case "Rating (Ascending)":
+                return function(a,b) {return a.rating - b.rating};
         }
     }
 }
