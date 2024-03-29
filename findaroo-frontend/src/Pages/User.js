@@ -69,6 +69,29 @@ export default function User() {
                 console.log(data)
             })
     }, [rating])
+
+    useEffect(() => {
+        try {
+            console.log("updating rating of user" + uid)
+            const form = {
+                user_id: uid,
+                rating: avgRating
+            }
+            fetch('http://localhost:5019/User', {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(form)
+            }).then(response => {
+                console.log("SUCCESS")
+                return response.text()
+            });
+        } catch (err) {
+            console.log(err)
+        }
+    }, [avgRating])
+
     const BlockUser = async () => {
         console.log(loggedInUser.blocked_users)
         console.log("PUT Call")
@@ -157,29 +180,6 @@ export default function User() {
             }
         }
         setReviewed(true)
-        updateRating();
-    }
-
-    const updateRating = async () => {
-        try {
-            console.log("updating rating of user" + uid)
-            const form = {
-                user_id: uid,
-                rating: avgRating
-            }
-            await fetch('http://localhost:5019/User', {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(form)
-            }).then(response => {
-                console.log("SUCCESS")
-                return response.text()
-            });
-        } catch (err) {
-            console.log(err)
-        }
     }
 
     function ShowForm() {
@@ -310,10 +310,9 @@ export default function User() {
             <Navbar />
 
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
-                <div className="Column">
+                {userData && <div className="Column">
                     <PersonInfo personDict={userData} />
-                    <h2>{(!(avgRating === null ) ? "User Average Rating: " + avgRating: "")}
-                    </h2>
+                    <h2>User Rating: {(avgRating && avgRating >= 0) ? avgRating + "/5" : "Unrated"}</h2>
 
                     {/* <h2>Compatibility Score: {calculateSimilarity} </h2> */}
                     
@@ -344,6 +343,7 @@ export default function User() {
                     <ShowForm />
 
                 </div>
+}
             </div>
         </div>
     );

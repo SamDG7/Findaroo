@@ -51,19 +51,19 @@ export default function PersonInfo({personDict}) {
                 {personDict.social && <div className="Row">
 
                     {personDict.social[0] && <a href={"https://www.facebook.com/" + personDict.social[0]} target="_blank" rel="noopener noreferrer">
-                        <img src={fb} alt={"Facebook link"} style={{ width: '50%', height: 'auto' }} />
+                        <img src={fb} alt={"Facebook link"} style={{ width: '35%', height: 'auto'}} />
                     </a>}
 
                     {personDict.social[1] && <a href={"https://www.instagram.com/" + personDict.social[1]} target="_blank" rel="noopener noreferrer">
-                        <img src={ig} alt={"Instagram link"} style={{ width: '50%', height: 'auto' }} />
+                        <img src={ig} alt={"Instagram link"} style={{ width: '35%', height: 'auto' }} />
                     </a>}
 
                     {personDict.social[2] && <a href={"https://www.twitter.com/" + personDict.social[2]} target="_blank" rel="noopener noreferrer">
-                        <img src={tw} alt={"Twitter link"} style={{ width: '50%', height: 'auto' }} />
+                        <img src={tw} alt={"Twitter link"} style={{ width: '35%', height: 'auto' }} />
                     </a>}
 
                     {personDict.social[3] && <a href={"https://www.linkedin.com/in/" + personDict.social[3]} target="_blank" rel="noopener noreferrer">
-                        <img src={li} alt={"LinkedIn link"} style={{ width: '50%', height: 'auto' }} />
+                        <img src={li} alt={"LinkedIn link"} style={{ width: '35%', height: 'auto' }} />
                     </a>}
                 </div>}
                 
