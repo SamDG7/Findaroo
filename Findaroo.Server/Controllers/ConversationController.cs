@@ -34,7 +34,10 @@ namespace Findaroo.Server.Controllers
             foreach (var conversation in conversationList)
             {
                 var messageList = getConversationMessages(conversation.conversation_id);
-                conversation.date_modified = messageList[^1].date_modified;
+                if (messageList.Count > 0)
+                {
+                    conversation.date_modified = messageList[^1].date_modified;
+                }
             }
             conversationList.Sort((a, b) => DateTime.Compare(b.date_modified, a.date_modified));
             return conversationList;
