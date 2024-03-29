@@ -219,8 +219,9 @@ namespace Findaroo.Server.Controllers
 
             if (userId.Equals(acceptRoommateInvitationRequest.receiver_id))
             {
-                _notificationManager.recordNotification(acceptRoommateInvitationRequest.receiver_id, 
-                    userId, NotificationEnum.RoommateInvitationAcceptedByReceiver);
+                _notificationManager.recordNotification(acceptRoommateInvitationRequest.sender_id,
+                    userId, 
+                    NotificationEnum.RoommateInvitationAcceptedByReceiver);
             } else
             {
                 _notificationManager.recordNotification(acceptRoommateInvitationRequest.receiver_id, 
