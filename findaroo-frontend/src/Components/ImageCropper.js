@@ -12,7 +12,9 @@ function ImageCropper(props) {
         // default crop config
         {
             unit: '%',
-            width: 30,
+            width: 50,
+            x: 25,
+            y: 25,
             aspect: 1,
         }
     );
@@ -61,6 +63,10 @@ function ImageCropper(props) {
     return (
         <ReactCrop
             src={imageToCrop || WhiteSquare}
+            imageStyle={{
+                resizeMode: 'stretch',
+                height: '60vh',
+            }}
             crop={cropConfig}
             aspect={1}
             ruleOfThirds
