@@ -44,6 +44,7 @@ namespace Findaroo.Server.Controllers
             List<String> ids = idsToNames.ids;
             return _psql.user
                 .Where(u => ids.Contains(u.user_id))
+                .OrderBy(u => idsToNames.ids.IndexOf(u.user_id))
                 .Select(u => u.first_name + " " + u.last_name)
                 .ToList();
         }
