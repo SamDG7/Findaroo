@@ -91,10 +91,15 @@ export function Notification() {
     );
 
     async function getNotifications(getMessageNotification) {
-        const response = await fetch(`${GlobalVariables.backendURL}${getMessageNotification ? "/Notification/Message" : "/Notification"}`, {
+        const data = await fetch(`${GlobalVariables.backendURL}${getMessageNotification ? "/Notification/Message" : "/Notification"}`, {
             credentials:'include'
+        }).then(response => {
+            if (response.status == 200) {
+                return response.json();
+            } else {
+                return [];
+            }
         });
-        const data = await response.json();
 
         if (data.length == 0) {
             return;
@@ -223,7 +228,7 @@ function MessageNotificationItem({prop}) {
     const navigate = useNavigate();
     console.log(prop.notification.seen);
     return (
-        <li onClick={() => navigate("/Messages")}>
+        <li onClick={() => navigate("/Conversations")}>
             <div className={`Row Start notification-item ${prop.notification.seen ? 'seen' : 'not-seen'}`}>
                 <img src={prop.image}></img>
                 <div className='Column Start'>
