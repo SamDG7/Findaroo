@@ -43,10 +43,7 @@ export default function Conversations() {
     );
 
     function GetSortedConversations(data) {
-        const sortedData = data.sort(
-            function(a,b) {
-                return a.date_modified.localeCompare(b.date_modified)
-            });
+        const sortedData = data//.sort(TimeSort);
 
         return (
             sortedData.map((conversation, index) => (

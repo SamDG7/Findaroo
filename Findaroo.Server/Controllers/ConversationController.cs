@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FirebaseAdmin.Auth;
 using System.Net;
+using System.Runtime.InteropServices.JavaScript;
 
 namespace Findaroo.Server.Controllers
 {
@@ -27,9 +28,16 @@ namespace Findaroo.Server.Controllers
         [Route("all")]
         public List<Conversation> getConversations(String user_id)
         {
-            return _psql.conversation
+            var conversationList = _psql.conversation
                 .FromSql($"SELECT * from conversation where {user_id} = ANY(user_ids)")
                 .ToList();
+            foreach (var conversation in conversationList)
+            {
+                var messageList = getConversationMessages(conversation.conversation_id);
+                conversation.date_modified = messageList[^1].date_modified;
+            }
+            conversationList.Sort((a, b) => DateTime.Compare(b.date_modified, a.date_modified));
+            return conversationList;
         }
         
         [HttpGet]
@@ -90,12 +98,9 @@ namespace Findaroo.Server.Controllers
             newConversationMessage.conversation_id = postMessageRequest.conversation_id;
             newConversationMessage.user_id = postMessageRequest.user_id;
             newConversationMessage.message_text = postMessageRequest.message_text;
-            var reference = _psql.conversation_message.Add(newConversationMessage);
-            _psql.SaveChanges();
-            
-            Conversation conversation = getConversation(postMessageRequest.conversation_id);
-            conversation.date_modified = reference.Entity.date_modified;
-            _psql.conversation.Update(conversation);
+            _psql.conversation_message.Add(newConversationMessage);
+
+            var conversation = _psql.conversation.Find(postMessageRequest.conversation_id);
 
             // Kinda inefficient but makes it scalable if we wanna make group chat
             for (int i = 0; i < conversation.user_ids.Length; i++)
