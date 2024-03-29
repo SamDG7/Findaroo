@@ -19,7 +19,7 @@ namespace Findaroo.Server.Utilities
             if (type == NotificationEnum.Message)
             {
                 Notification? nExists = _psql.notification
-                    .Where(n => n.sender_id.Equals(sender_id) && n.receiver_id.Equals(receiver_id) && n.type == type)
+                    .Where(n => n.sender_id.Equals(sender_id) && n.receiver_id.Equals(receiver_id) && n.type == type && n.seen == false)
                     .FirstOrDefault();
                 if (nExists == null)
                 {
