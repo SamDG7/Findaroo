@@ -1,14 +1,10 @@
 import React, {useEffect} from 'react';
-import logo from '../Findaroo.png';
 import "./Navbar.css"
 import "./Notification.css"
 import { useState, useRef } from 'react';
-import {ButtonImportant, ButtonTransparent} from './Buttons';
-import {Link} from "react-router-dom";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {useNavigate} from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth";
-import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { getAuth } from "firebase/auth";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { AiFillMessage } from "react-icons/ai";
 
@@ -94,14 +90,14 @@ export function Notification() {
         const data = await fetch(`${GlobalVariables.backendURL}${getMessageNotification ? "/Notification/Message" : "/Notification"}`, {
             credentials:'include'
         }).then(response => {
-            if (response.status == 200) {
+            if (response.status === 200) {
                 return response.json();
             } else {
                 return [];
             }
         });
 
-        if (data.length == 0) {
+        if (data.length === 0) {
             return;
         }
 
@@ -226,7 +222,7 @@ function NotificationItem({prop}) {
 
 function MessageNotificationItem({prop}) {
     const navigate = useNavigate();
-    console.log(prop.notification.seen);
+    //console.log(prop.notification.seen);
     return (
         <li onClick={() => navigate("/Conversations")}>
             <div className={`Row Start notification-item ${prop.notification.seen ? 'seen' : 'not-seen'}`}>

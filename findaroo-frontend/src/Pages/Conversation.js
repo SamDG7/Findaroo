@@ -1,12 +1,11 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import InputStandard from "../Components/InputFields";
-import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
+import ButtonStandard from "../Components/Buttons";
 import {MessageStyle} from "../Components/ConversationInfo";
-import Selector from "../Components/Selector";
 
 export default function Conversations() {
     // This redirects to the login page if not logged in

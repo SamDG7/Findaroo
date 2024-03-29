@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import './PersonInfo.css';
 import GlobalVariables from "../Utils/GlobalVariables";
 import { useNavigate } from "react-router-dom";
-import { ButtonImportant } from "./Buttons";
-import { getAuth } from "@firebase/auth";
-import InputStandard from "./InputFields"
-import ButtonStandard from "./Buttons"
 
 export function MessageStyle({messageInfo}){
-    console.log(messageInfo.date_modified)
+    //console.log(messageInfo.date_modified)
 
     const [userName, setUserName] = useState();
     const date = new Date(messageInfo.date_modified);
@@ -84,7 +79,6 @@ export function ConversationInfoSmall({conversationDict}) {
             </div>
             <div className="Column">
                 {lastMessage && <MessageStyle messageInfo={lastMessage}/>}
-
             </div>
             <div className="Column End">
                 <h3>

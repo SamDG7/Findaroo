@@ -1,12 +1,9 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import InputStandard from "../Components/InputFields";
-import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
 import {ConversationInfoSmall} from "../Components/ConversationInfo";
-import Selector from "../Components/Selector";
 
 export default function Conversations() {
     // This redirects to the login page if not logged in
@@ -43,10 +40,7 @@ export default function Conversations() {
     );
 
     function GetSortedConversations(data) {
-        const sortedData = data.sort(
-            function(a,b) {
-                return a.date_modified.localeCompare(b.date_modified)
-            });
+        const sortedData = data//.sort(TimeSort);
 
         return (
             sortedData.map((conversation, index) => (
