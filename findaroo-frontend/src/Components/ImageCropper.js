@@ -38,6 +38,7 @@ function ImageCropper(props) {
         const canvas = document.createElement('canvas');
         const scaleX = sourceImage.naturalWidth / sourceImage.width;
         const scaleY = sourceImage.naturalHeight / sourceImage.height;
+
         canvas.width = cropConfig.width;
         canvas.height = cropConfig.height;
         const ctx = canvas.getContext('2d');
@@ -54,23 +55,7 @@ function ImageCropper(props) {
             cropConfig.height
         );
 
-        return new Promise((resolve, reject) => {
-            canvas.toBlob(
-                (blob) => {
-                    // returning an error
-                    if (!blob) {
-                        reject(new Error('Canvas is empty'));
-                        return;
-                    }
-
-                    blob.name = fileName;
-                    // creating a Object URL representing the Blob object given
-                    const croppedImageUrl = window.URL.createObjectURL(blob);
-
-                    resolve(croppedImageUrl);
-                }, 'image/jpeg'
-            );
-        });
+        return canvas.toDataURL('image/png');
     }
 
     return (

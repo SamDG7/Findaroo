@@ -40,6 +40,7 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpPost]
+        // https://stackoverflow.com/questions/69676656/upload-files-via-js-to-asp-net-core-with-iformfile
         public void uploadProfilePicture([FromForm] ImageModel imageModel)
         {
             try
