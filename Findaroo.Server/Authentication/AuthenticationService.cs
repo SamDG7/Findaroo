@@ -1,33 +1,30 @@
 ﻿using FirebaseAdmin.Auth;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using System.Net;
 using System.Runtime.CompilerServices;
+using System.Text;
+using static Google.Apis.Requests.BatchRequest;
 
 namespace Findaroo.Server.Authentication
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationService
     {
-        public async Task<String> CreateUser(String username, String password)
+        public static async Task<string> authenticate(string? idToken)
         {
-            var userArgs = new UserRecordArgs
+            if (idToken == null)
             {
-                Email = username,
-                Password = password
-            };
-
-            var userRecord = await FirebaseAuth.DefaultInstance.CreateUserAsync(userArgs);
-
-            return userRecord.Uid;
-        }
-
-        public async Task<String> Authenticate(String idToken)
-        {
-            try
+                return null;
+            }
+            else
             {
                 var userRecord = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
+                if (userRecord == null)
+                {
+                    return null;
+                }
                 return userRecord.Uid;
-            } catch (FirebaseAuthException)
-            {
-                throw;
             }
+            
         }
     }
 }

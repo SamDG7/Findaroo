@@ -18,6 +18,7 @@ namespace Findaroo.Server.PostgreSQL
         public DbSet<Notification> notification { get; set; }
         public DbSet<CalendarEvent> calendar_event { get; set; }
         public DbSet<Ratings> ratings { get; set; }
+        public DbSet<RoommateTransaction> roommate_transaction { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
