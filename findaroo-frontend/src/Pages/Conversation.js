@@ -6,6 +6,10 @@ import React, {useEffect, useState} from "react";
 import InputStandard from "../Components/InputFields";
 import ButtonStandard from "../Components/Buttons";
 import {MessageStyle} from "../Components/ConversationInfo";
+import EmojiPicker from 'emoji-picker-react';
+import { BsEmojiSmileFill } from "react-icons/bs";
+import { IconContext } from "react-icons";
+import { useRef } from "react";
 
 export default function Conversations() {
     // This redirects to the login page if not logged in
@@ -14,6 +18,9 @@ export default function Conversations() {
     const [conversationData, setConversationData] = useState(null);
     const [conversationMessages, setConversationMessages] = useState(null);
     const [newMessage, setNewMessage] = useState(null);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const messageInput = useRef();
+
     const { cid } = useParams();
 
     useEffect(() => {
@@ -57,8 +64,28 @@ export default function Conversations() {
                     {conversationMessages.map((message, index) => (
                         <MessageStyle messageInfo={message} key={index}/>
                     ))}
+                    {
+                        showEmojiPicker ? 
+                        <div position="absolute">
+                            <EmojiPicker 
+                                onEmojiClick={(emojiData, event) => {
+                                    console.log(messageInput);
+                                    console.log(emojiData);
+                                }
+                            }></EmojiPicker>
+                        </div>
+                        :
+                        <div></div>
+                    }
                     <div className="Row">
-                        <InputStandard onChangeFunction={(e) => setNewMessage(e.target.value)}/>
+                        <div ref={messageInput}>
+                            <InputStandard  onChangeFunction={(e) => setNewMessage(e.target.value)}/>
+                        </div>
+                        <IconContext.Provider value={{ color: '#ffd800', size: '1.5em'}}>
+                            <div>
+                                <BsEmojiSmileFill onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
+                            </div>
+                        </IconContext.Provider>
                         <ButtonStandard text="Send Message" onClickFunction={sendMessage}/>
                     </div>
                 </div>
