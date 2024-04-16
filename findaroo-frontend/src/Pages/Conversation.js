@@ -69,8 +69,8 @@ export default function Conversations() {
                         <div position="absolute">
                             <EmojiPicker 
                                 onEmojiClick={(emojiData, event) => {
-                                    console.log(messageInput);
-                                    console.log(emojiData);
+                                    messageInput.current.value = messageInput.current.value + emojiData.emoji;
+                                    setNewMessage(newMessage + emojiData.emoji);
                                 }
                             }></EmojiPicker>
                         </div>
@@ -78,8 +78,18 @@ export default function Conversations() {
                         <div></div>
                     }
                     <div className="Row">
-                        <div ref={messageInput}>
-                            <InputStandard  onChangeFunction={(e) => setNewMessage(e.target.value)}/>
+                        {
+                            //I have to expand this InputStandard to add a useRef (yeah it's kinda scuffed)
+                        }
+                        <div className="Row">
+                            <h3 style={{width: "10vw", textAlign: "right"}}>
+                            </h3>
+                            <input
+                                className="InputStandard"
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                placeholder="..."
+                                ref={messageInput}
+                            />
                         </div>
                         <IconContext.Provider value={{ color: '#ffd800', size: '1.5em'}}>
                             <div>
