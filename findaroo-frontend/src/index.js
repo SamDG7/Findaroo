@@ -33,6 +33,7 @@ import BlockedUsers from './Pages/BlockedUsers';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import RoomHistory from './Pages/RoomHistory';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -148,6 +149,11 @@ const router = createBrowserRouter(
         {
             path: "Profile/MyRooms/RoommateInvitations",
             element: <RoommateInvitation/>,
+            errorElement: <Error />,
+        },
+        {
+            path: "Profile/MyRooms/RoomHistory",
+            element: <RoomHistory/>,
             errorElement: <Error />,
         },
         {
