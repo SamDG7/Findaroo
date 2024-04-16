@@ -35,10 +35,10 @@ export function ConnectionInfo({connectionDict}) {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
                 body: JSON.stringify({
-                    reviewerId: auth.currentUser.uid, // Assuming this is the ID of the reviewer
-                    reviewedId: connectionDict.user_id, // ID of the person being reviewed
+                    reviewer_id: auth.currentUser.uid, // Assuming this is the ID of the reviewer
+                    reviewed_id: connectionDict.user_id, // ID of the person being reviewed
                     roomed: reviewData.roomed === 'yes',
-                    positiveRemarks: reviewData.positiveRemarks,
+                    positive_remarks: reviewData.positiveRemarks,
                     criticisms: reviewData.criticisms
                 })
             });
@@ -52,7 +52,6 @@ export function ConnectionInfo({connectionDict}) {
         } catch (error) {
             console.error('Error submitting review:', error);
         }
-        // Implement additional logic to send data to server here
     };
 
     function review() {

@@ -24,15 +24,6 @@ namespace Findaroo.Server.Controllers
 
             try
             {
-                // var newReview = new RoommateReview
-                // {
-                //     reviewer_id = review.ReviewerId,
-                //     reviewed_id = review.ReviewedId,
-                //     roomed = review.Roomed,
-                //     positive_remarks = review.PositiveRemarks,
-                //     criticisms = review.Criticisms
-                // };
-
                 _psql.roommate_reviews.Add(review);
                 _psql.SaveChanges();
 
