@@ -26,7 +26,7 @@ export function Notification() {
         })
         getNotifications(true);
         getNotifications(false);
-        console.log(notificationData);
+        //console.log(notificationData);
     }, []);
 
     useEffect(() => {
@@ -135,7 +135,7 @@ export function Notification() {
                 'name': nameDict[d.sender_id],
                 'image': imageList[i]
             })));
-            console.log(messageNotificationData);
+            //console.log(messageNotificationData);
         } else {
             setNotificationData(data.map((d, i) => ({
                 'notification': d,
