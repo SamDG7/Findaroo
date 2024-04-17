@@ -2,7 +2,7 @@ import "./Page.css"
 import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import {getAuth} from "firebase/auth";
 import ButtonStandard, { ButtonImportant } from "../Components/Buttons";
 import {RoomAndRoommates} from "../Components/RoomAndRoommates"
@@ -15,6 +15,9 @@ export default function ExpenseTracker() {
     const [roomData, setRoomData] = useState();
     const [expenseCount, setExpenseCount] = useState(0);
     const [expenseData, setExpenseData] = useState([]);
+    const [roommateData, setRoommateData] = useState({});
+    const expenseDescription = useRef();
+    const expenseAmount = useRef();
 
     useEffect(() => {
 
@@ -23,12 +26,12 @@ export default function ExpenseTracker() {
             return;
         }
 
-        GetRoomData();
+        getRoomData();
     }, []);
 
     useEffect(() => {
-        //GetRoommateData();
-        GetExpenses();
+        getRoommateData();
+        getExpenses();
     }, [roomData]);
 
     return (
@@ -42,7 +45,7 @@ export default function ExpenseTracker() {
                             roomData.date_created.substring(0, roomData.date_created.indexOf('T'))}`}</h3>
                     </div>
                     <div className="Column End">
-                        <ButtonImportant text="Settle Debt"/>
+                        <ButtonImportant text="Settle Up"/>
                     </div>
                 </div>
                 <div className="Column Start">
@@ -50,18 +53,38 @@ export default function ExpenseTracker() {
                 </div>
                 <div className="Row Start">
                     <div className="Row Start">
-                        <InputStandard name="Description"></InputStandard>
-                        <InputStandard name="Amount"></InputStandard>
+                        <div className="Row">
+                            <h3 style={{width: "10vw", textAlign: "right"}}>
+                                Description
+                            </h3>
+                            <input
+                                className="InputStandard"
+                                placeholder="..."
+                                ref={expenseDescription}
+                            />
+                        </div>
+                        <div className="Row">
+                            <h3 style={{width: "10vw", textAlign: "right"}}>
+                                Amount
+                            </h3>
+                            <input
+                                className="InputStandard"
+                                placeholder="..."
+                                ref={expenseAmount}
+                            />
+                        </div>
                     </div>
                     <div className="Column End">
-                        <ButtonImportant text="Add Expense"></ButtonImportant>
+                        <ButtonImportant text="Add Expense" onClickFunction={createNewExpense}></ButtonImportant>
                     </div>
                 </div>
+                <ExpenseList></ExpenseList>
+                <ButtonStandard text="Load More"/>
             </div>
         </div>
     );
 
-    async function GetRoomData() {
+    async function getRoomData() {
         const response = await fetch(`${GlobalVariables.backendURL}/Room/byRoomId?room_id=${rid}`, {
             method: 'GET',
             credentials: 'include',
@@ -70,11 +93,46 @@ export default function ExpenseTracker() {
         setRoomData(responseBody);
     }
 
-    async function GetRoommateData() {
-        //const idList = roomData.
+    async function getRoommateData() {
+        if (roomData == null) return;
+        const idList = roomData.roommate_id;
+
+        const response = await fetch(`${GlobalVariables.backendURL}/User/idsFromNames`, {
+            method: 'POST',
+            crednetials: 'include',
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({"ids":idList})
+        }).catch(error => {
+            console.log(error);
+        });
+
+        const nameList = await response.json().catch(error => {
+            console.log(error);
+        })
+
+        if (nameList == null) return;
+        
+        var imageList = [];
+
+        for (const id of idList) {
+            var imageResponse = await fetch(GlobalVariables.backendURL + "/Image?user_id=" + id);
+            var blob = await imageResponse.blob();
+            imageList.push(URL.createObjectURL(blob));
+        }
+
+        var roommateDataHelper = {};
+        idList.forEach((id, i) => {
+            roommateDataHelper[id] = {
+                'name': nameList[i], 
+                'image': imageList[i]
+            }
+        });
+        setRoommateData(roommateDataHelper);
     }
 
-    async function GetExpenses() {
+    async function getExpenses() {
         if (roomData == null) {
             return;
         }
@@ -94,13 +152,52 @@ export default function ExpenseTracker() {
         setExpenseCount(expenseCount + 10);
     }
 
-    function renderExpenses() {
-        if (expenseData.length == 0) {
+    async function createNewExpense() {
+        var description = expenseDescription.current.value;
+        var amount = parseFloat(expenseAmount.current.value);
+        if (description == null || amount == null) {
             return;
         }
+        const response = await fetch(`${GlobalVariables.backendURL}/RoommateTransaction`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+                'roomId': roomData.room_id,
+                'receiverId': roomData.roommate_id,
+                'name': description,
+                'amount': amount
+            })
+        });
+    }
+
+    function ExpenseList() {
+        if (expenseData == null || expenseData.length == 0) return;
+        if (roomData == null || expenseData == null) return;
+
         return (
             <div className="Grid">
-
+                {expenseData.map((expense, i) => (
+                    <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]">
+                        <img 
+                            className="object-scale-down w-24 h-24" 
+                            src={roommateData[expense.payer_id].image} 
+                            alt={"Profile picture"} 
+                        />
+                        <div className="Column Start">
+                            <h2>{expense.name}</h2>
+                            <h3>{`Paid by ${roommateData[expense.payer_id].name}`}</h3>
+                            <h4>{expense.date_created
+                                .substring(0, expense.date_created.indexOf('T'))}</h4>
+                        </div>
+                        <div className="Column End">
+                            <h2>{`$${expense.amount}`}</h2>
+                            <ButtonImportant text="Update Expense"/>
+                        </div>
+                    </div>
+                ))}
             </div>
         );
     }
