@@ -7,10 +7,11 @@ using System.Net;
 using Findaroo.Server.Model.ResponseModel;
 using Findaroo.Server.Model.RequestModel.RoommateTransaction;
 using Microsoft.EntityFrameworkCore;
+using Findaroo.Server.Model.ResponseModel.RoommateTransaction;
 
 namespace Findaroo.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class RoommateTransactionController : ControllerBase
     {
@@ -48,6 +49,44 @@ namespace Findaroo.Server.Controllers
             );    
         }
 
+        [HttpGet("amountOwed")]
+        public async Task<GetAmountOwedResponse> getAmountOwed(string room_id) 
+        {
+            string userId = await AuthenticationService.authenticate(Request.Cookies["idToken"]);
+            if (userId == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return null;
+            }
+
+            if (_psql.roommate
+                .Where(rm => rm.room_id.Equals(room_id) && rm.roommate_id.Equals(userId))
+                .FirstOrDefault() == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return null;
+            }
+
+            List<String> roommates = _psql.roommate
+                .Where(rm => rm.room_id.Equals(room_id) && !rm.roommate_id.Equals(userId))
+                .Select(rm => rm.roommate_id).ToList();
+
+            List<double> amountOwed = new List<double>();
+            roommates.ForEach(rm =>
+            {
+                double amountOwedToRm = _psql.roommate_transaction
+                    .Where(rt => rt.room_id.Equals(room_id) && rt.payer_id.Equals(rm) && rt.receiver_id.Contains(userId))
+                    .Select(rt => rt.amount).Sum();
+                double amountPaidToRm = _psql.roommate_transaction
+                    .Where(rt => rt.room_id.Equals(room_id) && rt.payer_id.Equals(userId) && rt.receiver_id.Contains(rm))
+                    .Select(rt => rt.amount).Sum();
+
+                amountOwed.Add(amountOwedToRm - amountPaidToRm);
+            });
+
+            return new GetAmountOwedResponse(roommates, amountOwed);
+        }
+
         [HttpPost]
         public async void createNewTransaction([FromBody] CreateNewTransactionRequest createNewTransactionRequest)
         {
@@ -67,7 +106,8 @@ namespace Findaroo.Server.Controllers
             }
 
             RoommateTransaction newTransaction = new RoommateTransaction(createNewTransactionRequest.roomId,
-                userId, createNewTransactionRequest.receiverId, createNewTransactionRequest.amount);
+                userId, createNewTransactionRequest.receiverId, createNewTransactionRequest.name, 
+                createNewTransactionRequest.amount);
             _psql.roommate_transaction.Add(newTransaction);
             _psql.SaveChanges();
         }

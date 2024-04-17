@@ -12,13 +12,15 @@ namespace Findaroo.Server.Model.TableModel
         public string room_id { get; set; }
         public string payer_id { get; set; }
         public List<string> receiver_id { get; set; }
+        public string name { get; set; }
         public double amount { get; set; }
         [DatabaseGenerated (DatabaseGeneratedOption.Identity)]
         public DateTime date_created { get; set; }
 
-        public RoommateTransaction(string room_id, string payer_id, List<string> receiver_id, double amount)  {
+        public RoommateTransaction(string room_id, string payer_id, List<string> receiver_id, string name, double amount)  {
             this.room_id = room_id;
             this.payer_id = payer_id;
+            this.name = name;
             this.receiver_id = receiver_id;
             this.amount = amount;
         }

@@ -4,9 +4,9 @@ namespace Findaroo.Server.Model.ResponseModel;
 
 public class GetThisRoomTransactionResponse
 {
-    public List<RoommateTransaction> roommateTransactionList {  get; set; }
+    public List<TableModel.RoommateTransaction> roommateTransactionList {  get; set; }
 
-    public GetThisRoomTransactionResponse(List<RoommateTransaction> roommateTransactionList)
+    public GetThisRoomTransactionResponse(List<TableModel.RoommateTransaction> roommateTransactionList)
     {
         this.roommateTransactionList = roommateTransactionList;
     }
