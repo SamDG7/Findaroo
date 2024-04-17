@@ -91,6 +91,52 @@ namespace Findaroo.Server.Controllers
         }
         
         [HttpPost]
+        public void addUserToConversation(String conversationId, String new_user_id)
+        {
+            Console.Write(new_user_id);
+            
+            // Get the conversation
+            var conversation = getConversation(conversationId);
+            
+            // Add the user if it is new
+            List<String> userList = new List<string>(conversation.user_ids);
+            if (userList.Contains(new_user_id))
+            {
+                Response.StatusCode = 404;
+                return;
+            }
+            userList.Add(new_user_id);
+            conversation.user_ids = userList.ToArray();
+            
+            // Update the database
+            _psql.conversation.Update(conversation);
+            _psql.SaveChanges();
+        }
+        
+        [HttpPost]
+        public void removeUserFromConversation(String conversationId, String removing_user_id)
+        {
+            Console.Write(removing_user_id);
+            
+            // Get the conversation
+            var conversation = getConversation(conversationId);
+            
+            // Add the user if it is new
+            List<String> userList = new List<string>(conversation.user_ids);
+            if (!userList.Contains(removing_user_id))
+            {
+                Response.StatusCode = 404;
+                return;
+            }
+            userList.Remove(removing_user_id);
+            conversation.user_ids = userList.ToArray();
+            
+            // Update the database
+            _psql.conversation.Update(conversation);
+            _psql.SaveChanges();
+        }
+        
+        [HttpPost]
         [Route("messages")]
         public async void makeMessage([FromBody] PostMessageRequest postMessageRequest)
         {
