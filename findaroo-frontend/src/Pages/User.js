@@ -20,6 +20,40 @@ export default function User() {
     const [reviewed, setReviewed] = useState(false)
     const { uid } = useParams();
     const [compScore, setCompScore] = useState(0)   
+    const [reviews, setReviews] = useState([]);
+
+
+    useEffect(() => {
+        const sampleReviews = [
+            {
+                reviewerName: "Jane Doe",
+                reviewDate: "2023-04-12",
+                positiveComments: "Very cooperative and understanding.",
+                negativeComments: "Sometimes late to respond."
+            },
+            {
+                reviewerName: "John Smith",
+                reviewDate: "2023-03-29",
+                positiveComments: "Great communication skills.",
+                negativeComments: "Can be a bit rigid in negotiations."
+            }
+        ];
+        setReviews(sampleReviews); // Set the sample reviews
+    }, []);
+    const displayReviews = () => {
+        if (reviews.length === 0) {
+            return <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">This user has no reviews.</div>;
+        } else {
+            return reviews.map((review, index) => (
+                <div key={index} className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
+                    <h4>Reviewed by: {review.reviewerName}</h4>
+                    <p>Date: {review.reviewDate}</p>
+                    <p>Positive: {review.positiveComments}</p>
+                    <p>Negative: {review.negativeComments}</p>
+                </div>
+            ));
+        }
+    };
 
     useEffect(() => {
         console.log(GlobalVariables.isMod)
@@ -342,8 +376,9 @@ export default function User() {
                     <ShowForm />
 
                 </div>
-}
+}   
             </div>
+            {displayReviews()}
         </div>
     );
 
