@@ -47,17 +47,20 @@ namespace Findaroo.Server.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-    }
 
-    
-    // public class RoommateReview
-    // {
-        
-    //     public int id {get; set;}
-    //     public int reviewer_id { get; set; }
-    //     public int reviewed_id { get; set; }
-    //     public bool roomed { get; set; }
-    //     public string positive_remarks { get; set; }
-    //     public string criticisms { get; set; }
-    // }
+        [HttpGet("{reviewedId}")]
+        public ActionResult<IEnumerable<Review>> GetReviewsByReviewedId(string reviewedId)
+        {
+            var reviews = _psql.roommate_reviews
+                .Where(r => r.reviewed_id == reviewedId)
+                .ToList();
+
+            if (!reviews.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(reviews);
+        }
+    } 
 }

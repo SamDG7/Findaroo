@@ -49,6 +49,7 @@ export function ConnectionInfo({connectionDict}) {
             if (response.ok) {
                 console.log('Review submitted successfully.');
                 setModalOpen(false);
+                alert("Your review was succesfully submitted!")
             } else {
                 throw new Error('Failed to submit review');
             }

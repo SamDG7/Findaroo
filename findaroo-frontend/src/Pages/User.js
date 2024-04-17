@@ -21,35 +21,18 @@ export default function User() {
     const { uid } = useParams();
     const [compScore, setCompScore] = useState(0)   
     const [reviews, setReviews] = useState([]);
+    const [reviewerData, setReviewerData] = useState(null);
 
-
-    useEffect(() => {
-        const sampleReviews = [
-            {
-                reviewerName: "Jane Doe",
-                reviewDate: "2023-04-12",
-                positiveComments: "Very cooperative and understanding.",
-                negativeComments: "Sometimes late to respond."
-            },
-            {
-                reviewerName: "John Smith",
-                reviewDate: "2023-03-29",
-                positiveComments: "Great communication skills.",
-                negativeComments: "Can be a bit rigid in negotiations."
-            }
-        ];
-        setReviews(sampleReviews); // Set the sample reviews
-    }, []);
+    
     const displayReviews = () => {
         if (reviews.length === 0) {
             return <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">This user has no reviews.</div>;
         } else {
             return reviews.map((review, index) => (
-                <div key={index} className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
-                    <h4>Reviewed by: {review.reviewerName}</h4>
-                    <p>Date: {review.reviewDate}</p>
-                    <p>Positive: {review.positiveComments}</p>
-                    <p>Negative: {review.negativeComments}</p>
+                <div key={index} className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl text-left">
+                    <h4 className="text-lg font-semibold mb-1">Reviewed by: {review.reviewerName}</h4>
+                    <p className="mb-1 pl-2">Positive Comments: {review.positiveComments}</p>
+                    <p className="pl-2">Negative Comments: {review.negativeComments}</p>
                 </div>
             ));
         }
@@ -215,6 +198,86 @@ export default function User() {
         setReviewed(true)
     }
 
+    useEffect(() => {
+        var rev_id = uid
+        console.log("GET CALL FOR REVIEWS for" + rev_id)
+        if (rev_id == null) {
+            return;
+        }
+
+        const fetchReviews = async () => {
+            try {
+                let response = await fetch(`http://localhost:5019/Review/${rev_id}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                let reviewData = await response.json();
+                
+                for (let review of reviewData) {
+                    console.log(review)
+                    try {
+                        response = await fetch(`http://localhost:5019/User?user_id=${review.reviewer_id}`);
+                        let userData = await response.json();
+                        review.reviewerName = userData.first_name + " " + userData.last_name; // Assume 'name' is the user's name in the userData
+                    } catch (error) {
+                        console.error('Failed to fetch user details:', error);
+                        review.reviewerName = "Unknown"; // Fallback if the user data fetch fails
+                    }
+
+                    review.reviewDate = review.reviewed_at;
+                    review.positiveComments = review.positive_remarks;
+                    review.negativeComments = review.criticisms;
+                }
+
+                setReviews(reviewData);
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+                setReviews([]); // Set empt
+            }
+            
+        };
+        fetchReviews();
+        
+        //should be all reviews were reviewed_id == our current user
+        // const sampleReviews = [
+        //     {
+        //         reviewerName: "Jane Doe",
+        //         reviewDate: "2023-04-12",
+        //         positiveComments: "Very cooperative and understanding.",
+        //         negativeComments: "Sometimes late to respond."
+        //     },
+        //     {
+        //         reviewerName: "John Smith",
+        //         reviewDate: "2023-03-29",
+        //         positiveComments: "Great communication skills.",
+        //         negativeComments: "Can be a bit rigid in negotiations."
+        //     }
+        // ];
+        // fetch(`http://localhost:5019/Review/${rev_id}`)
+        //     .then(response => {
+        //         console.log(response)
+        //         if (!response.ok) {
+        //             throw new Error('Network response was not ok');
+        //         }
+        //         return response.json();
+        //     })
+        //     .then(data => {
+        //         // Assuming the data returned is an array of review objects
+        //         const formattedReviews = data.map(review => ({
+        //             reviewerName: review.reviewer_id, // Adapt field names based on actual API response
+        //             // reviewDate: new Date(review.reviewed_at).toISOString().split('T')[0], // Format date as needed
+        //             positiveComments: review.positive_remarks,
+        //             negativeComments: review.criticisms
+        //         }));
+
+                
+        //         setReviews(formattedReviews);
+        //     })
+        //     .catch(error => {
+        //         console.error('There was a problem with the fetch operation:', error);
+        //         setReviews([]); // Set empty reviews on error or no data
+        //     });
+    }, []);
     function ShowForm() {
         if(show) {
             
