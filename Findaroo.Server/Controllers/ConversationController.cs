@@ -91,6 +91,7 @@ namespace Findaroo.Server.Controllers
         }
         
         [HttpPost]
+        [Route("/addUser")]
         public void addUserToConversation(String conversationId, String new_user_id)
         {
             Console.Write(new_user_id);
@@ -114,6 +115,7 @@ namespace Findaroo.Server.Controllers
         }
         
         [HttpPost]
+        [Route("/removeUser")]
         public void removeUserFromConversation(String conversationId, String removing_user_id)
         {
             Console.Write(removing_user_id);
