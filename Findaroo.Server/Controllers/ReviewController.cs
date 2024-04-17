@@ -1,5 +1,9 @@
 using Findaroo.Server.PostgreSQL;
 using Microsoft.AspNetCore.Mvc;
+using Findaroo.Server.Model.RequestModel;
+using Findaroo.Server.Model.TableModel;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Findaroo.Server.Controllers
 {
@@ -15,7 +19,7 @@ namespace Findaroo.Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<string> PostReview([FromBody] RoommateReview review)
+        public ActionResult<string> PostReview([FromBody] ReviewPostRequest review)
         {
             if (review == null)
             {
@@ -37,13 +41,15 @@ namespace Findaroo.Server.Controllers
         }
     }
 
-
-    public class RoommateReview
-    {
-        public int reviewer_id { get; set; }
-        public int reviewed_id { get; set; }
-        public bool roomed { get; set; }
-        public string positive_remarks { get; set; }
-        public string criticisms { get; set; }
-    }
+    
+    // public class RoommateReview
+    // {
+        
+    //     public int id {get; set;}
+    //     public int reviewer_id { get; set; }
+    //     public int reviewed_id { get; set; }
+    //     public bool roomed { get; set; }
+    //     public string positive_remarks { get; set; }
+    //     public string criticisms { get; set; }
+    // }
 }
