@@ -29,18 +29,21 @@ export function ConnectionInfo({connectionDict}) {
     const submitReview = async () => {
         console.log('Review Data:', reviewData);
         try {
+            const form = {
+            reviewer_id: auth.currentUser.uid, // Assuming this is the ID of the reviewer
+            reviewed_id: connectionDict.user_id, // ID of the person being reviewed
+            roomed: reviewData.roomed === 'yes',
+            positive_remarks: reviewData.positiveRemarks,
+            criticisms: reviewData.criticisms
+            };
+            console.log('form:', form);
+
             const response = await fetch(GlobalVariables.backendURL + "/Review", {
                 method: 'POST',
                 headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
+                    'Content-type': 'application/json',
                 },
-                body: JSON.stringify({
-                    reviewer_id: auth.currentUser.uid, // Assuming this is the ID of the reviewer
-                    reviewed_id: connectionDict.user_id, // ID of the person being reviewed
-                    roomed: reviewData.roomed === 'yes',
-                    positive_remarks: reviewData.positiveRemarks,
-                    criticisms: reviewData.criticisms
-                })
+                body: JSON.stringify(form)
             });
     
             if (response.ok) {

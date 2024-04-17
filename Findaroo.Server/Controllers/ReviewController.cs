@@ -1,6 +1,6 @@
 using Findaroo.Server.PostgreSQL;
 using Microsoft.AspNetCore.Mvc;
-using Findaroo.Server.Model.RequestModel;
+using Findaroo.Server.Model.RequestModel.Review;
 using Findaroo.Server.Model.TableModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +28,15 @@ namespace Findaroo.Server.Controllers
 
             try
             {
-                _psql.roommate_reviews.Add(review);
+                Review new_review = new Review();
+                
+                new_review.reviewer_id = review.reviewer_id;
+                new_review.reviewed_id = review.reviewed_id;
+                new_review.roomed = review.roomed;
+                new_review.positive_remarks = review.positive_remarks;
+                new_review.criticisms = review.criticisms;
+
+                _psql.roommate_reviews.Add(new_review);
                 _psql.SaveChanges();
 
                 return Ok();
