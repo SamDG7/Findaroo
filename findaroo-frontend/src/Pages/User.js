@@ -25,17 +25,35 @@ export default function User() {
 
     
     const displayReviews = () => {
+        
+
         if (reviews.length === 0) {
             return <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">This user has no reviews.</div>;
         } else {
-            return reviews.map((review, index) => (
-                <div key={index} className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl text-left">
-                    <h4 className="text-lg font-semibold mb-1">Reviewed by: {review.reviewerName}</h4>
-                    <p className="mb-1 pl-2">Positive Comments: {review.positiveComments}</p>
-                    <p className="pl-2">Negative Comments: {review.negativeComments}</p>
-                    <p>Date: {review.reviewDate}</p>
-                </div>
-            ));
+            
+            return reviews.map((review, index) => {
+                const formattedDate = new Date(review.reviewDate).toLocaleDateString("en-US", {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+                return (
+                // <div key={index} className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl text-left">
+                //     <h4 className="text-lg font-semibold mb-1">Reviewed by: {review.reviewerName}</h4>
+                //     <p className="mb-1 pl-2">Positive Comments: {review.positiveComments}</p>
+                //     <p className="pl-2">Negative Comments: {review.negativeComments}</p>
+                //     <p>Reviewed on: {formattedDate}</p>
+                // </div>
+                
+                    <div key={index} className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl flex flex-col text-left">
+                        <div className="flex justify-between">
+                            <h4 className="text-lg font-semibold mb-1">Reviewed by: {review.reviewerName}</h4>
+                            <p className="text-sm font-medium text-gray-600">Reviewed on {formattedDate}</p>
+                        </div>
+                        <p className="mb-1 pl-2">Positive Comments: {review.positiveComments}</p>
+                        <p className="pl-2">Negative Comments: {review.negativeComments}</p>
+                    </div>
+               
+                );
+        });
         }
     };
 
