@@ -35,6 +35,7 @@ namespace Findaroo.Server.Controllers
                 new_review.roomed = review.roomed;
                 new_review.positive_remarks = review.positive_remarks;
                 new_review.criticisms = review.criticisms;
+                new_review.reviewed_at = DateTime.Now;
 
                 _psql.roommate_reviews.Add(new_review);
                 _psql.SaveChanges();

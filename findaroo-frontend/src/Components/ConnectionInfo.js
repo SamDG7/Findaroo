@@ -34,7 +34,8 @@ export function ConnectionInfo({connectionDict}) {
             reviewed_id: connectionDict.user_id, // ID of the person being reviewed
             roomed: reviewData.roomed === 'yes',
             positive_remarks: reviewData.positiveRemarks,
-            criticisms: reviewData.criticisms
+            criticisms: reviewData.criticisms,
+            reviewed_at: Date.now(),
             };
             console.log('form:', form);
 

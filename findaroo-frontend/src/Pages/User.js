@@ -33,6 +33,7 @@ export default function User() {
                     <h4 className="text-lg font-semibold mb-1">Reviewed by: {review.reviewerName}</h4>
                     <p className="mb-1 pl-2">Positive Comments: {review.positiveComments}</p>
                     <p className="pl-2">Negative Comments: {review.negativeComments}</p>
+                    <p>Date: {review.reviewDate}</p>
                 </div>
             ));
         }
@@ -212,7 +213,9 @@ export default function User() {
                     throw new Error('Network response was not ok');
                 }
                 let reviewData = await response.json();
-                
+                console.log("This user has this many reviews: " + reviewData.length)
+                console.log("THIS IS REVIEW DATA: " )
+                console.log(reviewData.reviewed_at)
                 for (let review of reviewData) {
                     console.log(review)
                     try {
@@ -408,9 +411,8 @@ export default function User() {
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 {userData && <div className="Column">
                     <PersonInfo personDict={userData} />
-                    <h2>User Rating: {(avgRating && avgRating >= 0) ? avgRating + "/5" : "Unrated"}</h2>
-
-                    <h2>Compatibility Score: {(compScore && compScore !== NaN && compScore >= 0) ? compScore : "46.5"}/100 </h2>
+                    <h2>User Rating: {(avgRating && avgRating >= 0) ? avgRating + "/5" : "Unrated"}  |  Compatibility Score: {(compScore && compScore !== NaN && compScore >= 0) ? compScore : "46.5"}/100 | 
+                    This user has {reviews.length} reviews</h2>
                     
                     <div className="Row space-x-[2vw]">
                                      
@@ -420,6 +422,7 @@ export default function User() {
                         <ButtonDelete text="Report User" onClickFunction={openReportingMenu}/>
                         {GlobalVariables.isMod ? <ButtonDelete text="Delete Account" onClickFunction={DeleteAccount}/>: ""}
                         {GlobalVariables.isMod ? <ButtonDelete text="Delete Biography" onClickFunction={DeleteBiography}/>: ""}
+                        <h2></h2>
 
                         <div>
                             {isReporting && (
