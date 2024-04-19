@@ -72,12 +72,14 @@ export function ConnectionInfo({connectionDict}) {
                 <h3>
                     {connectionDict.name}
                 </h3>
-                <ButtonImportant text="Review" onClickFunction={review} />
             </div>
             <h3 className="Column End">
+                <ButtonImportant text="Review" onClickFunction={review} />
+                <div className="my-3">
                 <ButtonImportant text="Unfriend" onClickFunction={unfriend} />
+                </div>
             </h3>
-            {isModalOpen && (
+            {/* {isModalOpen && (
                 <div className="modal-content">
                     <span className="close-btn" onClick={() => setModalOpen(false)}>&times;</span>
                     <h2>Roommate Review Form</h2>
@@ -92,7 +94,39 @@ export function ConnectionInfo({connectionDict}) {
                         <button type="button" onClick={submitReview}>Submit Review</button>
                     </form>
                 </div>
-            )}
+            )} */}
+            {isModalOpen && (
+    <div className=" inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 overflow-auto">
+        <div className="modal-content bg-white rounded-lg shadow-xl p-6 max-w-lg w-full mx-auto my-8">
+            <div className="flex justify-between items-center">
+                <h2 className="text-xl font-semibold text-gray-900">Roommate Review Form</h2>
+                <button className="close-btn text-gray-600 hover:text-gray-800" onClick={() => setModalOpen(false)}>&times;</button>
+            </div>
+            <form className="mt-4">
+                <p className="font-medium">Did you room with this person?</p>
+                <div className="mb-4">
+                    <label className="inline-flex items-center mr-4">
+                        <input type="radio" name="roomed" value="yes" onChange={handleInputChange} className="text-blue-600 form-radio" />
+                        <span className="ml-2">Yes</span>
+                    </label>
+                    <label className="inline-flex items-center">
+                        <input type="radio" name="roomed" value="no" onChange={handleInputChange} className="text-blue-600 form-radio" />
+                        <span className="ml-2">No</span>
+                    </label>
+                </div>
+                <p className="font-medium">Positive remarks:</p>
+                <textarea name="positiveRemarks" rows="4" onChange={handleInputChange} className="mt-1 p-2 w-full border rounded-md"></textarea>
+                <p className="font-medium mt-4">Criticisms:</p>
+                <textarea name="criticisms" rows="4" onChange={handleInputChange} className="mt-1 p-2 w-full border rounded-md"></textarea>
+                <button type="button" onClick={submitReview} className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                    Submit Review
+                </button>
+            </form>
+        </div>
+    </div>
+)}
+
+
         </div>
         );
     }
