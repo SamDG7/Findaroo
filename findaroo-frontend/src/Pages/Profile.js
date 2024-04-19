@@ -186,7 +186,7 @@ export default function Profile() {
                             <ButtonStandard text="My Connections" onClickFunction={() => {navigate("/Profile/MyConnections");}}/>
                             <ButtonWithNotification text="Connection Requests" count={requestCount} onClickFunction={() => {navigate("/Profile/MyConnectionRequests");}}/>
                             <ButtonStandard text="Blocked Users" onClickFunction={() => {navigate("/Profile/BlockedUsers");}}/>
-                            <ButtonStandard text="My Reviews"/>
+                            <ButtonStandard text="My Reviews" onClickFunction={() => {navigate("/User/" + auth.currentUser.uid);}}/>
                         </div>
                         <div className="Row space-x-[2vw]">
                             <ButtonDelete text="Disable Account" onClickFunction={togglePopup}/>

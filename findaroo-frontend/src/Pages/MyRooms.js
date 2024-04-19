@@ -43,6 +43,7 @@ export default function MyRooms() {
                     }
                 </div>
                 <ButtonStandard text="My Invitations" onClickFunction={() => navigate("/Profile/MyRooms/RoommateInvitations")}></ButtonStandard>
+                <ButtonStandard text="Room History" onClickFunction={() => navigate("/Profile/MyRooms/RoomHistory")}></ButtonStandard>
                 {
                     showCreateRoom && <div>
                         <InputStandard name="Room Name" defaultValue={newRoomName} onChangeFunction={(e) => setNewRoomName(e.target.value)}/>

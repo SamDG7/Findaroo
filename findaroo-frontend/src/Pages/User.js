@@ -20,6 +20,42 @@ export default function User() {
     const [reviewed, setReviewed] = useState(false)
     const { uid } = useParams();
     const [compScore, setCompScore] = useState(0)   
+    const [reviews, setReviews] = useState([]);
+    const [reviewerData, setReviewerData] = useState(null);
+
+    
+    const displayReviews = () => {
+        
+
+        if (reviews.length === 0) {
+            return <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">This user has no reviews.</div>;
+        } else {
+            
+            return reviews.map((review, index) => {
+                const formattedDate = new Date(review.reviewDate).toLocaleDateString("en-US", {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+                return (
+                // <div key={index} className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl text-left">
+                //     <h4 className="text-lg font-semibold mb-1">Reviewed by: {review.reviewerName}</h4>
+                //     <p className="mb-1 pl-2">Positive Comments: {review.positiveComments}</p>
+                //     <p className="pl-2">Negative Comments: {review.negativeComments}</p>
+                //     <p>Reviewed on: {formattedDate}</p>
+                // </div>
+                
+                    <div key={index} className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl flex flex-col text-left">
+                        <div className="flex justify-between">
+                            <h4 className="text-lg font-semibold mb-1">Reviewed by: {review.reviewerName}</h4>
+                            <p className="text-sm font-medium text-gray-600">Reviewed on {formattedDate}</p>
+                        </div>
+                        <p className="mb-1 pl-2">Positive Comments: {review.positiveComments}</p>
+                        <p className="pl-2">Negative Comments: {review.negativeComments}</p>
+                    </div>
+               
+                );
+        });
+        }
+    };
 
     useEffect(() => {
         console.log(GlobalVariables.isMod)
@@ -181,6 +217,88 @@ export default function User() {
         setReviewed(true)
     }
 
+    useEffect(() => {
+        var rev_id = uid
+        console.log("GET CALL FOR REVIEWS for" + rev_id)
+        if (rev_id == null) {
+            return;
+        }
+
+        const fetchReviews = async () => {
+            try {
+                let response = await fetch(`http://localhost:5019/Review/${rev_id}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                let reviewData = await response.json();
+                console.log("This user has this many reviews: " + reviewData.length)
+                console.log("THIS IS REVIEW DATA: " )
+                console.log(reviewData.reviewed_at)
+                for (let review of reviewData) {
+                    console.log(review)
+                    try {
+                        response = await fetch(`http://localhost:5019/User?user_id=${review.reviewer_id}`);
+                        let userData = await response.json();
+                        review.reviewerName = userData.first_name + " " + userData.last_name; // Assume 'name' is the user's name in the userData
+                    } catch (error) {
+                        console.error('Failed to fetch user details:', error);
+                        review.reviewerName = "Unknown"; // Fallback if the user data fetch fails
+                    }
+
+                    review.reviewDate = review.reviewed_at;
+                    review.positiveComments = review.positive_remarks;
+                    review.negativeComments = review.criticisms;
+                }
+
+                setReviews(reviewData);
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+                setReviews([]); // Set empt
+            }
+            
+        };
+        fetchReviews();
+        
+        //should be all reviews were reviewed_id == our current user
+        // const sampleReviews = [
+        //     {
+        //         reviewerName: "Jane Doe",
+        //         reviewDate: "2023-04-12",
+        //         positiveComments: "Very cooperative and understanding.",
+        //         negativeComments: "Sometimes late to respond."
+        //     },
+        //     {
+        //         reviewerName: "John Smith",
+        //         reviewDate: "2023-03-29",
+        //         positiveComments: "Great communication skills.",
+        //         negativeComments: "Can be a bit rigid in negotiations."
+        //     }
+        // ];
+        // fetch(`http://localhost:5019/Review/${rev_id}`)
+        //     .then(response => {
+        //         console.log(response)
+        //         if (!response.ok) {
+        //             throw new Error('Network response was not ok');
+        //         }
+        //         return response.json();
+        //     })
+        //     .then(data => {
+        //         // Assuming the data returned is an array of review objects
+        //         const formattedReviews = data.map(review => ({
+        //             reviewerName: review.reviewer_id, // Adapt field names based on actual API response
+        //             // reviewDate: new Date(review.reviewed_at).toISOString().split('T')[0], // Format date as needed
+        //             positiveComments: review.positive_remarks,
+        //             negativeComments: review.criticisms
+        //         }));
+
+                
+        //         setReviews(formattedReviews);
+        //     })
+        //     .catch(error => {
+        //         console.error('There was a problem with the fetch operation:', error);
+        //         setReviews([]); // Set empty reviews on error or no data
+        //     });
+    }, []);
     function ShowForm() {
         if(show) {
             
@@ -311,9 +429,8 @@ export default function User() {
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 {userData && <div className="Column">
                     <PersonInfo personDict={userData} />
-                    <h2>User Rating: {(avgRating && avgRating >= 0) ? avgRating + "/5" : "Unrated"}</h2>
-
-                    <h2>Compatibility Score: {(compScore && compScore !== NaN && compScore >= 0) ? compScore : "46.5"}/100 </h2>
+                    <h2>User Rating: {(avgRating && avgRating >= 0) ? avgRating + "/5" : "Unrated"}  |  Compatibility Score: {(compScore && compScore !== NaN && compScore >= 0) ? compScore : "46.5"}/100 | 
+                    This user has {reviews.length} reviews</h2>
                     
                     <div className="Row space-x-[2vw]">
                                      
@@ -323,6 +440,7 @@ export default function User() {
                         <ButtonDelete text="Report User" onClickFunction={openReportingMenu}/>
                         {GlobalVariables.isMod ? <ButtonDelete text="Delete Account" onClickFunction={DeleteAccount}/>: ""}
                         {GlobalVariables.isMod ? <ButtonDelete text="Delete Biography" onClickFunction={DeleteBiography}/>: ""}
+                        <h2></h2>
 
                         <div>
                             {isReporting && (
@@ -342,8 +460,9 @@ export default function User() {
                     <ShowForm />
 
                 </div>
-}
+}   
             </div>
+            {displayReviews()}
         </div>
     );
 
