@@ -67,22 +67,22 @@ namespace Findaroo.Server.Controllers
                 return null;
             }
 
-            List<String> roommates = _psql.roommate
+            List<string> roommates = _psql.roommate
                 .Where(rm => rm.room_id.Equals(room_id) && !rm.roommate_id.Equals(userId))
                 .Select(rm => rm.roommate_id).ToList();
 
             List<double> amountOwed = new List<double>();
-            roommates.ForEach(rm =>
+            foreach (var rm in roommates)
             {
                 double amountOwedToRm = _psql.roommate_transaction
-                    .Where(rt => rt.room_id.Equals(room_id) && rt.payer_id.Equals(rm) && rt.receiver_id.Contains(userId))
-                    .Select(rt => rt.amount).Sum();
+                    .Where(rt => rt.room_id.Equals(room_id) && rt.payer_id.Equals(rm))
+                    .Select(rt => rt.amount / rt.receiver_id.Count()).Sum();
                 double amountPaidToRm = _psql.roommate_transaction
-                    .Where(rt => rt.room_id.Equals(room_id) && rt.payer_id.Equals(userId) && rt.receiver_id.Contains(rm))
-                    .Select(rt => rt.amount).Sum();
+                    .Where(rt => rt.room_id.Equals(room_id) && rt.payer_id.Equals(userId))
+                    .Select(rt => rt.amount / rt.receiver_id.Count()).Sum();
 
-                amountOwed.Add(amountOwedToRm - amountPaidToRm);
-            });
+                amountOwed.Add(Math.Round(amountOwedToRm - amountPaidToRm, 2));
+            }
 
             return new GetAmountOwedResponse(roommates, amountOwed);
         }

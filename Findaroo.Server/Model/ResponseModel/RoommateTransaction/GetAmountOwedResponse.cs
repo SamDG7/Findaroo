@@ -2,8 +2,8 @@
 {
     public class GetAmountOwedResponse
     {
-        List<String> user_id { get; set; }
-        List<double> amount_owed { get; set; }
+        public List<string> user_id { get; set; }
+        public List<double> amount_owed { get; set; }
 
         public GetAmountOwedResponse(List<string> user_id, List<double> amount_owed)
         {

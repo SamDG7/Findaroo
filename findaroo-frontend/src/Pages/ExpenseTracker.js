@@ -15,7 +15,8 @@ export default function ExpenseTracker() {
     const [roomData, setRoomData] = useState();
     const [expenseCount, setExpenseCount] = useState(0);
     const [expenseData, setExpenseData] = useState([]);
-    const [roommateData, setRoommateData] = useState({});
+    const [roommateData, setRoommateData] = useState();
+    const [amountOwedData, setAmountOwedData] = useState({});
     const expenseDescription = useRef();
     const expenseAmount = useRef();
 
@@ -30,7 +31,8 @@ export default function ExpenseTracker() {
     }, []);
 
     useEffect(() => {
-        getRoommateData();
+        getRoommateData(); 
+        getAmountOwed();
         getExpenses();
     }, [roomData]);
 
@@ -43,6 +45,7 @@ export default function ExpenseTracker() {
                         <h1>{roomData && roomData.room_name}</h1>
                         <h3>{`Created on: ${roomData && 
                             roomData.date_created.substring(0, roomData.date_created.indexOf('T'))}`}</h3>
+                        <AmountOwedList/>
                     </div>
                     <div className="Column End">
                         <ButtonImportant text="Settle Up"/>
@@ -83,6 +86,13 @@ export default function ExpenseTracker() {
             </div>
         </div>
     );
+
+    async function refresh() {
+        setExpenseData(null);
+        setExpenseCount(0);
+        getAmountOwed();
+        getExpenses();
+    }
 
     async function getRoomData() {
         const response = await fetch(`${GlobalVariables.backendURL}/Room/byRoomId?room_id=${rid}`, {
@@ -129,13 +139,13 @@ export default function ExpenseTracker() {
                 'image': imageList[i]
             }
         });
+        console.log(roommateDataHelper);
         setRoommateData(roommateDataHelper);
     }
 
     async function getExpenses() {
-        if (roomData == null) {
-            return;
-        }
+        if (roomData == null) return;
+
         const response = await fetch(`${GlobalVariables.backendURL}/RoommateTransaction?room_id=${roomData.room_id}&offset=${expenseCount}`, {
             method: 'GET',
             credentials: 'include',
@@ -150,6 +160,23 @@ export default function ExpenseTracker() {
         }
         setExpenseData([...expenseData, ...responseBody.roommateTransactionList]);
         setExpenseCount(expenseCount + 10);
+    }
+
+    async function getAmountOwed() {
+        if (roomData == null) {
+            return;
+        }
+        const response = await fetch(`${GlobalVariables.backendURL}/RoommateTransaction/amountOwed?room_id=${roomData.room_id}`, {
+            method: 'GET',
+            credentials: 'include',
+        }).catch(error => {
+            console.log(error);
+        });
+        const data = await response.json().catch(error => {
+            console.log(error);
+        });
+
+        setAmountOwedData(data);
     }
 
     async function createNewExpense() {
@@ -171,12 +198,27 @@ export default function ExpenseTracker() {
                 'amount': amount
             })
         });
+        refresh();
+    }
+
+    async function deleteExpense(transactionId) {
+        const response = await fetch(`${GlobalVariables.backendURL}/RoommateTransaction`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({"transactionId": transactionId})
+        }).catch(error => {
+            console.log(error);
+        })
+        refresh();
     }
 
     function ExpenseList() {
         if (expenseData == null || expenseData.length == 0) return;
-        if (roomData == null || expenseData == null) return;
-
+        if (roomData == null || roommateData == null) return;
+    
         return (
             <div className="Grid">
                 {expenseData.map((expense, i) => (
@@ -194,9 +236,34 @@ export default function ExpenseTracker() {
                         </div>
                         <div className="Column End">
                             <h2>{`$${expense.amount}`}</h2>
-                            <ButtonImportant text="Update Expense"/>
+                            <ButtonImportant text="Delete Expense" onClickFunction={() => deleteExpense(expenseData[i].transactionId)}/>
                         </div>
                     </div>
+                ))}
+            </div>
+        );
+
+
+    }
+
+    function AmountOwedList() {
+        if (amountOwedData == null || amountOwedData.user_id == null) return;
+        if (roomData == null || roommateData == null) return;
+
+        return (
+            <div className="Column Start">
+                {amountOwedData.user_id.map((userId, i) => (
+                    amountOwedData.amount_owed[i] < 0 ? 
+                        <h2 style={{"color": "green"}}>
+                            {`${roommateData[userId].name} owes you $${Math.abs(amountOwedData.amount_owed[i])}`}
+                        </h2>
+                    :
+                    amountOwedData.amount_owed[i] > 0 ?
+                        <h2 style={{"color": "red"}}>
+                            {`You owe ${roommateData[userId].name} $${amountOwedData.amount_owed[i]}`}
+                        </h2>
+                    :
+                    <div/>
                 ))}
             </div>
         );
