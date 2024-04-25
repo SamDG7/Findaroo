@@ -325,7 +325,8 @@ export default function User() {
     const DeleteAccount = async () => {
         let answer = window.confirm("This record will be removed from Findaroo. Are you sure?");
         if (!answer) return;
-        await fetch(GlobalVariables.backendURL + "/User", {
+        console.log(uid)
+        await fetch(GlobalVariables.backendURL + "/User/notify", {
             mode: 'cors',
             method: 'DELETE',
             headers: {
@@ -440,6 +441,7 @@ export default function User() {
                         <ButtonDelete text="Report User" onClickFunction={openReportingMenu}/>
                         {GlobalVariables.isMod ? <ButtonDelete text="Delete Account" onClickFunction={DeleteAccount}/>: ""}
                         {GlobalVariables.isMod ? <ButtonDelete text="Delete Biography" onClickFunction={DeleteBiography}/>: ""}
+                        {/* {GlobalVariables.isMod ? <ButtonDelete text="Delete Image" onClickFunction={DeleteImage}/>: ""} */}
                         <h2></h2>
 
                         <div>
