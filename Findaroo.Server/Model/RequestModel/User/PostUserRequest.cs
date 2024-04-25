@@ -22,5 +22,6 @@
         public string user_id { get; set; }
         public string?[]? social { get; set; }
         public string[]? blocked_users { get; set; }
+        public string[]? bookmarks { get; set; }
     }
 }

@@ -160,6 +160,40 @@ export default function User() {
             
         }
     }
+
+    const BookmarkUser = async () => {
+        console.log(loggedInUser.bookmarks)
+        console.log("PUT Call")
+        var copy = null
+        
+        if(loggedInUser.bookmarks == null) {
+            copy = [userData.user_id]
+        } else {
+            copy = loggedInUser.bookmarks
+            copy.push(userData.user_id)
+        }
+        console.log(copy)
+        
+        try {
+            const form = {
+                user_id: GlobalVariables.userCredential.uid,
+                bookmarks: copy
+            }
+            await fetch('http://localhost:5019/User', {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(form)
+			}).then(response => {
+				return response.text()
+			  });
+        } catch (err) {
+            console.log(err)
+            
+        }
+    }
+
     const SubmitRating = async () => {
         if(rating == null || isNaN(rating)  ) {
             setMessage("Enter a Number 0-5")
@@ -434,7 +468,7 @@ export default function User() {
                     
                     <div className="Row space-x-[2vw]">
                                      
-
+                    <ButtonImportant text="Bookmark User" onClickFunction={BookmarkUser}/>
                         <ButtonImportant text="Block User" onClickFunction={BlockUser}/>
                         <ButtonImportant text="Rate User" onClickFunction={() => {setShow(!show)}}/>
                         <ButtonDelete text="Report User" onClickFunction={openReportingMenu}/>

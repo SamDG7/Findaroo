@@ -26,5 +26,6 @@ namespace Findaroo.Server.Model.RequestModel.User
         public string? room_type { get; set; }
         public string?[]? social { get; set; }
         public string[]? blocked_users { get; set; }
+        public string[]? bookmarks { get; set; }
     }
 }
