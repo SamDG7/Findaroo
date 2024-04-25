@@ -168,7 +168,8 @@ function NotificationItem({prop}) {
         ConnectionRequestAccepted: 2,
         RoommateInvitation: 3,
         RoommateInvitationAcceptedBySender: 4,
-        RoommateInvitationAcceptedByReceiver: 5
+        RoommateInvitationAcceptedByReceiver: 5,
+        ModDeletedAccount: 6
     }
 
     return (
@@ -197,6 +198,8 @@ function NotificationItem({prop}) {
                 return `${name} accepted your roommate invitation.`
             case notificationType.RoommateInvitationAcceptedBySender:
                 return `You now belong to a room with ${name}.`
+            case notificationType.ModDeletedAccount:
+                return 'Moderator deleted account'
             default:
                 return 'Invalid notification type.'
         }
