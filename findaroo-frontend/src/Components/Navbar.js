@@ -68,6 +68,11 @@ const Navbar = () => {
                         <ButtonTransparent text={"Search"}/>
                     </Link>
                 </li>
+                <li style={{float: "right"}}>
+                    <Link to="/FAQs">
+                        <ButtonTransparent text={"FAQs"}/>
+                    </Link>
+                </li>
             </ul>
         </nav>
     );
