@@ -32,6 +32,7 @@ namespace Findaroo.Server.Mapper
             if (updateUserRequest.social != null) user.social = updateUserRequest.social;
             if (updateUserRequest.blocked_users != null) user.blocked_users = updateUserRequest.blocked_users;
             if (updateUserRequest.bookmarks != null) user.bookmarks = updateUserRequest.bookmarks;
+            if (updateUserRequest.visible != null) user.visible = (bool)updateUserRequest.visible;
         }
     }
 }

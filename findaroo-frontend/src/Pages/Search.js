@@ -74,7 +74,13 @@ export default function Search() {
             return data
         }
         for (let i = 0; i < data.length; i++) {
+
+            console.log("profile visible: " + data[i].visible);
+
             if(blockedUsers.includes(data[i].user_id)) {
+                data.splice(i, 1)
+                i--
+            } else if (data[i].visible == false) {
                 data.splice(i, 1)
                 i--
             }
@@ -82,8 +88,22 @@ export default function Search() {
 
         return data
     }
+
+    function filterPrivateUsers(data) {
+
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].visible == false) {
+                data.splice(i, 1)
+                i--
+            }
+        }
+
+        return data
+    }
+
     function GetSortedPersons(data, sortTypeName) {
         data = filterBlockedUsers(data)
+        data = filterPrivateUsers(data)
 
         const sortFunction = GetSort(sortTypeName);
         const sortedData = data.sort(sortFunction);

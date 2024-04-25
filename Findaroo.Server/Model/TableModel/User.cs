@@ -36,6 +36,7 @@ namespace Findaroo.Server.Model.TableModel
         public string?[]? social { get; set; }
         public string[]? blocked_users { get; set; }
         public string[]? bookmarks { get; set; }
+        public bool visible { get; set; }
 
         public User() { }
 
