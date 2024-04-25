@@ -21,7 +21,6 @@ export default function ExpenseTracker() {
     const expenseAmount = useRef();
 
     useEffect(() => {
-
         if (!GlobalVariables.authenticated || GlobalVariables.userCredential.uid === undefined) {
             navigate("/Login");
             return;
@@ -48,7 +47,7 @@ export default function ExpenseTracker() {
                         <AmountOwedList/>
                     </div>
                     <div className="Column End">
-                        <ButtonImportant text="Settle Up"/>
+                        <ButtonImportant text="Settle Up" onClickFunction={settleUp}/>
                     </div>
                 </div>
                 <div className="Column Start">
@@ -87,11 +86,10 @@ export default function ExpenseTracker() {
         </div>
     );
 
-    async function refresh() {
-        setExpenseData(null);
+    async function refreshData() {
         setExpenseCount(0);
         getAmountOwed();
-        getExpenses();
+        getExpenses(true);
     }
 
     async function getRoomData() {
@@ -139,14 +137,13 @@ export default function ExpenseTracker() {
                 'image': imageList[i]
             }
         });
-        console.log(roommateDataHelper);
         setRoommateData(roommateDataHelper);
     }
 
-    async function getExpenses() {
+    async function getExpenses(refresh = false) {
         if (roomData == null) return;
 
-        const response = await fetch(`${GlobalVariables.backendURL}/RoommateTransaction?room_id=${roomData.room_id}&offset=${expenseCount}`, {
+        const response = await fetch(`${GlobalVariables.backendURL}/RoommateTransaction?room_id=${roomData.room_id}&offset=${refresh ? 0 : expenseCount}`, {
             method: 'GET',
             credentials: 'include',
         }).catch(error => {
@@ -158,8 +155,13 @@ export default function ExpenseTracker() {
         if (responseBody.roommateTransactionList.length == 0) {
             return;
         }
-        setExpenseData([...expenseData, ...responseBody.roommateTransactionList]);
-        setExpenseCount(expenseCount + 10);
+        
+        if (!refresh) {
+            setExpenseCount(expenseCount + 10);
+            setExpenseData([...expenseData, ...responseBody.roommateTransactionList]);
+        } else {
+            setExpenseData(responseBody.roommateTransactionList);
+        }
     }
 
     async function getAmountOwed() {
@@ -177,6 +179,20 @@ export default function ExpenseTracker() {
         });
 
         setAmountOwedData(data);
+    }
+
+    async function settleUp() {
+        await fetch(`${GlobalVariables.backendURL}/RoommateTransaction/settleUp`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+                'roomId': roomData.room_id
+            })
+        })
+        refreshData();
     }
 
     async function createNewExpense() {
@@ -198,7 +214,7 @@ export default function ExpenseTracker() {
                 'amount': amount
             })
         });
-        refresh();
+        refreshData();
     }
 
     async function deleteExpense(transactionId) {
@@ -212,7 +228,7 @@ export default function ExpenseTracker() {
         }).catch(error => {
             console.log(error);
         })
-        refresh();
+        refreshData();
     }
 
     function ExpenseList() {
@@ -222,28 +238,40 @@ export default function ExpenseTracker() {
         return (
             <div className="Grid">
                 {expenseData.map((expense, i) => (
-                    <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]">
-                        <img 
-                            className="object-scale-down w-24 h-24" 
-                            src={roommateData[expense.payer_id].image} 
-                            alt={"Profile picture"} 
-                        />
-                        <div className="Column Start">
-                            <h2>{expense.name}</h2>
-                            <h3>{`Paid by ${roommateData[expense.payer_id].name}`}</h3>
-                            <h4>{expense.date_created
-                                .substring(0, expense.date_created.indexOf('T'))}</h4>
-                        </div>
-                        <div className="Column End">
-                            <h2>{`$${expense.amount}`}</h2>
-                            <ButtonImportant text="Delete Expense" onClickFunction={() => deleteExpense(expenseData[i].transactionId)}/>
-                        </div>
-                    </div>
+                    <ExpenseItem expense={expense} roommate={roommateData[expense.payer_id]}/>
                 ))}
             </div>
         );
+    }
 
-
+    function ExpenseItem({expense, roommate}) {
+        console.log(expense);
+        console.log(roommate);
+        const [expenseId] = useState(expense.transaction_id);
+        return (
+            <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]">
+                <img 
+                    className="object-scale-down w-24 h-24" 
+                    src={roommate.image} 
+                    alt={"Profile picture"} 
+                />
+                <div className="Column Start">
+                    <h2>{expense.name}</h2>
+                    <h3>{`Paid by ${roommate.name}`}</h3>
+                    <h4>{expense.date_created
+                        .substring(0, expense.date_created.indexOf('T'))}</h4>
+                </div>
+                <div className="Column End">
+                    <h2>{`$${expense.amount}`}</h2>
+                    {
+                        expense.payer_id == GlobalVariables.userCredential.uid ? 
+                        <ButtonImportant text="Delete Expense" onClickFunction={() => deleteExpense(expenseId)}/>
+                        :
+                        <div/>
+                    }
+                </div>
+            </div>
+        );
     }
 
     function AmountOwedList() {
