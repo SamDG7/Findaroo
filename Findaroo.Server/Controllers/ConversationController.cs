@@ -128,7 +128,7 @@ namespace Findaroo.Server.Controllers
             
             _notificationManager.recordNotification(
                 newUserId,
-                "",
+                newUserId,
                 NotificationEnum.AddedToConversation
             );
             
@@ -158,7 +158,7 @@ namespace Findaroo.Server.Controllers
             
             _notificationManager.recordNotification(
                 removingUserId,
-                "",
+                removingUserId,
                 NotificationEnum.RemovedFromConversation
             );
             

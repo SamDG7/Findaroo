@@ -30,14 +30,10 @@ export function MessageAddDelete({conversationDict, connectionDict}) {
     );
 
     async function leaveGroup() {
-        await fetch(GlobalVariables.backendURL + "/Conversation/removeUser", {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            },
-            body: JSON.stringify([conversationDict.conversation_id, GlobalVariables.userCredential.user_id])
-        }).catch(error => console.log(error));
-        navigate("/conversations")
+        await fetch(GlobalVariables.backendURL + "/Conversation/removeUser?conversationId="
+            +conversationDict.conversation_id+"&removingUserId="+GlobalVariables.userCredential.uid, {method: "POST"})
+            .catch(error => console.log(error));
+        navigate("/Conversations")
     }
 
     function displayAddUser() {

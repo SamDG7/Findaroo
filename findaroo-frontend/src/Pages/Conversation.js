@@ -23,6 +23,15 @@ export default function Conversations() {
             navigate("/Login");
         }
     }, []);
+    
+    useEffect(() => {
+        if (conversationData != null && !conversationData.user_ids.includes(GlobalVariables.userCredential.uid)) {
+            console.log("UIDS:")
+            console.log(conversationData.user_ids)
+            console.log(GlobalVariables.userCredential.uid)
+            navigate("/Conversations")
+        }
+    }, [conversationData]);
 
     useEffect(() => {
 
