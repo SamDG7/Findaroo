@@ -5,6 +5,8 @@ import {Link, useNavigate} from "react-router-dom";
 import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputBox} from "../Components/InputFields";
 import GlobalVariables from "../Utils/GlobalVariables";
+import {DropdownButton, DropdownItem} from "react-bootstrap";
+import Selector from "../Components/Selector";
 
 export default function EditPreferences() {
     // This redirects to the login page if not logged in
@@ -18,6 +20,8 @@ export default function EditPreferences() {
 
     // Personal Info
     const [roomType, setRoomType] = useState();
+    const [currencyCode, setCurrencyCode] = useState(null);
+    const [currencyCodes, setCurrencyCodes] = useState();
     const [priceLow, setPriceLow] = useState();
     const [priceHigh, setPriceHigh] = useState();
     const [roommatePreferences, setRoommatePreferences] = useState()
@@ -33,9 +37,16 @@ export default function EditPreferences() {
             if (data.min_price) setPriceLow(data.min_price);
             if (data.max_price) setPriceHigh(data.max_price);
             if (data.room_type) setRoomType(data.room_type);
-            if (data.preferences) setRoommatePreferences(data.preferences)})
-        .catch(error => console.error(error));
-        
+            if (data.currency_code) setCurrencyCode(data.currency_code);
+            if (data.preferences) setRoommatePreferences(data.preferences)
+        }).then(
+            fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.min.json')
+                .then(response => response.json())
+                .then(data => {console.log(data);
+                    setCurrencyCodes(data);
+                }).catch(error => console.error(error))
+        ).catch(error => console.error(error));
+
     }, []);
 
     const SavePreferencesCall = async () => {
@@ -45,6 +56,7 @@ export default function EditPreferences() {
                 user_id: GlobalVariables.userCredential.uid,
                 min_price: priceLow,
                 max_price: priceHigh,
+                currency_Code: currencyCode,
                 preferences: roommatePreferences,
                 room_type: roomType
             }
@@ -64,6 +76,24 @@ export default function EditPreferences() {
         }
     }
 
+    function priceExchange(value){
+        // Get the transfer rate from the old currency to the new one
+        fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/'+ (currencyCode ? currencyCode : "USD").toLowerCase() +'.json')
+            .then(response => response.json())
+            .then(data => {
+                const transferRate = (currencyCode ? data[currencyCode] : data["usd"])[value.toLowerCase()]
+                console.log("Transfer rate:")
+                console.log(transferRate);
+                setPriceLow((priceLow * transferRate))
+                setPriceHigh((priceHigh * transferRate))
+                setCurrencyCode(value)
+            }).catch(error => console.error(error))
+    }
+
+    function getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+    }
+
     // Preferences
 
     return (
@@ -74,10 +104,13 @@ export default function EditPreferences() {
                     <div className="Column Start">
                         <h2>Preferences</h2>
                         <div className="Row Start">
+
+                            {currencyCodes && <Selector name="Select Currency" values={Object.values(currencyCodes)} defaultValue={currencyCode != null ? currencyCodes[currencyCode] : "US Dollar"} onChangeFunction={(e) => {
+                                priceExchange(getKeyByValue(currencyCodes, e.target.value))
+                            }} />}
                             <InputStandard name="Min Price" defaultValue={priceLow} onChangeFunction={(e) => setPriceLow(e.target.value)}/>
                             <InputStandard name="Max Price" defaultValue={priceHigh} onChangeFunction={(e) => setPriceHigh(e.target.value)}/>
                             <InputStandard name="Room Type" defaultValue={roomType} onChangeFunction={(e) => setRoomType(e.target.value)}/>
-                            
                         </div>
                         <h2>Roommate Preferences</h2>
                         <div className="Row Start">

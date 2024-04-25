@@ -19,8 +19,9 @@ namespace Findaroo.Server.Model.RequestModel.User
         public string? company { get; set; }
         public string? school { get; set; }
         public int? rating { get; set; }
-        public int? min_price { get; set; }
-        public int? max_price { get; set; }
+        public string? currency_Code { get; set; }
+        public float? min_price { get; set; }
+        public float? max_price { get; set; }
         public int[]? lifestyle_answers { get; set; }
         public string? preferences { get; set; }
         public string? room_type { get; set; }
