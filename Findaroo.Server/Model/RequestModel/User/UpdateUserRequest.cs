@@ -29,5 +29,6 @@ namespace Findaroo.Server.Model.RequestModel.User
         public string[]? blocked_users { get; set; }
         public string[]? bookmarks { get; set; }
         public bool? visible { get; set; }
+        public string? time_zone { get; set; }
     }
 }

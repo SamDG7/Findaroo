@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import './PersonInfo.css';
 import GlobalVariables from "../Utils/GlobalVariables";
 import { useNavigate } from "react-router-dom";
+import {TimeZoneHelper} from "./TimeZoneHelper";
 
 export function MessageStyle({messageInfo}){
     //console.log(messageInfo.date_modified)
@@ -18,15 +19,18 @@ export function MessageStyle({messageInfo}){
                 'Content-type': 'application/json'
             },
             body: JSON.stringify({ids: [messageInfo.user_id]})
-        }).then(response => response.json()).then(data => {console.log(data); setUserName(data[0]);}).catch(error => console.log(error));
-    }, []);
+        }).then(response => response.json()).then(data => {console.log(data); setUserName(data[0]);}).catch(error => console.log(error)).then(
+            // Get the correct time zone
+
+        );
+    }, [messageInfo.user_id]);
 
     return(
         <div
             className={"Column drop-shadow-xl my-[1.5vh]" + (messageInfo.user_id === GlobalVariables.userCredential.uid ? " End bg-blue-200 ml-auto" : " Start bg-gray-200  mr-auto")}>
             <div className="Row">
                 <h3>{userName}</h3>
-                <h3>{date.toLocaleString()}</h3>
+                <h3><TimeZoneHelper time={date} uid={messageInfo.user_id}/></h3>
             </div>
             <h2>{messageInfo.message_text}</h2>
         </div>
@@ -65,7 +69,7 @@ export function ConversationInfoSmall({conversationDict}) {
         return;
     }
 
-    const dateString = lastMessage ? "Last Message: " + new Date(lastMessage.date_modified).toLocaleString() : "Conversation Created: " + conversationDict.date_modified;
+    const dateString = lastMessage ? "Last Message: " + TimeZoneHelper(new Date(lastMessage.date_modified)) : "Conversation Created: " + conversationDict.date_modified;
 
     return (
         <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]"

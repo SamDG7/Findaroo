@@ -24,6 +24,7 @@ export default function EditPreferences() {
     const [currencyCodes, setCurrencyCodes] = useState();
     const [priceLow, setPriceLow] = useState();
     const [priceHigh, setPriceHigh] = useState();
+    const [timeZone, setTimeZone] = useState();
     const [roommatePreferences, setRoommatePreferences] = useState()
 
     const [saveText, setSaveText] = useState(null);

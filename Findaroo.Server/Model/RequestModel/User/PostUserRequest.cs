@@ -23,5 +23,6 @@
         public string?[]? social { get; set; }
         public string[]? blocked_users { get; set; }
         public string[]? bookmarks { get; set; }
+        public string? time_zone { get; set; }
     }
 }
