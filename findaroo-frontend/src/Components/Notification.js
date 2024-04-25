@@ -168,7 +168,9 @@ function NotificationItem({prop}) {
         ConnectionRequestAccepted: 2,
         RoommateInvitation: 3,
         RoommateInvitationAcceptedBySender: 4,
-        RoommateInvitationAcceptedByReceiver: 5
+        RoommateInvitationAcceptedByReceiver: 5,
+        AddedToConversation: 6,
+        RemovedFromConversation: 7,
     }
 
     return (
@@ -197,6 +199,10 @@ function NotificationItem({prop}) {
                 return `${name} accepted your roommate invitation.`
             case notificationType.RoommateInvitationAcceptedBySender:
                 return `You now belong to a room with ${name}.`
+            case notificationType.AddedToConversation:
+                return `You have been added to a conversation`
+            case notificationType.RemovedFromConversation:
+                return `You have been removed from a conversation`
             default:
                 return 'Invalid notification type.'
         }
@@ -214,6 +220,10 @@ function NotificationItem({prop}) {
                 return '/Profile/MyRooms'
             case notificationType.RoommateInvitationAcceptedBySender:
                 return '/Profile/MyRooms'
+            case notificationType.AddedToConversation:
+                return `/Conversations`
+            case notificationType.RemovedFromConversation:
+                return `/Conversations`
             default:
                 return '/Profile'
         }
