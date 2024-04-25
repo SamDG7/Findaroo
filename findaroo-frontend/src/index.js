@@ -30,6 +30,7 @@ import RoommateAgreement from './Pages/RoommateAgreement';
 import RoommateInvitation from './Pages/RoommateInvitations';
 import Calendar from './Pages/Calendar';
 import BlockedUsers from './Pages/BlockedUsers';
+import Bookmarks from './Pages/Bookmarks';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -165,6 +166,11 @@ const router = createBrowserRouter(
         {
             path: "Profile/BlockedUsers",
             element: <BlockedUsers/>,
+            errorElement: <Error />,
+        },
+        {
+            path: "Profile/Bookmarks",
+            element: <Bookmarks/>,
             errorElement: <Error />,
         }
     ]
