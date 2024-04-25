@@ -12,6 +12,7 @@ import Home from "./Pages/Home"
 import Conversations from "./Pages/Conversations"
 import Conversation from "./Pages/Conversation"
 import Search from "./Pages/Search"
+import FAQs from './Pages/FAQs';
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
 import EditProfile from "./Pages/EditProfile";
@@ -79,6 +80,11 @@ const router = createBrowserRouter(
         {
             path: "/Search",
             element: <Search />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/FAQs",
+            element: <FAQs />,
             errorElement: <Error />,
         },
         {

@@ -8,7 +8,8 @@
         RoommateInvitation = 3,
         RoommateInvitationAcceptedBySender = 4,
         RoommateInvitationAcceptedByReceiver = 5,
-        AddedToConversation = 6,
-        RemovedFromConversation = 7,
+        ModDeletedAccount = 6,
+        AddedToConversation = 7,
+        RemovedFromConversation = 8,
     }
 }

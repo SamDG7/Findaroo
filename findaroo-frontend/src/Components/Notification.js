@@ -169,8 +169,9 @@ function NotificationItem({prop}) {
         RoommateInvitation: 3,
         RoommateInvitationAcceptedBySender: 4,
         RoommateInvitationAcceptedByReceiver: 5,
-        AddedToConversation: 6,
-        RemovedFromConversation: 7,
+        ModDeletedAccount: 6,
+        AddedToConversation: 7,
+        RemovedFromConversation: 8,
     }
 
     return (
@@ -203,6 +204,8 @@ function NotificationItem({prop}) {
                 return `You have been added to a conversation`
             case notificationType.RemovedFromConversation:
                 return `You have been removed from a conversation`
+            case notificationType.ModDeletedAccount:
+                return 'Moderator deleted account'
             default:
                 return 'Invalid notification type.'
         }
