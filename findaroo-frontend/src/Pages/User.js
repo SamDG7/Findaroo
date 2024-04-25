@@ -355,11 +355,24 @@ export default function User() {
             )
         }
     }
-
+    const DeleteImage = async () => {
+        console.log("HERE")
+        let answer = window.confirm("This image will be removed from Findaroo. Are you sure?");
+        if (!answer) return;
+        await fetch(GlobalVariables.backendURL + "/Image?userId=" + uid, {
+            mode: 'cors',
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'Access-Control-Allow-Origin': 'http://localhost:3000'
+            },
+            
+        })
+        .catch(error => console.error(error));
+    }
     const DeleteAccount = async () => {
         let answer = window.confirm("This record will be removed from Findaroo. Are you sure?");
         if (!answer) return;
-        console.log(uid)
         await fetch(GlobalVariables.backendURL + "/User/notify", {
             mode: 'cors',
             method: 'DELETE',
@@ -475,7 +488,8 @@ export default function User() {
                         <ButtonDelete text="Report User" onClickFunction={openReportingMenu}/>
                         {GlobalVariables.isMod ? <ButtonDelete text="Delete Account" onClickFunction={DeleteAccount}/>: ""}
                         {GlobalVariables.isMod ? <ButtonDelete text="Delete Biography" onClickFunction={DeleteBiography}/>: ""}
-                        {/* {GlobalVariables.isMod ? <ButtonDelete text="Delete Image" onClickFunction={DeleteImage}/>: ""} */}
+                        {GlobalVariables.isMod ? <ButtonDelete text="Delete Image" onClickFunction={DeleteImage}/>: ""}
+                        
                         <h2></h2>
 
                         <div>
