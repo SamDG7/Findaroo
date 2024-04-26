@@ -18,7 +18,6 @@ export default function Conversations() {
 
     const [conversationData, setConversationData] = useState(null);
     const [conversationMessages, setConversationMessages] = useState(null);
-    const [newMessage, setNewMessage] = useState(null);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const messageInput = useRef();
 
@@ -83,7 +82,6 @@ export default function Conversations() {
                             <EmojiPicker 
                                 onEmojiClick={(emojiData, event) => {
                                     messageInput.current.value = messageInput.current.value + emojiData.emoji;
-                                    setNewMessage(newMessage + emojiData.emoji);
                                 }
                             }></EmojiPicker>
                         </div>
@@ -99,7 +97,7 @@ export default function Conversations() {
                             </h3>
                             <input
                                 className="InputStandard"
-                                onChange={(e) => setNewMessage(e.target.value)}
+                                onChange={(e) => {console.log(e.target.value);}}
                                 placeholder="..."
                                 ref={messageInput}
                             />
@@ -117,13 +115,13 @@ export default function Conversations() {
     );
 
     async function sendMessage() {
-        console.log("Attempting to create message '" + newMessage + "'");
+        console.log("Attempting to create message '" + messageInput.current.value + "'");
         await fetch(GlobalVariables.backendURL + "/Conversation/messages", {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json; charset=UTF-8'
             },
-            body: JSON.stringify({conversation_id: conversationData.conversation_id, user_id: GlobalVariables.userCredential.uid, message_text: newMessage})
+            body: JSON.stringify({conversation_id: conversationData.conversation_id, user_id: GlobalVariables.userCredential.uid, message_text: messageInput.current.value})
         }).catch(error => console.log(error));
 
         // This updates the current messages page
@@ -134,6 +132,7 @@ export default function Conversations() {
                 console.log(data);
                 setConversationMessages(data);
             }).catch(error => console.error(error));
+        messageInput.current.value = "";
     }
 
     async function getConnections() {
