@@ -55,7 +55,7 @@ export default function Search() {
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
                     <div className="Column Start" >
-                        <Selector name="Sort By" values={["Situation Compatiblity", "Lifestyle Compatibility", "A-Z", "Z-A", "Rating (Descending)", "Rating (Ascending)", "Random", "Average Price (Ascending)", "Average Price (Descending)", "Min Price (Ascending)", "Min Price (Descending)", "Max Price (Ascending)", "Max Price (Descending)"]} onChangeFunction={(e) => setSortType(e.target.value)} />
+                        <Selector name="Sort By" values={["Lifestyle Compatibility", "Situation Compatibility", "A-Z", "Z-A", "Rating (Descending)", "Rating (Ascending)", "Random", "Average Price (Ascending)", "Average Price (Descending)", "Min Price (Ascending)", "Min Price (Descending)", "Max Price (Ascending)", "Max Price (Descending)"]} onChangeFunction={(e) => setSortType(e.target.value)} />
 
                     </div>
                     <div className="Column End">
@@ -246,13 +246,15 @@ export default function Search() {
         lifestyle_sim *= (100 / 170);
         lifestyle_sim = Math.round(lifestyle_sim * 100) / 100;
 
+        console.log("Lifestyle Sim between " + personDict.first_name + " and " + userData.first_name + ": " + lifestyle_sim);
+
         return lifestyle_sim;
     }
 
     function GetSort(sortTypeName) {
         switch (sortTypeName) {
             default:
-            case "Price Compatibility":
+            case "Situation Compatibility":
                 return function (a, b) {
                     if (typeof calculateSituationSimilarity(a) === 'string' || typeof calculateSituationSimilarity(b) === 'string') {
                         return calculateSituationSimilarity(a) - calculateSituationSimilarity(b)

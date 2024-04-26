@@ -123,9 +123,6 @@ export default function User() {
         }
     }, [avgRating])
 
-    useEffect(() => {
-        calculateSimilarity();
-    }, [compScore])
 
     const BlockUser = async () => {
         console.log(loggedInUser.blocked_users)
@@ -477,7 +474,7 @@ export default function User() {
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 {userData && <div className="Column">
                     <PersonInfo personDict={userData} />
-                    <h2>User Rating: {(avgRating && avgRating >= 0) ? avgRating + "/5" : "Unrated"}  |  Compatibility Score: {(compScore && compScore !== NaN && compScore >= 0) ? compScore : "46.5"}/100 | 
+                    <h2>User Rating: {(avgRating && avgRating >= 0) ? avgRating + "/5" : "Unrated"}  |  Compatibility Score: {(compScore && compScore !== NaN && compScore >= 0) ? compScore : "0"}/100 | 
                     This user has {reviews.length} reviews</h2>
                     
                     <div className="Row space-x-[2vw]">
