@@ -23,6 +23,27 @@ export default function User() {
     const [reviews, setReviews] = useState([]);
     const [reviewerData, setReviewerData] = useState(null);
 
+    const [bookmarkedUsers, setBookmarkedUsers] = useState([])
+    const [bookmarked, setBookmarked] = useState();
+
+    useEffect(() => {
+        //REPLACE THIS WITH USER_ID
+        console.log("GET Call")
+        fetch('http://localhost:5019/User/All')
+            .then(response => response.json())
+            .then(data => {console.log(data); 
+                setBookmarkedUsers(data[data.findIndex(obj => obj.user_id == GlobalVariables.userCredential.uid)].bookmarks);
+                if(bookmarkedUsers.includes(uid)) {
+                    console.log("User is bookmarked")
+                    setBookmarked(true);
+                } else {
+                    console.log("User is not bookmarked")
+                    setBookmarked(false);
+                }
+            })
+            .catch(error => console.error(error));
+    }, []);
+
     
     const displayReviews = () => {
         
@@ -90,7 +111,7 @@ export default function User() {
                 console.log(data)
             })
 
-        calculateLifestyleSimilarity();
+        calculateSimilarity();
     }, []);
     useEffect(() => {
         fetch('http://localhost:5019/Ratings/avg?user=' + uid)
@@ -123,6 +144,9 @@ export default function User() {
         }
     }, [avgRating])
 
+    useEffect(() => {
+        calculateSimilarity();
+    }, [compScore])
 
     const BlockUser = async () => {
         console.log(loggedInUser.blocked_users)
@@ -159,6 +183,48 @@ export default function User() {
     }
 
     const BookmarkUser = async () => {
+
+        
+        setBookmarked(true);
+
+        console.log(loggedInUser.bookmarks)
+        console.log("PUT Call")
+        var copy = null
+        
+        if(loggedInUser.bookmarks == null) {
+            copy = [userData.user_id]
+        } else {
+            copy = loggedInUser.bookmarks
+            copy.push(userData.user_id)
+        }
+        console.log(copy)
+        
+        try {
+            const form = {
+                user_id: GlobalVariables.userCredential.uid,
+                bookmarks: copy
+            }
+            await fetch('http://localhost:5019/User', {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(form)
+			}).then(response => {
+				return response.text()
+			  });
+        } catch (err) {
+            console.log(err)
+        }
+
+        window.alert("Bookmarked user.")
+    }
+
+    const UnbookmarkUser = async () => {
+
+        setBookmarked(false);
+
+        /*
         console.log(loggedInUser.bookmarks)
         console.log("PUT Call")
         var copy = null
@@ -189,6 +255,9 @@ export default function User() {
             console.log(err)
             
         }
+        */
+
+        window.alert("Unbookmarked user.")
     }
 
     const SubmitRating = async () => {
@@ -352,24 +421,11 @@ export default function User() {
             )
         }
     }
-    const DeleteImage = async () => {
-        console.log("HERE")
-        let answer = window.confirm("This image will be removed from Findaroo. Are you sure?");
-        if (!answer) return;
-        await fetch(GlobalVariables.backendURL + "/Image?userId=" + uid, {
-            mode: 'cors',
-            method: 'DELETE',
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                'Access-Control-Allow-Origin': 'http://localhost:3000'
-            },
-            
-        })
-        .catch(error => console.error(error));
-    }
+
     const DeleteAccount = async () => {
         let answer = window.confirm("This record will be removed from Findaroo. Are you sure?");
         if (!answer) return;
+        console.log(uid)
         await fetch(GlobalVariables.backendURL + "/User/notify", {
             mode: 'cors',
             method: 'DELETE',
@@ -474,19 +530,19 @@ export default function User() {
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 {userData && <div className="Column">
                     <PersonInfo personDict={userData} />
-                    <h2>User Rating: {(avgRating && avgRating >= 0) ? avgRating + "/5" : "Unrated"}  |  Compatibility Score: {(compScore && compScore !== NaN && compScore >= 0) ? compScore : "0"}/100 | 
+                    <h2>User Rating: {(avgRating && avgRating >= 0) ? avgRating + "/5" : "Unrated"}  |  Compatibility Score: {(compScore && compScore !== NaN && compScore >= 0) ? compScore : "46.5"}/100 | 
                     This user has {reviews.length} reviews</h2>
                     
                     <div className="Row space-x-[2vw]">
                                      
-                    <ButtonImportant text="Bookmark User" onClickFunction={BookmarkUser}/>
+                    {!bookmarked && <ButtonImportant text="Bookmark User" onClickFunction={BookmarkUser}/>}
+                    {bookmarked && <ButtonImportant text="Unbookmark User" onClickFunction={UnbookmarkUser}/>}
                         <ButtonImportant text="Block User" onClickFunction={BlockUser}/>
                         <ButtonImportant text="Rate User" onClickFunction={() => {setShow(!show)}}/>
                         <ButtonDelete text="Report User" onClickFunction={openReportingMenu}/>
                         {GlobalVariables.isMod ? <ButtonDelete text="Delete Account" onClickFunction={DeleteAccount}/>: ""}
                         {GlobalVariables.isMod ? <ButtonDelete text="Delete Biography" onClickFunction={DeleteBiography}/>: ""}
-                        {GlobalVariables.isMod ? <ButtonDelete text="Delete Image" onClickFunction={DeleteImage}/>: ""}
-                        
+                        {/* {GlobalVariables.isMod ? <ButtonDelete text="Delete Image" onClickFunction={DeleteImage}/>: ""} */}
                         <h2></h2>
 
                         <div>
@@ -513,8 +569,50 @@ export default function User() {
         </div>
     );
 
-    function calculateLifestyleSimilarity() {
+    function calculateSimilarity() {
+        var total_sim = 5;
         if (userData != null) {
+
+            // if (userData.min_price == null && userData.max_price == null) {
+            //     return "Please fill out preferences to view similarity";
+            // }
+
+            // if (loggedInUser.min_price == null && loggedInUser.max_price == null) {
+            //     return "This user has not filled out their preferences";
+            // }
+
+            if (loggedInUser.age != null && userData.age != null) {
+                if (Math.abs(loggedInUser.min_price - userData.min_price) > 5) {
+                    total_sim -= 0.35;
+                }
+            }
+
+            if (loggedInUser.min_price != null && userData.min_price != null) {
+                if (Math.abs(loggedInUser.min_price - userData.min_price) > 500) {
+                    total_sim -= 0.5;
+                }
+            }
+            if (loggedInUser.max_price != null && userData.max_price != null) {
+                if (Math.abs(loggedInUser.max_price - userData.max_price) > 500) {
+                    total_sim -= 0.5;
+                }
+            }
+            if (loggedInUser.school != null && userData.school != null) {
+                if (loggedInUser.school !== userData.school) {
+                    total_sim -= 1;
+                }
+            }
+            if (loggedInUser.state != null && userData.state != null) {
+                if (loggedInUser.state !== userData.state) {
+                    total_sim -= 0.5;
+                }
+            }
+            if (loggedInUser.rating) {
+                if (loggedInUser.rating < 3) {
+                    total_sim -= 0.5;
+                }
+            }
+
             var questions = loggedInUser.lifestyle_answers;
             var userQuestions = userData.lifestyle_answers;
 
@@ -523,44 +621,44 @@ export default function User() {
             if (questions != null && userQuestions != null) {
                 lifestyle_sim += 10 - Math.abs(questions[0] - userQuestions[0]) * 5;
 
-                if (questions[1] == 1 || userQuestions[1] == 1) {
-                    if (questions[0] != userQuestions[0]) {
+                if (questions[1] === 1 || userQuestions[1] === 1) {
+                    if (questions[0] !== userQuestions[0]) {
                         lifestyle_sim *= 0;
                     }
                 }
 
                 lifestyle_sim += 10 - Math.abs(questions[2] - userQuestions[2]) * 5;
 
-                if (questions[3] == 1 || userQuestions[3] == 1) {
-                    if (questions[2] != userQuestions[2]) {
+                if (questions[3] === 1 || userQuestions[3] === 1) {
+                    if (questions[2] !== userQuestions[2]) {
                         lifestyle_sim *= 0;
                     }
                 }
 
                 lifestyle_sim += 10 - Math.abs(questions[4] - userQuestions[4]) * 5;
 
-                if (questions[5] == 1 || userQuestions[5] == 1) {
-                    if (questions[4] != userQuestions[4]) {
+                if (questions[5] === 1 || userQuestions[5] === 1) {
+                    if (questions[4] !== userQuestions[4]) {
                         lifestyle_sim *= 0;
                     }
                 }
 
-                if (questions[6] == userQuestions[6]) {
+                if (questions[6] === userQuestions[6]) {
                     lifestyle_sim += 5;
                 }
 
-                if (questions[7] == 1) {
-                    if (userQuestions[6] == 0) {
+                if (questions[7] === 1) {
+                    if (userQuestions[6] === 0) {
                         lifestyle_sim *= 0;
                     }
                 }
-                if (userQuestions[7] == 1) {
-                    if (questions[6] == 0) {
+                if (userQuestions[7] === 1) {
+                    if (questions[6] === 0) {
                         lifestyle_sim *= 0;
                     }
                 }
 
-                if (questions[8] == userQuestions[8]) {
+                if (questions[8] === userQuestions[8]) {
                     lifestyle_sim += 5;
                 }
 
@@ -583,12 +681,19 @@ export default function User() {
             }
         }
 
-        lifestyle_sim *= (100 / 170);
+        //TODO: set total_sim as person rating
+        if (lifestyle_sim + total_sim < 0) {
+            total_sim = 0;
+        }
+
+        total_sim *= 10;
+        total_sim = Math.round(total_sim * 100) / 100;
+
+        lifestyle_sim *= (50 / 170);
         lifestyle_sim = Math.round(lifestyle_sim * 100) / 100;
 
-        setCompScore(lifestyle_sim);
-
-        return lifestyle_sim;
+        setCompScore(total_sim + lifestyle_sim);
+        return total_sim + lifestyle_sim;
     }
 
 
