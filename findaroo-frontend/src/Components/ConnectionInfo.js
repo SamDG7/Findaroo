@@ -35,7 +35,6 @@ export function ConnectionInfo({connectionDict}) {
             roomed: reviewData.roomed === 'yes',
             positive_remarks: reviewData.positiveRemarks,
             criticisms: reviewData.criticisms,
-            reviewed_at: Date.now(),
             };
             console.log('form:', form);
 

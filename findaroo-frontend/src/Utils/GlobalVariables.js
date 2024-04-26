@@ -9,4 +9,6 @@ export default class GlobalVariables {
     static email;
     static isActivated;
     static isMod = false;
+
+    static events = [];
 }

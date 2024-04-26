@@ -19,9 +19,7 @@ import {
 } from 'date-fns';
 import Popup from "../Components/Popup";
 
-let events = [
-    // ... (Your existing events data)
-];
+var events = GlobalVariables.events;
   
 const colStartClasses = [
     '',
