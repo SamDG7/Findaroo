@@ -1,13 +1,13 @@
 import React from "react";
 import './PersonInfo.css';
-import ButtonStandard, { ButtonImportant } from "./Buttons";
+import ButtonStandard, { ButtonImportant, ButtonTransparent } from "./Buttons";
 import {getAuth} from 'firebase/auth';
 import {useState, useEffect} from "react";
 import GlobalVariables from "../Utils/GlobalVariables";
 import { PersonInfoSmall } from "./PersonInfo";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import InputStandard from "./InputFields";
+
 
 export function RoomAndRoommates({roomDict, connectionDict}) {
     const navigate = useNavigate();
@@ -16,7 +16,6 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
     const [roommateDict, setRoommateDict] = useState(null);
     const [showAddRoommate, setShowAddRoommate] = useState(false);
     const [visible, setVisible] = useState(true);
-
     if (!visible) {
         return;
     }
@@ -89,6 +88,98 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
 
     function displayAddRoommate() {
         setShowAddRoommate(!showAddRoommate);
+    }
+    function moveUp(input) {
+        console.log(input)    
+        for(var i = 0; i < roommateDict.length; i++) {         
+            if(roommateDict[i].id === input){
+                console.log(i)
+                if(i === 0) return
+                var copy = [...roommateDict]
+                var temp = copy[i-1]               
+                copy[i-1] = copy[i]               
+                copy[i] = temp              
+                setRoommateDict(copy)
+            }
+        }
+        
+    }
+    function moveDown(input) {
+        console.log(input)    
+        for(var i = 0; i < roommateDict.length-1; i++) {
+            
+            if(roommateDict[i].id === input){
+                console.log("HERE")
+                var copy = [...roommateDict]
+                var temp = copy[i+1]
+                copy[i+1] = copy[i]
+                copy[i] = temp
+                console.log(copy)
+                setRoommateDict(copy)
+                
+                
+                
+            }
+        }
+        
+    }
+    function RoommateInfo({roommate, room_id}) {
+        const navigate = useNavigate();
+        const [image, setImage] = useState(null);
+        const [visible, setVisible] = useState(true);
+    
+        useEffect(() => {
+            if (roommate["id"] != null && image == null) {
+                GetImage(roommate["id"]);
+            }
+        }, [roommate['id']]);
+    
+        const GetImage = async function() {
+            console.log(roommate["id"])
+            const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + roommate["id"]);
+            const blob = await imageResponse.blob();
+            const source = URL.createObjectURL(blob);
+            setImage(source);
+        }
+    
+        if (!roommate['id'] || !visible) {
+            return;
+        }
+        return (
+            <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]" >
+                <img className="object-scale-down w-24 h-24" src={image}
+                    alt={roommate['name'] + "'s profile picture"} />
+                <div className="Column Start" onClick={() => navigate("/User/" + roommate["id"])}>
+                    <Link to="/User" params={roommate["id"]}>
+                        <h2>
+                            {roommate['name']}
+                        </h2>
+                    </Link>
+                    <h3>
+                        Date joined: {roommate['date_joined']}
+                    </h3>
+                </div>
+                <h3 className="Column End">
+                    <ButtonImportant text={"Remove from group"} onClickFunction={removeFromGroup}></ButtonImportant>
+                    <ButtonTransparent text={"Move Up"} onClickFunction={() => moveUp(roommate["id"])}></ButtonTransparent>
+                    <ButtonTransparent text={"Move Down"} onClickFunction={() => moveDown(roommate["id"])}></ButtonTransparent>
+                </h3>
+            </div>
+        );
+        
+        
+    
+        async function removeFromGroup() {
+            setVisible(false);
+            const response = await fetch(GlobalVariables.backendURL + "/Roommate", {
+                method:'DELETE',
+                credentials: 'include',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify({"roomId": room_id, "userIdToRemove": roommate.id})
+            })
+        }
     }
 }
 
@@ -180,57 +271,3 @@ function AddRoommate({connectionDict, roomId}) {
     }
 }
 
-export function RoommateInfo({roommate, room_id}) {
-    const navigate = useNavigate();
-    const [image, setImage] = useState(null);
-    const [visible, setVisible] = useState(true);
-
-    useEffect(() => {
-        if (roommate["id"] != null && image == null) {
-            GetImage(roommate["id"]);
-        }
-    }, [roommate['id']]);
-
-    const GetImage = async function() {
-        console.log(roommate["id"])
-        const imageResponse = await fetch("http://localhost:5019/Image?user_id=" + roommate["id"]);
-        const blob = await imageResponse.blob();
-        const source = URL.createObjectURL(blob);
-        setImage(source);
-    }
-
-    if (!roommate['id'] || !visible) {
-        return;
-    }
-    return (
-        <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]" onClick={() => navigate("/User/" + roommate["id"])}>
-            <img className="object-scale-down w-24 h-24" src={image}
-                alt={roommate['name'] + "'s profile picture"} />
-            <div className="Column Start">
-                <Link to="/User" params={roommate["id"]}>
-                    <h2>
-                        {roommate['name']}
-                    </h2>
-                </Link>
-                <h3>
-                    Date joined: {roommate['date_joined']}
-                </h3>
-            </div>
-            <h3 className="Column End">
-                <ButtonImportant text={"Remove from group"} onClickFunction={removeFromGroup}></ButtonImportant>
-            </h3>
-        </div>
-    );
-
-    async function removeFromGroup() {
-        setVisible(false);
-        const response = await fetch(GlobalVariables.backendURL + "/Roommate", {
-            method:'DELETE',
-            credentials: 'include',
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            },
-            body: JSON.stringify({"roomId": room_id, "userIdToRemove": roommate.id})
-        })
-    }
-}
