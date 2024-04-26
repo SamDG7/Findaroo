@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Findaroo.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class RoommateTransactionController : ControllerBase
     {

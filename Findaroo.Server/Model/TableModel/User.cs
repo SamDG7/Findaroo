@@ -21,8 +21,8 @@ namespace Findaroo.Server.Model.TableModel
         public string occupation { get; set; }
         public string? company { get; set; }
         public string? school { get; set; }
-        public int? min_price { get; set; }
-        public int? max_price { get; set; }
+        public double? min_price { get; set; }
+        public double? max_price { get; set; }
         public string? preferences { get; set; }
         public int rating { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

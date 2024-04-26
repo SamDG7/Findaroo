@@ -5,12 +5,19 @@ import { useNavigate } from "react-router-dom";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { RxCross1 } from "react-icons/rx";
 import Popup from "./Popup";
+import { CiFaceSmile } from "react-icons/ci";
+import EmojiPicker from 'emoji-picker-react';
 
 export function MessageStyle({messageInfo}){
     //console.log(messageInfo.date_modified)
     const [isVisible, setVisible] = useState(true);
     const [userName, setUserName] = useState();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [showSuggestionMode, setShowSuggestionMode] = useState(false);
+    const [userHasNotReacted, setUserHasNotReacted] = useState(true);
+    const [myReaction, setMyReaction] = useState();
+    const [messageReactions, setMessageReactions] = useState(null);
+    const [reactionCount, setReactionCount] = useState(null);
 
     const closePopup = () => {
         setIsPopupOpen(false);
@@ -28,6 +35,7 @@ export function MessageStyle({messageInfo}){
             },
             body: JSON.stringify({ids: [messageInfo.user_id]})
         }).then(response => response.json()).then(data => {console.log(data); setUserName(data[0]);}).catch(error => console.log(error));
+        getReactions();
     }, []);
 
     return(
@@ -48,10 +56,109 @@ export function MessageStyle({messageInfo}){
                 <h3>{date.toLocaleString()}</h3>
             </div>
             <h2>{messageInfo.message_text}</h2>
+            {showSuggestionMode && <EmojiPicker onEmojiClick={(emojiData, event) => {
+                sendReaction(emojiData);
+                setShowSuggestionMode(false);
+                setUserHasNotReacted(false);
+            }}/>}
+            <div className="Row Start" onClick={() => console.log("debug")}>
+                {
+                    messageReactions && reactionCount && messageReactions.map((reaction, i) => (
+                        <MessageReaction emoji={reaction} count={reactionCount[i]}/>
+                    ))
+                }
+                {
+                    userHasNotReacted && 
+                    <div className="Row Start outline-offset-5 outline rounded-lg" onClick={() => setShowSuggestionMode(!showSuggestionMode)}>
+                        <CiFaceSmile />
+                        +
+                    </div>
+                }
+                
+            </div>
         </div>
         :
         <div></div>
     );
+
+    function MessageReaction({emoji, count}) {
+        return (
+            <div 
+                className={`Row Start outline-offset-5 ${emoji == myReaction ? "outline-double" : "outline"} rounded-lg`} 
+                onClick={() => {
+                    if (emoji == myReaction) {
+                        removeReaction();
+                    };
+                }}
+            >
+                {`${emoji} ${count}`}
+            </div>
+        );
+    }
+
+    async function getReactions() {
+        const response = await fetch(`${GlobalVariables.backendURL}/MessageReaction?messageId=${messageInfo.message_id}`, {
+            method: 'GET',
+            credentials: 'include'
+        }).catch(error => {
+            console.log(error);
+        })
+        const data = await response.json()
+        .catch(error => {
+            console.log(error);
+        });
+
+        if (data == null) return;
+
+        var reactionList = [];
+        var countList = [];
+        
+        for (const r of data.messageReactions) {
+            if (r.user_id == GlobalVariables.userCredential.uid) {
+                setUserHasNotReacted(false);
+                setMyReaction(r.react_emoji);
+            }
+            var index = reactionList.indexOf(r.react_emoji);
+            if (index != -1) {
+                countList[index]++;
+            } else {
+                reactionList.push(r.react_emoji);
+                countList.push(1);
+            }
+        }
+        setMessageReactions(reactionList);
+        setReactionCount(countList);
+    }
+
+    async function sendReaction(emojiData) {
+        await fetch(GlobalVariables.backendURL + "/MessageReaction", {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "messageId": messageInfo.message_id,
+                "messageReactionEmoji": emojiData.emoji
+            })
+        })
+        getReactions();
+    }
+
+    async function removeReaction() {
+        await fetch(GlobalVariables.backendURL + "/MessageReaction", {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "messageId": messageInfo.message_id
+            })
+        })
+        getReactions();
+        setUserHasNotReacted(true);
+    }
 
     async function deleteMessage() {
         await fetch(GlobalVariables.backendURL + "/Conversation/message", {
