@@ -3,10 +3,8 @@ import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Popup from "../Components/Popup";
-import {forEach} from "react-bootstrap/ElementChildren";
 import {PersonInfoSmall} from "../Components/PersonInfo";
-import {RoomAndRoommates} from "../Components/RoomAndRoommates";
+import {SimpleRoom} from "../Components/RoomAndRoommates";
 
 export default function Home() {
     // This redirects to the login page if not logged in
@@ -85,19 +83,21 @@ export default function Home() {
     return (
         <div className="Page">
             <Navbar />
-            <div className="Column">
-                {combinedArr && combinedArr.map((data, index) => {
-                    return PickStyle(data, index);
-                })}
+            <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
+                <div className="Column">
+                    {combinedArr && combinedArr.map((data, index) => {
+                        return PickStyle(data, index);
+                    })}
+                </div>
             </div>
         </div>
     );
 
     function PickStyle(data, index){
-        if (data["user_id"] != null) {
+        if ("user_id" in data) {
             return <PersonInfoSmall key={index} personDict={data} similarityOutput={calculateLifestyleSimilarity(data)} />;
         } else {
-            return <RoomAndRoommates key={index} roomDict={data} similarityOutput={calculateRoomLifestyleSimilarity(data)} />;
+            return <SimpleRoom key={index} roomDict={data} similarityOutput={calculateRoomLifestyleSimilarity(data)} />;
         }
     }
 
@@ -106,7 +106,7 @@ export default function Home() {
     }
 
     function calculateSimilarity(dataDict) {
-        if (dataDict["user_id"] != null) {
+        if ("user_id" in dataDict) {
             return calculateLifestyleSimilarity(dataDict);
         } else {
             return calculateRoomLifestyleSimilarity(dataDict);
@@ -114,13 +114,19 @@ export default function Home() {
     }
 
     function calculateRoomLifestyleSimilarity(roomDict) {
-        if (roomDict != null && roomDict.length > 0){
+        //console.log(roomDict)
+        if (roomDict != null){
             let totalSimilarity = 0;
-            roomDict.roommate_id.forEach((value, index, array) => {
-                    totalSimilarity += calculateLifestyleSimilarity(value);
+            roomDict.roomates.forEach((value, index, array) => {
+                    const roomSimilarity = calculateLifestyleSimilarity(value);
+
+                    if (!Number.isNaN(roomSimilarity)) {
+                        totalSimilarity += roomSimilarity;
+                    }
                 }
             );
-            totalSimilarity /= roomDict.length;
+            totalSimilarity /= roomDict.roomates.length;
+            console.log(totalSimilarity);
             return totalSimilarity;
         } else {
             return 0;
@@ -195,16 +201,14 @@ export default function Home() {
                 lifestyle_sim += 20 - Math.abs(questions[16] - userQuestions[16]) * 10;
 
             }
+
+            lifestyle_sim *= (100 / 170);
+            lifestyle_sim = Math.round(lifestyle_sim * 100) / 100;
+
+            return lifestyle_sim;
+        } else {
+            return 0;
         }
-
-        lifestyle_sim *= (100 / 170);
-        lifestyle_sim = Math.round(lifestyle_sim * 100) / 100;
-
-        if (userData != null && personDict != null){
-            console.log("Lifestyle Sim between " + personDict.first_name + " and " + userData.first_name + ": " + lifestyle_sim);
-        }
-
-        return lifestyle_sim;
     }
 
 }
