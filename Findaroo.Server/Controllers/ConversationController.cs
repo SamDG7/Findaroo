@@ -90,6 +90,83 @@ namespace Findaroo.Server.Controllers
             }
         }
         
+        [HttpGet]
+        [Route("getUsers")]
+        public User[] getConversationUserNames(String conversationId)
+        {
+            // Get the conversation
+            var conversation = getConversation(conversationId);
+            
+            // Add the user's info
+            List<User> userList = new List<User>();
+            foreach (var userId in conversation.user_ids)
+            {
+                userList.Add(_psql.user.Find(userId));
+            }
+            
+            return userList.ToArray();
+        }
+        
+        [HttpPost]
+        [Route("addUser")]
+        public void addUserToConversation(String conversationId, String newUserId)
+        {
+            Console.Write(newUserId);
+            
+            // Get the conversation
+            var conversation = getConversation(conversationId);
+            
+            // Add the user if it is new
+            List<String> userList = new List<string>(conversation.user_ids);
+            if (userList.Contains(newUserId))
+            {
+                Response.StatusCode = 404;
+                return;
+            }
+            userList.Add(newUserId);
+            conversation.user_ids = userList.ToArray();
+            
+            _notificationManager.recordNotification(
+                newUserId,
+                newUserId,
+                NotificationEnum.AddedToConversation
+            );
+            
+            // Update the database
+            _psql.conversation.Update(conversation);
+            _psql.SaveChanges();
+        }
+        
+        [HttpPost]
+        [Route("removeUser")]
+        public void removeUserFromConversation(String conversationId, String removingUserId)
+        {
+            Console.Write(removingUserId);
+            
+            // Get the conversation
+            var conversation = getConversation(conversationId);
+            
+            // Add the user if it is new
+            List<String> userList = new List<string>(conversation.user_ids);
+            if (!userList.Contains(removingUserId))
+            {
+                Response.StatusCode = 404;
+                return;
+            }
+            userList.Remove(removingUserId);
+            conversation.user_ids = userList.ToArray();
+            
+            _notificationManager.recordNotification(
+                removingUserId,
+                removingUserId,
+                NotificationEnum.RemovedFromConversation
+            );
+            
+            // Update the database
+            _psql.conversation.Update(conversation);
+            _psql.SaveChanges();
+        }
+        
         [HttpPost]
         [Route("messages")]
         public async void makeMessage([FromBody] PostMessageRequest postMessageRequest)

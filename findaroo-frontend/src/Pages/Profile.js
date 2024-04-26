@@ -42,6 +42,8 @@ export default function Profile() {
 
     const closeReportForm = () => setIsReportFormOpen(false);
 
+    const [visible, setVisibility] = useState("public");
+
     useEffect(() => {
 
         if (!GlobalVariables.authenticated || GlobalVariables.userCredential.uid === undefined) {
@@ -55,6 +57,13 @@ export default function Profile() {
             .then(data => {
                 //console.log(data);
                 setUserData(data);
+
+                if (data.visible == false) {
+                    setVisibility("private");
+                } else {
+                    setVisibility("public");
+                }
+
             }).catch(error => console.error(error));
 
         ConnectionRequestsCount();
@@ -86,6 +95,39 @@ export default function Profile() {
             navigate("/Login");
         }
     }
+
+    
+
+    const handleVisibilityChange = (event) => {
+        
+        setVisibility(event.target.value);
+
+        var argument = true;
+        if (event.target.value != "public")
+        {
+            argument = false;
+        }
+    
+        console.log("PUT Call")
+        try {
+            const form = {
+                user_id: GlobalVariables.userCredential.uid,
+                visible: argument
+            }
+            console.log(form);
+            fetch('http://localhost:5019/User', {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(form)
+            }).then(response => {
+                return response.text()
+            });
+        }catch (err) {
+            console.log(err)
+        }
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -164,6 +206,13 @@ export default function Profile() {
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
                     <PersonInfo personDict={userData}/>
+                    <div align="left">
+                        <h2>Visibility:</h2>
+                        <select value={visible} onChange={handleVisibilityChange}>
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                        </select>
+                    </div>
                     <div className="Column Start">
                         <div className="Row space-x-[2vw]">
                             <Link to="/Profile/Edit">
@@ -187,6 +236,7 @@ export default function Profile() {
                             <ButtonWithNotification text="Connection Requests" count={requestCount} onClickFunction={() => {navigate("/Profile/MyConnectionRequests");}}/>
                             <ButtonStandard text="Blocked Users" onClickFunction={() => {navigate("/Profile/BlockedUsers");}}/>
                             <ButtonStandard text="My Reviews" onClickFunction={() => {navigate("/User/" + auth.currentUser.uid);}}/>
+                            <ButtonStandard text="My Bookmarks" onClickFunction={() => {navigate("/Profile/Bookmarks");}}/>
                         </div>
                         <div className="Row space-x-[2vw]">
                             <ButtonDelete text="Disable Account" onClickFunction={togglePopup}/>
