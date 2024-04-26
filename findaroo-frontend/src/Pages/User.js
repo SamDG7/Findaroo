@@ -90,7 +90,7 @@ export default function User() {
                 console.log(data)
             })
 
-        calculateSimilarity();
+        calculateLifestyleSimilarity();
     }, []);
     useEffect(() => {
         fetch('http://localhost:5019/Ratings/avg?user=' + uid)
@@ -466,50 +466,8 @@ export default function User() {
         </div>
     );
 
-    function calculateSimilarity() {
-        var total_sim = 5;
+    function calculateLifestyleSimilarity() {
         if (userData != null) {
-
-            // if (userData.min_price == null && userData.max_price == null) {
-            //     return "Please fill out preferences to view similarity";
-            // }
-
-            // if (loggedInUser.min_price == null && loggedInUser.max_price == null) {
-            //     return "This user has not filled out their preferences";
-            // }
-
-            if (loggedInUser.age != null && userData.age != null) {
-                if (Math.abs(loggedInUser.min_price - userData.min_price) > 5) {
-                    total_sim -= 0.35;
-                }
-            }
-
-            if (loggedInUser.min_price != null && userData.min_price != null) {
-                if (Math.abs(loggedInUser.min_price - userData.min_price) > 500) {
-                    total_sim -= 0.5;
-                }
-            }
-            if (loggedInUser.max_price != null && userData.max_price != null) {
-                if (Math.abs(loggedInUser.max_price - userData.max_price) > 500) {
-                    total_sim -= 0.5;
-                }
-            }
-            if (loggedInUser.school != null && userData.school != null) {
-                if (loggedInUser.school !== userData.school) {
-                    total_sim -= 1;
-                }
-            }
-            if (loggedInUser.state != null && userData.state != null) {
-                if (loggedInUser.state !== userData.state) {
-                    total_sim -= 0.5;
-                }
-            }
-            if (loggedInUser.rating) {
-                if (loggedInUser.rating < 3) {
-                    total_sim -= 0.5;
-                }
-            }
-
             var questions = loggedInUser.lifestyle_answers;
             var userQuestions = userData.lifestyle_answers;
 
@@ -518,44 +476,44 @@ export default function User() {
             if (questions != null && userQuestions != null) {
                 lifestyle_sim += 10 - Math.abs(questions[0] - userQuestions[0]) * 5;
 
-                if (questions[1] === 1 || userQuestions[1] === 1) {
-                    if (questions[0] !== userQuestions[0]) {
+                if (questions[1] == 1 || userQuestions[1] == 1) {
+                    if (questions[0] != userQuestions[0]) {
                         lifestyle_sim *= 0;
                     }
                 }
 
                 lifestyle_sim += 10 - Math.abs(questions[2] - userQuestions[2]) * 5;
 
-                if (questions[3] === 1 || userQuestions[3] === 1) {
-                    if (questions[2] !== userQuestions[2]) {
+                if (questions[3] == 1 || userQuestions[3] == 1) {
+                    if (questions[2] != userQuestions[2]) {
                         lifestyle_sim *= 0;
                     }
                 }
 
                 lifestyle_sim += 10 - Math.abs(questions[4] - userQuestions[4]) * 5;
 
-                if (questions[5] === 1 || userQuestions[5] === 1) {
-                    if (questions[4] !== userQuestions[4]) {
+                if (questions[5] == 1 || userQuestions[5] == 1) {
+                    if (questions[4] != userQuestions[4]) {
                         lifestyle_sim *= 0;
                     }
                 }
 
-                if (questions[6] === userQuestions[6]) {
+                if (questions[6] == userQuestions[6]) {
                     lifestyle_sim += 5;
                 }
 
-                if (questions[7] === 1) {
-                    if (userQuestions[6] === 0) {
+                if (questions[7] == 1) {
+                    if (userQuestions[6] == 0) {
                         lifestyle_sim *= 0;
                     }
                 }
-                if (userQuestions[7] === 1) {
-                    if (questions[6] === 0) {
+                if (userQuestions[7] == 1) {
+                    if (questions[6] == 0) {
                         lifestyle_sim *= 0;
                     }
                 }
 
-                if (questions[8] === userQuestions[8]) {
+                if (questions[8] == userQuestions[8]) {
                     lifestyle_sim += 5;
                 }
 
@@ -578,19 +536,12 @@ export default function User() {
             }
         }
 
-        //TODO: set total_sim as person rating
-        if (lifestyle_sim + total_sim < 0) {
-            total_sim = 0;
-        }
-
-        total_sim *= 10;
-        total_sim = Math.round(total_sim * 100) / 100;
-
-        lifestyle_sim *= (50 / 170);
+        lifestyle_sim *= (100 / 170);
         lifestyle_sim = Math.round(lifestyle_sim * 100) / 100;
 
-        setCompScore(total_sim + lifestyle_sim);
-        return total_sim + lifestyle_sim;
+        setCompScore(lifestyle_sim);
+
+        return lifestyle_sim;
     }
 
 
