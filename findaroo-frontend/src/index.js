@@ -30,6 +30,7 @@ import RoommateAgreement from './Pages/RoommateAgreement';
 import RoommateInvitation from './Pages/RoommateInvitations';
 import Calendar from './Pages/Calendar';
 import BlockedUsers from './Pages/BlockedUsers';
+import ExpenseTracker from './Pages/ExpenseTracker';
 import Bookmarks from './Pages/Bookmarks';
 
 // Import the functions you need from the SDKs you need
@@ -167,6 +168,12 @@ const router = createBrowserRouter(
             path: "Profile/BlockedUsers",
             element: <BlockedUsers/>,
             errorElement: <Error />,
+        },
+        {
+            path: "Profile/ExpenseTracker/:rid",
+            element: <ExpenseTracker/>,
+            errorElement: <Error />,
+            
         },
         {
             path: "Profile/Bookmarks",
