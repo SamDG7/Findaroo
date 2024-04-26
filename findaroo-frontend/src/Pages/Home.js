@@ -14,7 +14,8 @@ export default function Home() {
     const [status, setStatus] = useState(true);
     const [userArr, setUserArr] = useState();
     const [roomArr, setRoomArr] = useState();
-    const [combinedArr, setCombinedArr] = useState();
+    const [combinedArr, setCombinedArr] = useState(null);
+    const [userData, setUserData] = useState(null);
 
     useEffect(() => {
         if (!GlobalVariables.authenticated || GlobalVariables.userCredential.uid === undefined) {
@@ -33,6 +34,19 @@ export default function Home() {
                 setStatus(data.status);
             })
             .catch(error => console.error(error));
+    }, [navigate]);
+
+    useEffect(() => {
+        if (!GlobalVariables.userCredential) {
+            return;
+        }
+        console.log("GET Call for new added user in search")
+        fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setUserData(data);
+            }).catch(error => console.error(error));
     }, []);
 
     useEffect(() => {
@@ -43,19 +57,28 @@ export default function Home() {
                 setUserArr(data);
             })
             .catch(error => console.error(error));
-        fetch('http://localhost:5019/Room')
+        fetch('http://localhost:5019/Room/all')
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                setRoomArr(data);
+                console.log(data["rooms"]);
+                setRoomArr(data["rooms"]);
             })
             .catch(error => console.error(error));
     }, [])
 
     useEffect(() => {
         // this merges arrays
-        let newArr = [...roomArr, ...userArr];
-        const sortedArr = newArr.sort(FeaturedSort);
+        let newArr = [];
+        if (roomArr) {
+            newArr = [...roomArr, ...newArr];
+        }
+        if (userArr) {
+            newArr = [...userArr, ...newArr];
+        }
+        const sortFunction = FeaturedSort();
+        const sortedArr = newArr.sort(sortFunction);
+        console.log("Combined Arr:")
+        console.log(sortedArr)
         setCombinedArr(sortedArr);
     }, [roomArr, userArr])
 
@@ -63,44 +86,49 @@ export default function Home() {
         <div className="Page">
             <Navbar />
             <div className="Column">
-                combinedArr.map((data, index) => (
-                    data[status] != null
-                    ?
-                    <PersonInfoSmall key={index} personDict={data} similarityOutput={calculateLifestyleSimilarity(data)} />
-                    :
-                    room {false && <RoomAndRoommates key={index} roomDict={data} similarityOutput={calculateRoomLifestyleSimilarity(data)} />}
-                ))
+                {combinedArr && combinedArr.map((data, index) => {
+                    return PickStyle(data, index);
+                })}
             </div>
         </div>
     );
 
-    function FeaturedSort(sortTypeName){
+    function PickStyle(data, index){
+        if (data["user_id"] != null) {
+            return <PersonInfoSmall key={index} personDict={data} similarityOutput={calculateLifestyleSimilarity(data)} />;
+        } else {
+            return <RoomAndRoommates key={index} roomDict={data} similarityOutput={calculateRoomLifestyleSimilarity(data)} />;
+        }
+    }
+
+    function FeaturedSort(){
         return function (a, b) { return calculateSimilarity(b) - calculateSimilarity(a) };
     }
 
     function calculateSimilarity(dataDict) {
-        if (dataDict[status] != null) {
-            return calculateRoomLifestyleSimilarity(dataDict);
+        if (dataDict["user_id"] != null) {
+            return calculateLifestyleSimilarity(dataDict);
         } else {
             return calculateRoomLifestyleSimilarity(dataDict);
         }
     }
 
-
     function calculateRoomLifestyleSimilarity(roomDict) {
         if (roomDict != null && roomDict.length > 0){
-        let totalSimilarity = 0;
-        roomDict.forEach(function (value.roommate_id, index, array) {
-                totalSimilarity += calculateLifestyleSimilarity()
-            }
-        );
-        totalSimilarity /= roomDict.length;
-        return totalSimilarity;
+            let totalSimilarity = 0;
+            roomDict.roommate_id.forEach((value, index, array) => {
+                    totalSimilarity += calculateLifestyleSimilarity(value);
+                }
+            );
+            totalSimilarity /= roomDict.length;
+            return totalSimilarity;
+        } else {
+            return 0;
         }
     }
 
     function calculateLifestyleSimilarity(personDict) {
-        if (userData != null) {
+        if (userData != null && personDict != null) {
             var questions = personDict.lifestyle_answers;
             var userQuestions = userData.lifestyle_answers;
 
@@ -172,7 +200,9 @@ export default function Home() {
         lifestyle_sim *= (100 / 170);
         lifestyle_sim = Math.round(lifestyle_sim * 100) / 100;
 
-        console.log("Lifestyle Sim between " + personDict.first_name + " and " + userData.first_name + ": " + lifestyle_sim);
+        if (userData != null && personDict != null){
+            console.log("Lifestyle Sim between " + personDict.first_name + " and " + userData.first_name + ": " + lifestyle_sim);
+        }
 
         return lifestyle_sim;
     }

@@ -78,6 +78,40 @@ namespace Findaroo.Server.Controllers
 
             return new GetMyRoomsResponse(rooms);
         }
+        
+        [HttpGet("all")]
+        public async Task<GetAllRoomsResponse> getAllRooms() 
+        {
+            var queryResult = _psql.room
+                .Join(_psql.roommate,
+                    room => room.room_id,
+                    roommate => roommate.room_id,
+                    (_room, _roommate) => new
+                    {
+                        room_id = _room.room_id,
+                        room_name = _room.room_name,
+                        room_mate_ids = _roommate.roommate_id,
+                        date_created = _room.date_created,
+                        date_joined = _roommate.date_joined
+                    })
+                .OrderBy(r => r.date_created)
+                .GroupBy(r => r.room_id)
+                .ToList();
+
+            List<RoomWithRoommateAllInfo> rooms = new List<RoomWithRoommateAllInfo>();
+            queryResult.ForEach(q =>
+            {
+                rooms.Add(new RoomWithRoommateAllInfo(
+                    _psql,
+                    q.Select(q => q.room_id).FirstOrDefault(),
+                    q.Select(q => q.room_name).FirstOrDefault(),
+                    q.Select(q => q.room_mate_ids).ToList(),
+                    q.Select(q => q.date_created).FirstOrDefault(),
+                    q.Select(q => q.date_joined).ToList()));
+            });
+
+            return new GetAllRoomsResponse(rooms);
+        }
 
         [HttpGet("byRoomId")]
         public async Task<RoomWithRoommateDTO> getRoomById(string room_id)
