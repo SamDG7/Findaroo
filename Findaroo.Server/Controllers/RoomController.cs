@@ -17,6 +17,7 @@ namespace Findaroo.Server.Controllers
     public class RoomController : ControllerBase
     {
         PostgresContext _psql;
+        AuthenticationService authenticationService;
 
         public RoomController(PostgresContext psql)
         {
@@ -76,6 +77,50 @@ namespace Findaroo.Server.Controllers
             });
 
             return new GetMyRoomsResponse(rooms);
+        }
+
+        [HttpGet("byRoomId")]
+        public async Task<RoomWithRoommateDTO> getRoomById(string room_id)
+        {
+            string userId = await AuthenticationService.authenticate(Request.Cookies["idToken"]);
+            if (userId == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return null;
+            }
+
+            if (_psql.roommate
+                .Where(rm => rm.room_id.Equals(room_id) && rm.roommate_id.Equals(userId))
+                .FirstOrDefault() == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return null;
+            }
+
+            var queryResult = _psql.room
+                .Where(r => r.room_id.Equals(room_id))
+                .Join(_psql.roommate,
+                    room => room.room_id,
+                    roommate => roommate.room_id,
+                    (_room, _roommate) => new
+                    {
+                        room_id = _room.room_id,
+                        room_name = _room.room_name,
+                        roommate_id = _roommate.roommate_id,
+                        date_created = _room.date_created,
+                        date_joined = _roommate.date_joined
+                    })
+                .OrderBy(r => r.date_created)
+                .GroupBy(r => r.room_id)
+                .ToList().FirstOrDefault();
+
+            return new RoomWithRoommateDTO(
+                queryResult.Select(q => q.room_id).FirstOrDefault(),
+                queryResult.Select(q => q.room_name).FirstOrDefault(),
+                queryResult.Select(q => q.roommate_id).ToList(),
+                queryResult.Select(q => q.date_created).FirstOrDefault(),
+                queryResult.Select(q => q.date_joined).ToList()
+            );
         }
 
         [HttpPost]

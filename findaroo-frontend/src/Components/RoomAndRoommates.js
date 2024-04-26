@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import InputStandard from "./InputFields";
 
 export function RoomAndRoommates({roomDict, connectionDict}) {
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
     const auth = getAuth();
     const [showRoommate, setShowRoommate] = useState(false);
     const [roommateDict, setRoommateDict] = useState(null);
@@ -31,6 +31,8 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
                 </div>
                 <div className="Column End">
                     <div className="Row Start">
+                        <ButtonStandard text="Expense Tracker" onClickFunction={() => navigate(`/Profile/ExpenseTracker/${roomDict.room_id}`)}/>
+                        <div className="p-[0.25vw]"/>
                         <ButtonStandard text="Add Roommates" onClickFunction={displayAddRoommate}></ButtonStandard>
                         <div className="p-[0.25vw]"/>
                         <ButtonStandard text="View Roommates" onClickFunction={displayRoommates}/>
