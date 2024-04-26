@@ -34,6 +34,7 @@ namespace Findaroo.Server.Mapper
             if (updateUserRequest.blocked_users != null) user.blocked_users = updateUserRequest.blocked_users;
             if (updateUserRequest.bookmarks != null) user.bookmarks = updateUserRequest.bookmarks;
             if (updateUserRequest.visible != null) user.visible = (bool)updateUserRequest.visible;
+            if (updateUserRequest.time_zone != null) user.time_zone = updateUserRequest.time_zone;
         }
     }
 }

@@ -9,6 +9,5 @@ namespace Findaroo.Server.Model.RequestModel.Review
         public string positive_remarks { get; set; }
         public string criticisms { get; set; }
 
-        public DateTime reviewed_at {get; set;}
     }
 }

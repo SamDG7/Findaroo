@@ -21,11 +21,11 @@ export default function Selector({name, values, onChangeFunction, defaultValue})
             <h3>
                 {name}
             </h3>
-            <select className="InputStandard" onChange={onChangeFunction}>
+            <select className="InputStandard" onChange={onChangeFunction} value={defaultValue}>
                 {
                     uniqueValues.map((value, index) =>
                         (
-                        value && <option key={index} value={value}>{value}</option>
+                        value && <option key={value} value={value}>{value}</option>
                     ))
                 }
             </select>

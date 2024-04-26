@@ -6,6 +6,10 @@ import React, {useEffect, useState} from "react";
 import InputStandard from "../Components/InputFields";
 import ButtonStandard from "../Components/Buttons";
 import {MessageStyle} from "../Components/ConversationInfo";
+import EmojiPicker from 'emoji-picker-react';
+import { BsEmojiSmileFill } from "react-icons/bs";
+import { IconContext } from "react-icons";
+import { useRef } from "react";
 import {MessageAddDelete} from "../Components/MessageAddDelete";
 
 export default function Conversations() {
@@ -14,7 +18,9 @@ export default function Conversations() {
 
     const [conversationData, setConversationData] = useState(null);
     const [conversationMessages, setConversationMessages] = useState(null);
-    const [newMessage, setNewMessage] = useState(null);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const messageInput = useRef();
+
     const [connections, setConnections] = useState(null);
     const { cid } = useParams();
 
@@ -70,8 +76,37 @@ export default function Conversations() {
                     {conversationMessages.map((message, index) => (
                         <MessageStyle messageInfo={message} key={index}/>
                     ))}
+                    {
+                        showEmojiPicker ? 
+                        <div position="absolute">
+                            <EmojiPicker 
+                                onEmojiClick={(emojiData, event) => {
+                                    messageInput.current.value = messageInput.current.value + emojiData.emoji;
+                                }
+                            }></EmojiPicker>
+                        </div>
+                        :
+                        <div></div>
+                    }
                     <div className="Row">
-                        <InputStandard onChangeFunction={(e) => setNewMessage(e.target.value)}/>
+                        {
+                            //I have to expand this InputStandard to add a useRef (yeah it's kinda scuffed)
+                        }
+                        <div className="Row">
+                            <h3 style={{width: "10vw", textAlign: "right"}}>
+                            </h3>
+                            <input
+                                className="InputStandard"
+                                onChange={(e) => {console.log(e.target.value);}}
+                                placeholder="..."
+                                ref={messageInput}
+                            />
+                        </div>
+                        <IconContext.Provider value={{ color: '#ffd800', size: '1.5em'}}>
+                            <div>
+                                <BsEmojiSmileFill onClick={() => setShowEmojiPicker(!showEmojiPicker)}/>
+                            </div>
+                        </IconContext.Provider>
                         <ButtonStandard text="Send Message" onClickFunction={sendMessage}/>
                     </div>
                 </div>
@@ -80,13 +115,13 @@ export default function Conversations() {
     );
 
     async function sendMessage() {
-        console.log("Attempting to create message '" + newMessage + "'");
+        console.log("Attempting to create message '" + messageInput.current.value + "'");
         await fetch(GlobalVariables.backendURL + "/Conversation/messages", {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json; charset=UTF-8'
             },
-            body: JSON.stringify({conversation_id: conversationData.conversation_id, user_id: GlobalVariables.userCredential.uid, message_text: newMessage})
+            body: JSON.stringify({conversation_id: conversationData.conversation_id, user_id: GlobalVariables.userCredential.uid, message_text: messageInput.current.value})
         }).catch(error => console.log(error));
 
         // This updates the current messages page
@@ -97,6 +132,7 @@ export default function Conversations() {
                 console.log(data);
                 setConversationMessages(data);
             }).catch(error => console.error(error));
+        messageInput.current.value = "";
     }
 
     async function getConnections() {
