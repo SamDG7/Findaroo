@@ -14,6 +14,7 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
     const auth = getAuth();
     const [showRoommate, setShowRoommate] = useState(false);
     const [roommateDict, setRoommateDict] = useState(null);
+    const [defDict, setDefDict] = useState(null)
     const [showAddRoommate, setShowAddRoommate] = useState(false);
     const [visible, setVisible] = useState(true);
     if (!visible) {
@@ -33,6 +34,8 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
                         <ButtonStandard text="Add Roommates" onClickFunction={displayAddRoommate}></ButtonStandard>
                         <div className="p-[0.25vw]"/>
                         <ButtonStandard text="View Roommates" onClickFunction={displayRoommates}/>
+                        <div className="p-[0.25vw]"/>
+                        <ButtonStandard text="Set Default View" onClickFunction={defaultView}/>
                         <div className="p-[0.25vw]"/>
                         <ButtonImportant text="Leave" onClickFunction={removeFromGroup}></ButtonImportant>
                     </div>
@@ -79,13 +82,22 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
                 'name': name,
                 'id': roomDict["roommate_id"][i],
                 'date_joined': roomDict["date_joined"][i].substring(0, roomDict["date_joined"][i].indexOf('T'))
-            })));
+            })))
+            setDefDict(userData.map((name, i) => ({
+                'name': name,
+                'id': roomDict["roommate_id"][i],
+                'date_joined': roomDict["date_joined"][i].substring(0, roomDict["date_joined"][i].indexOf('T'))
+            })))
+            ;
         }
         setShowRoommate(!showRoommate);
     }
 
     function displayAddRoommate() {
         setShowAddRoommate(!showAddRoommate);
+    }
+    function defaultView() {
+        setRoommateDict([...defDict])
     }
     function moveUp(input) {
         console.log(input)    
