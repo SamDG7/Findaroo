@@ -172,9 +172,11 @@ const router = createBrowserRouter(
         {
             path: "Profile/ExpenseTracker/:rid",
             element: <ExpenseTracker/>,
-            path: "Profile/Bookmarks",
+            errorElement: <Error />,
+            
         },
         {
+            path: "Profile/Bookmarks",
             element: <Bookmarks/>,
             errorElement: <Error />,
         }

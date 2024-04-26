@@ -153,6 +153,7 @@ export default function ExpenseTracker() {
             console.log(error);
         });
         if (responseBody.roommateTransactionList.length == 0) {
+            setExpenseData([]);
             return;
         }
         
