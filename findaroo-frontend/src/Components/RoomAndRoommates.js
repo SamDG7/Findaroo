@@ -7,7 +7,8 @@ import GlobalVariables from "../Utils/GlobalVariables";
 import { PersonInfoSmall } from "./PersonInfo";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import InputStandard from "./InputFields";
+import Popup from "../Components/Popup";
 
 export function RoomAndRoommates({roomDict, connectionDict}) {
     const navigate = useNavigate();
@@ -15,10 +16,85 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
     const [showRoommate, setShowRoommate] = useState(false);
     const [roommateDict, setRoommateDict] = useState(null);
     const [showAddRoommate, setShowAddRoommate] = useState(false);
+
+    const [showRent, setShowRent] = useState(false);
+
     const [visible, setVisible] = useState(true);
+
+    const [rentCost, setRentCost] = useState();
+    const [rentDate, setRentDate] = useState();
+    const [rentSplit, setRentSplit] = useState();
+
     const [defDict, setDefDict] = useState(null)
+
     if (!visible) {
         return;
+    }
+
+    const handleRentUpdate = ({ cost, date, split }) => {
+        var desc = "You pay: $";
+        desc += (cost / split);
+
+        const newEvent = {
+            id: GlobalVariables.events.length + 1,
+            name: "Rent Due",
+            description: desc,
+            imageUrl: 'https://via.placeholder.com/256',
+            startDatetime: date,
+            endDatetime: date,
+        };
+        GlobalVariables.events = [...GlobalVariables.events, newEvent];
+        console.log(GlobalVariables.events);
+    };
+
+    function UpdateRentForm({ onSubmit }) {
+
+        const [isEditing, setEditing] = useState(true);
+        const [cost, setCost] = useState('');
+        const [date, setDate] = useState('');
+        const [split, setSplit] = useState('');
+    
+        const handleSubmit = (e) => {
+            e.preventDefault();
+            onSubmit({ cost, date, split });
+            setCost('');
+            setDate('');
+            setSplit('');
+        };
+    
+        const toggleAdding = () => {
+            setEditing(!isEditing);
+        };
+    
+        return (
+            <div>
+                <Popup isOpen={isEditing} closePopup={toggleAdding}>
+                    <h2>Rent Management</h2>
+                    <form onSubmit={handleSubmit}>
+                        <div className="Column Center">
+                            <input
+                            type="number"
+                            placeholder="Cost"
+                            value={cost}
+                            onChange={(e) => setCost(e.target.value)}
+                            />
+                            <input
+                            type="date"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                            />
+                            <input
+                            type="number"
+                            placeholder="Split"
+                            value={split}
+                            onChange={(e) => setSplit(e.target.value)}
+                            />
+                            <button type="submit">Confirm</button>
+                        </div>
+                    </form>
+                </Popup>
+            </div>
+        );
     }
 
     return (
@@ -37,7 +113,10 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
                         <div className="p-[0.25vw]"/>
                         <ButtonStandard text="View Roommates" onClickFunction={displayRoommates}/>
                         <div className="p-[0.25vw]"/>
+                        
+                        <ButtonStandard text="Manage Rent" onClickFunction={displayRent}/>
                         {showRoommate && (<ButtonStandard text="Default View" onClickFunction={() => setRoommateDict([...defDict])}/>)}
+
                         <div className="p-[0.25vw]"/>
                         <ButtonImportant text="Leave" onClickFunction={removeFromGroup}></ButtonImportant>
                     </div>
@@ -47,6 +126,7 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
                 <AddRoommate connectionDict={connectionDict} roomId={roomDict.room_id}/>
                 
             </div>}
+
             <div className="Panel">
                 {
                     showRoommate && roommateDict.map((rm, i) => (
@@ -54,6 +134,7 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
                     ))
                 }
             </div>
+            {showRent && <UpdateRentForm onSubmit={handleRentUpdate} />}
         </div>
     );
 
@@ -92,6 +173,28 @@ export function RoomAndRoommates({roomDict, connectionDict}) {
             })));
         }
         setShowRoommate(!showRoommate);
+    }
+
+    async function displayRent() {
+        if (!showRent) {
+            
+            /*
+            const userResponse = await fetch(GlobalVariables.backendURL + "/User/idsFromNames", {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify({"ids": roomDict["roommate_id"]})
+            })
+            const userData = await userResponse.json();
+            setRoommateDict(userData.map((name, i) => ({
+                'name': name,
+                'id': roomDict["roommate_id"][i],
+                'date_joined': roomDict["date_joined"][i].substring(0, roomDict["date_joined"][i].indexOf('T'))
+            })));
+            */
+        }
+        setShowRent(!showRent);
     }
 
     function displayAddRoommate() {
