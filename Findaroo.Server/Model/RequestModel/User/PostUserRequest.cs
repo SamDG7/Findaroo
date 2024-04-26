@@ -14,13 +14,14 @@
         public string occupation { get; set; }
         public string? company { get; set; }
         public string? school { get; set; }
-        public int? min_price { get; set; }
-        public int? max_price { get; set; }
+        public float? min_price { get; set; }
+        public float? max_price { get; set; }
         public int[]? lifestyle_answers { get; set; }
         public string? preferences { get; set; }
         public string? room_type { get; set; }
         public string user_id { get; set; }
         public string?[]? social { get; set; }
         public string[]? blocked_users { get; set; }
+        public string[]? bookmarks { get; set; }
     }
 }

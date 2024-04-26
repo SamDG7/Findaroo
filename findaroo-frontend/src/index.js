@@ -12,6 +12,7 @@ import Home from "./Pages/Home"
 import Conversations from "./Pages/Conversations"
 import Conversation from "./Pages/Conversation"
 import Search from "./Pages/Search"
+import FAQs from './Pages/FAQs';
 import Error from "./Pages/Error";
 import Profile from "./Pages/Profile";
 import EditProfile from "./Pages/EditProfile";
@@ -30,10 +31,12 @@ import RoommateInvitation from './Pages/RoommateInvitations';
 import Calendar from './Pages/Calendar';
 import BlockedUsers from './Pages/BlockedUsers';
 import ExpenseTracker from './Pages/ExpenseTracker';
+import Bookmarks from './Pages/Bookmarks';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import RoomHistory from './Pages/RoomHistory';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -79,6 +82,11 @@ const router = createBrowserRouter(
         {
             path: "/Search",
             element: <Search />,
+            errorElement: <Error />,
+        },
+        {
+            path: "/FAQs",
+            element: <FAQs />,
             errorElement: <Error />,
         },
         {
@@ -152,6 +160,11 @@ const router = createBrowserRouter(
             errorElement: <Error />,
         },
         {
+            path: "Profile/MyRooms/RoomHistory",
+            element: <RoomHistory/>,
+            errorElement: <Error />,
+        },
+        {
             path: "Profile/BlockedUsers",
             element: <BlockedUsers/>,
             errorElement: <Error />,
@@ -159,6 +172,10 @@ const router = createBrowserRouter(
         {
             path: "Profile/ExpenseTracker/:rid",
             element: <ExpenseTracker/>,
+            path: "Profile/Bookmarks",
+        },
+        {
+            element: <Bookmarks/>,
             errorElement: <Error />,
         }
     ]

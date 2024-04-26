@@ -23,6 +23,7 @@ namespace Findaroo.Server.Mapper
             if (updateUserRequest.company != null) user.company = updateUserRequest.company;
             if (updateUserRequest.school != null) user.school = updateUserRequest.school;
             if (updateUserRequest.rating != null) user.rating = updateUserRequest.rating.Value;
+            if (updateUserRequest.currency_Code != null) user.currency_code = updateUserRequest.currency_Code;
             if (updateUserRequest.min_price != null) user.min_price = updateUserRequest.min_price;
             if (updateUserRequest.max_price != null) user.max_price = updateUserRequest.max_price;
             if (updateUserRequest.preferences != null) user.preferences = updateUserRequest.preferences;
@@ -31,6 +32,8 @@ namespace Findaroo.Server.Mapper
             if (updateUserRequest.status != null) user.status = (bool)updateUserRequest.status;
             if (updateUserRequest.social != null) user.social = updateUserRequest.social;
             if (updateUserRequest.blocked_users != null) user.blocked_users = updateUserRequest.blocked_users;
+            if (updateUserRequest.bookmarks != null) user.bookmarks = updateUserRequest.bookmarks;
+            if (updateUserRequest.visible != null) user.visible = (bool)updateUserRequest.visible;
         }
     }
 }

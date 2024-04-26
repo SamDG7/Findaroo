@@ -6,6 +6,7 @@ import React, {useEffect, useState} from "react";
 import InputStandard from "../Components/InputFields";
 import ButtonStandard from "../Components/Buttons";
 import {MessageStyle} from "../Components/ConversationInfo";
+import {MessageAddDelete} from "../Components/MessageAddDelete";
 
 export default function Conversations() {
     // This redirects to the login page if not logged in
@@ -14,6 +15,7 @@ export default function Conversations() {
     const [conversationData, setConversationData] = useState(null);
     const [conversationMessages, setConversationMessages] = useState(null);
     const [newMessage, setNewMessage] = useState(null);
+    const [connections, setConnections] = useState(null);
     const { cid } = useParams();
 
     useEffect(() => {
@@ -21,6 +23,15 @@ export default function Conversations() {
             navigate("/Login");
         }
     }, []);
+    
+    useEffect(() => {
+        if (conversationData != null && !conversationData.user_ids.includes(GlobalVariables.userCredential.uid)) {
+            console.log("UIDS:")
+            console.log(conversationData.user_ids)
+            console.log(GlobalVariables.userCredential.uid)
+            navigate("/Conversations")
+        }
+    }, [conversationData]);
 
     useEffect(() => {
 
@@ -40,13 +51,12 @@ export default function Conversations() {
                 setConversationMessages(data);
             }).catch(error => console.error(error));
 
-    }, []);
+        getConnections();
+    }, [cid]);
 
     if (!conversationData || !conversationMessages) {
         return;
     }
-
-    const peopleArr = conversationData.user_ids;
 
     return (
         <div className="Page">
@@ -54,6 +64,9 @@ export default function Conversations() {
 
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
+                    <div className="Row">
+                        <MessageAddDelete conversationDict={conversationData} connectionDict={connections}/>
+                    </div>
                     {conversationMessages.map((message, index) => (
                         <MessageStyle messageInfo={message} key={index}/>
                     ))}
@@ -66,7 +79,7 @@ export default function Conversations() {
         </div>
     );
 
-    async function sendMessage(){
+    async function sendMessage() {
         console.log("Attempting to create message '" + newMessage + "'");
         await fetch(GlobalVariables.backendURL + "/Conversation/messages", {
             method: 'POST',
@@ -84,5 +97,38 @@ export default function Conversations() {
                 console.log(data);
                 setConversationMessages(data);
             }).catch(error => console.error(error));
+    }
+
+    async function getConnections() {
+        const connectionResponse = await fetch(`${GlobalVariables.backendURL}/Connection?user_id=${GlobalVariables.userCredential.uid}`);
+        const connectionBody = await connectionResponse.json();
+
+        var idList = [];
+        connectionBody.forEach(element => {
+            if (element['user_1_id'] == GlobalVariables.userCredential.uid) {
+                idList.push(element['user_2_id'])
+            } else {
+                idList.push(element['user_1_id'])
+            }
+        });
+
+        var imageList = [];
+
+        for (const id of idList) {
+            var imageResponse = await fetch(GlobalVariables.backendURL + "/Image?user_id=" + id);
+            var blob = await imageResponse.blob();
+            imageList.push(URL.createObjectURL(blob));
+        }
+
+        var nameList = await fetch(GlobalVariables.backendURL + "/User/idsFromNames", {
+            method: 'POST',
+            body: JSON.stringify({"ids": idList}),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }).then(response => response.json());
+
+        var nameIdImageList = nameList.map((name, i) => ({'name':name, 'image':imageList[i], 'user_id':idList[i]}));
+        setConnections(nameIdImageList);
     }
 }
