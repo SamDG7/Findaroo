@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using FirebaseAdmin.Auth;
 using System.Net;
 using System.Runtime.InteropServices.JavaScript;
+using Findaroo.Server.Authentication;
 
 namespace Findaroo.Server.Controllers
 {
@@ -194,6 +195,23 @@ namespace Findaroo.Server.Controllers
                 );
             }
             
+            _psql.SaveChanges();
+        }
+
+        [HttpDelete]
+        [Route("message")]
+        public async void deleteMessage([FromBody] DeleteMessageRequest deleteMessageRequest)
+        {
+            String? userId = await AuthenticationService.authenticate(Request.Cookies["idToken"]);
+            if (userId == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return;
+            }
+
+            _psql.conversation_message
+                .Where(cm => cm.message_id.Equals(deleteMessageRequest.message_id) && cm.user_id.Equals(userId))
+                .ExecuteDelete();
             _psql.SaveChanges();
         }
 

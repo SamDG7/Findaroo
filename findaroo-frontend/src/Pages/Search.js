@@ -1,11 +1,11 @@
 import "./Page.css"
 import Navbar from "../Components/Navbar";
 import GlobalVariables from "../Utils/GlobalVariables";
-import {Link, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import InputStandard from "../Components/InputFields";
-import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
-import {PersonInfoSmall} from "../Components/PersonInfo";
+import ButtonStandard, { ButtonImportant } from "../Components/Buttons";
+import { PersonInfoSmall } from "../Components/PersonInfo";
 import Selector from "../Components/Selector";
 
 export default function Search() {
@@ -21,7 +21,7 @@ export default function Search() {
             navigate("/Login");
         }
 
-        
+
     }, []);
 
     useEffect(() => {
@@ -29,13 +29,14 @@ export default function Search() {
         console.log("GET Call")
         fetch('http://localhost:5019/User/All')
             .then(response => response.json())
-            .then(data => {console.log(data); 
-                setAllUsers(data); 
+            .then(data => {
+                console.log(data);
+                setAllUsers(data);
                 setBlockedUsers(data[data.findIndex(obj => obj.user_id == GlobalVariables.userCredential.uid)].blocked_users);
-                
+
             })
             .catch(error => console.error(error));
-        
+
     }, []);
 
     useEffect(() => {
@@ -43,26 +44,26 @@ export default function Search() {
         fetch('http://localhost:5019/User?user_id=' + GlobalVariables.userCredential.uid)
             .then(response => response.json())
             .then(data => {
-                console.log(data);    
+                console.log(data);
                 setUserData(data);
             }).catch(error => console.error(error));
     }, []);
 
     return (
         <div className="Page">
-            <Navbar/>
+            <Navbar />
             <div className="Panel mx-[2vw] my-[2vh] px-[1vw] py-[1vh] drop-shadow-xl">
                 <div className="Column">
                     <div className="Column Start" >
-                        <Selector name="Sort By" values={["Score", "A-Z", "Z-A", "Rating (Descending)", "Rating (Ascending)"]} onChangeFunction={(e) => setSortType(e.target.value)} />
-                        
+                        <Selector name="Sort By" values={["Lifestyle Compatibility", "Situation Compatibility", "A-Z", "Z-A", "Rating (Descending)", "Rating (Ascending)", "Random", "Average Price (Ascending)", "Average Price (Descending)", "Min Price (Ascending)", "Min Price (Descending)", "Max Price (Ascending)", "Max Price (Descending)"]} onChangeFunction={(e) => setSortType(e.target.value)} />
+
                     </div>
                     <div className="Column End">
                         <p>Showing {allUsers.length} Potential Roomates</p>
                     </div>
                     {
                         allUsers != null && GetSortedPersons(allUsers, sortType)
-                        
+
                     }
                 </div>
             </div>
@@ -70,14 +71,14 @@ export default function Search() {
     );
 
     function filterBlockedUsers(data) {
-        if(blockedUsers == null) {
+        if (blockedUsers == null) {
             return data
         }
         for (let i = 0; i < data.length; i++) {
 
             console.log("profile visible: " + data[i].visible);
 
-            if(blockedUsers.includes(data[i].user_id)) {
+            if (blockedUsers.includes(data[i].user_id)) {
                 data.splice(i, 1)
                 i--
             } else if (data[i].visible == false) {
@@ -112,12 +113,12 @@ export default function Search() {
         return (
             sortedData.map((person, index) => (
                 //Potentially calculate compatibility here
-                <PersonInfoSmall key={index} personDict={person} similarityOutput={calculateSimilarity(person)}/>
+                <PersonInfoSmall key={index} personDict={person} similarityOutput={calculateLifestyleSimilarity(person)} />
             ))
         );
     }
 
-    function calculateSimilarity(personDict) {
+    function calculateSituationSimilarity(personDict) {
         var total_sim = 5;
         if (userData != null) {
 
@@ -160,7 +161,20 @@ export default function Search() {
                     total_sim -= 0.5;
                 }
             }
+        }
 
+        if (total_sim < 0) {
+            total_sim = 0;
+        }
+
+        total_sim *= 20;
+        total_sim = Math.round(total_sim * 100) / 100;
+
+        return total_sim;
+    }
+    
+    function calculateLifestyleSimilarity(personDict) {
+        if (userData != null) {
             var questions = personDict.lifestyle_answers;
             var userQuestions = userData.lifestyle_answers;
 
@@ -217,7 +231,7 @@ export default function Search() {
                 lifestyle_sim += 10 - Math.abs(questions[11] - userQuestions[11]) * 5;
 
                 lifestyle_sim += 20 - Math.abs(questions[12] - userQuestions[12]) * 10;
-                
+
                 lifestyle_sim += 10 - Math.abs(questions[13] - userQuestions[13]) * 5;
 
                 lifestyle_sim += 20 - Math.abs(questions[14] - userQuestions[14]) * 10;
@@ -228,37 +242,49 @@ export default function Search() {
 
             }
         }
-        
-        //TODO: set total_sim as person rating
-        if (lifestyle_sim + total_sim < 0) {
-            total_sim = 0;
-        }
 
-        total_sim *= 10;
-        total_sim = Math.round(total_sim * 100) / 100;
-
-        lifestyle_sim *= (50 / 170);
+        lifestyle_sim *= (100 / 170);
         lifestyle_sim = Math.round(lifestyle_sim * 100) / 100;
-        
-        return total_sim + lifestyle_sim;
+
+        console.log("Lifestyle Sim between " + personDict.first_name + " and " + userData.first_name + ": " + lifestyle_sim);
+
+        return lifestyle_sim;
     }
+
     function GetSort(sortTypeName) {
         switch (sortTypeName) {
             default:
-            case "Score":
-                return function(a,b) {
-                    if (typeof calculateSimilarity(a) === 'string' || typeof calculateSimilarity(b) === 'string' ) {
-                        return calculateSimilarity(a) - calculateSimilarity(b)
+            case "Situation Compatibility":
+                return function (a, b) {
+                    if (typeof calculateSituationSimilarity(a) === 'string' || typeof calculateSituationSimilarity(b) === 'string') {
+                        return calculateSituationSimilarity(a) - calculateSituationSimilarity(b)
                     }
-                    return calculateSimilarity(b) - calculateSimilarity(a)};
+                    return calculateSituationSimilarity(b) - calculateSituationSimilarity(a)
+                };
+            case "Lifestyle Compatibility":
+                return function (a, b) { return calculateLifestyleSimilarity(b) - calculateLifestyleSimilarity(a) };
             case "A-Z":
-                return function(a,b) {return a.first_name === b.first_name ? a.last_name.localeCompare(b.last_name) : a.first_name.localeCompare(b.first_name)};
+                return function (a, b) { return a.first_name === b.first_name ? a.last_name.localeCompare(b.last_name) : a.first_name.localeCompare(b.first_name) };
             case "Z-A":
-                return function(a,b) {return a.first_name === b.first_name ? b.last_name.localeCompare(a.last_name) : b.first_name.localeCompare(a.first_name)};
+                return function (a, b) { return a.first_name === b.first_name ? b.last_name.localeCompare(a.last_name) : b.first_name.localeCompare(a.first_name) };
             case "Rating (Descending)":
-                return function(a,b) {return b.rating - a.rating};
+                return function (a, b) { return b.rating - a.rating };
             case "Rating (Ascending)":
-                return function(a,b) {return a.rating - b.rating};
+                return function (a, b) { return a.rating - b.rating };
+            case "Random":
+                return function (a, b) { return 0.5 - Math.random() };
+            case "Average Price (Ascending)":
+                return function (a, b) { return a.min_price + a.max_price - b.min_price - b.max_price };
+            case "Average Price (Descending)":
+                return function (a, b) { return b.min_price + b.max_price - a.min_price - a.max_price };
+            case "Min Price (Ascending)":
+                return function (a, b) { return a.min_price - b.min_price };
+            case "Min Price (Descending)":
+                return function (a, b) { return b.min_price - a.min_price };
+            case "Max Price (Ascending)":
+                return function (a, b) { return a.max_price - b.max_price };
+            case "Max Price (Descending)":
+                return function (a, b) { return b.max_price - a.max_price };
         }
     }
 }
