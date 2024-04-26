@@ -1,7 +1,21 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import './InputFields.css';
+import GlobalVariables from "../Utils/GlobalVariables";
 
-export default function Selector({name, values, onChangeFunction}) {
+export default function Selector({name, values, onChangeFunction, defaultValue}) {
+    const [uniqueValues, setUniqueValues] = useState([]);
+
+    // This removes duplicates
+    useEffect(() => {
+        const arr = [defaultValue];
+        // eslint-disable-next-line array-callback-return
+        values.map((item) => {
+            const findItem = arr.find((x) => x === item);
+            if (!findItem) arr.push(item);
+        });
+        setUniqueValues(arr);
+    }, [values]);
+
     return (
         <div className="Row Start">
             <h3>
@@ -9,8 +23,9 @@ export default function Selector({name, values, onChangeFunction}) {
             </h3>
             <select className="InputStandard" onChange={onChangeFunction}>
                 {
-                    values.map((value, index) => (
-                        <option key={index} value={value}>{value}</option>
+                    uniqueValues.map((value, index) =>
+                        (
+                        value && <option key={index} value={value}>{value}</option>
                     ))
                 }
             </select>

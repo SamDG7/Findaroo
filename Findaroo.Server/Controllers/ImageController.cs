@@ -96,5 +96,37 @@ namespace Findaroo.Server.Controllers
                 Response.StatusCode = ((int)HttpStatusCode.InternalServerError);
             }
         }
+        
+        [HttpDelete]
+        public void DeleteProfilePicture(string userId)
+        {
+            try
+            {
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "Images/Profile", userId);
+
+                if (!Directory.Exists(path))
+                {
+                    return;
+                }
+
+                var fileList = Directory.GetFiles(path);
+
+                foreach ( var file in fileList )
+                {
+                    System.IO.File.Delete(file);
+                }
+
+                /*path = Path.Combine(path, imageModel.image_name);
+
+                using (Stream stream = new FileStream(path, FileMode.Create))
+                {
+                    imageModel.form_file.CopyTo(stream);
+                }*/
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = ((int)HttpStatusCode.InternalServerError);
+            }
+        }
     }
 }

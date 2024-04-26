@@ -1,3 +1,4 @@
+using Findaroo.Server.Controllers;
 using Findaroo.Server.Model.TableModel;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,8 @@ namespace Findaroo.Server.PostgreSQL
         public DbSet<Ratings> ratings { get; set; }
         public DbSet<RoommateTransaction> roommate_transaction { get; set; }
         public DbSet<MessageReaction> message_reaction { get; set; }
+        public DbSet<Review> roommate_reviews { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
