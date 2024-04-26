@@ -7,11 +7,13 @@ import { RxCross1 } from "react-icons/rx";
 import Popup from "./Popup";
 import { CiFaceSmile } from "react-icons/ci";
 import EmojiPicker from 'emoji-picker-react';
+import TimeZoneHelper from "./TimeZoneHelper";
 
 export function MessageStyle({messageInfo}){
     //console.log(messageInfo.date_modified)
-    const [isVisible, setVisible] = useState(true);
     const [userName, setUserName] = useState();
+    const [lastDate, setLastDate] = useState(null);
+    const [isVisible, setVisible] = useState(true);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [showSuggestionMode, setShowSuggestionMode] = useState(false);
     const [userHasNotReacted, setUserHasNotReacted] = useState(true);
@@ -36,7 +38,15 @@ export function MessageStyle({messageInfo}){
             body: JSON.stringify({ids: [messageInfo.user_id]})
         }).then(response => response.json()).then(data => {console.log(data); setUserName(data[0]);}).catch(error => console.log(error));
         getReactions();
-    }, []);
+    }, [messageInfo.user_id]);
+
+    useEffect(() => {
+        fetch(GlobalVariables.backendURL + "/User?user_id=" + GlobalVariables.userCredential.uid)
+            .then(e => e.json())
+            .then(e => TimeZoneHelper(new Date(messageInfo.date_modified), e.time_zone))
+            .then(e => setLastDate(e))
+            .catch(error => console.log(error));
+    }, [messageInfo.date_modified]);
 
     return(
         isVisible ?
@@ -53,7 +63,7 @@ export function MessageStyle({messageInfo}){
             {messageInfo.user_id === GlobalVariables.userCredential.uid ? <RxCross1 onClick={() => setIsPopupOpen(true)}/> : <div></div>}
             <div className="Row">
                 <h3>{userName}</h3>
-                <h3>{date.toLocaleString()}</h3>
+                <h3>{lastDate}</h3>
             </div>
             <h2>{messageInfo.message_text}</h2>
             {showSuggestionMode && <EmojiPicker onEmojiClick={(emojiData, event) => {
@@ -180,6 +190,7 @@ export function ConversationInfoSmall({conversationDict}) {
     const uidArr = conversationDict.user_ids;
     const [peopleArr, setPeopleArr] = useState([]);
     const [lastMessage, setLastMessage] = useState();
+    const [lastDate, setLastDate] = useState(null);
 
     useEffect(() => {
         console.log("POST Call")
@@ -199,13 +210,23 @@ export function ConversationInfoSmall({conversationDict}) {
                 console.log(data);
                 setLastMessage(data[data.length - 1]);
             }).catch(error => console.error(error));
-    }, []);
+    }, [conversationDict.conversation_id, uidArr]);
+
+    useEffect(() => {
+        if (lastMessage){
+            fetch(GlobalVariables.backendURL + "/User?user_id=" + GlobalVariables.userCredential.uid)
+                .then(e => e.json())
+                .then(e => TimeZoneHelper(new Date(lastMessage.date_modified), e.time_zone))
+                .then(e => setLastDate(e))
+                .catch(error => console.log(error));
+        }
+    }, [lastMessage]);
 
     if (!conversationDict || peopleArr === []) {
         return;
     }
 
-    const dateString = lastMessage ? "Last Message: " + new Date(lastMessage.date_modified).toLocaleString() : "Conversation Created: " + conversationDict.date_modified;
+    const dateString = lastMessage && lastDate ? "Last Message: " + lastDate : "Conversation Created: " + conversationDict.date_modified;
 
     return (
         <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]"

@@ -38,6 +38,7 @@ namespace Findaroo.Server.Model.TableModel
         public string[]? blocked_users { get; set; }
         public string[]? bookmarks { get; set; }
         public bool visible { get; set; }
+        public string? time_zone { get; set; }
 
         public User() { }
 
@@ -63,6 +64,7 @@ namespace Findaroo.Server.Model.TableModel
             this.company = pur.company;
             this.school = pur.school;
             this.rating = 0;
+            this.currency_code = pur.currency_Code;
             this.min_price = pur.min_price;
             this.max_price = pur.max_price;
             this.lifestyle_answers = pur.lifestyle_answers;
@@ -72,6 +74,7 @@ namespace Findaroo.Server.Model.TableModel
             this.social = pur.social;
             this.blocked_users = pur.blocked_users;
             this.bookmarks = pur.bookmarks;
+            this.time_zone = pur.time_zone;
         }
     }
 }

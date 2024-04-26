@@ -5,7 +5,6 @@ import {Link, useNavigate} from "react-router-dom";
 import ButtonStandard, {ButtonImportant} from "../Components/Buttons";
 import InputStandard, {InputBox} from "../Components/InputFields";
 import GlobalVariables from "../Utils/GlobalVariables";
-import {DropdownButton, DropdownItem} from "react-bootstrap";
 import Selector from "../Components/Selector";
 
 export default function EditPreferences() {
@@ -24,6 +23,9 @@ export default function EditPreferences() {
     const [currencyCodes, setCurrencyCodes] = useState();
     const [priceLow, setPriceLow] = useState();
     const [priceHigh, setPriceHigh] = useState();
+    const [timeZone, setTimeZone] = useState(null);
+    const timeZones = Intl.supportedValuesOf('timeZone');
+
     const [roommatePreferences, setRoommatePreferences] = useState()
 
     const [saveText, setSaveText] = useState(null);
@@ -38,6 +40,7 @@ export default function EditPreferences() {
             if (data.max_price) setPriceHigh(data.max_price);
             if (data.room_type) setRoomType(data.room_type);
             if (data.currency_code) setCurrencyCode(data.currency_code);
+            if (data.time_zone) setTimeZone(data.time_zone);
             if (data.preferences) setRoommatePreferences(data.preferences)
         }).then(
             fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.min.json')
@@ -57,9 +60,11 @@ export default function EditPreferences() {
                 min_price: priceLow,
                 max_price: priceHigh,
                 currency_Code: currencyCode,
+                time_zone: timeZone,
                 preferences: roommatePreferences,
                 room_type: roomType
             }
+            console.log(form)
             await fetch('http://localhost:5019/User', {
 				method: "PUT",
 				headers: {
@@ -104,17 +109,28 @@ export default function EditPreferences() {
                     <div className="Column Start">
                         <h2>Preferences</h2>
                         <div className="Row Start">
-
-                            {currencyCodes && <Selector name="Select Currency" values={Object.values(currencyCodes)} defaultValue={currencyCode != null ? currencyCodes[currencyCode] : "US Dollar"} onChangeFunction={(e) => {
-                                priceExchange(getKeyByValue(currencyCodes, e.target.value))
-                            }} />}
-                            <InputStandard name="Min Price" defaultValue={priceLow} onChangeFunction={(e) => setPriceLow(e.target.value)}/>
-                            <InputStandard name="Max Price" defaultValue={priceHigh} onChangeFunction={(e) => setPriceHigh(e.target.value)}/>
-                            <InputStandard name="Room Type" defaultValue={roomType} onChangeFunction={(e) => setRoomType(e.target.value)}/>
+                            <Selector name="Select Time Zone" values={timeZones}
+                                      defaultValue={timeZone != null ? timeZone : "No time zone selected"} onChangeFunction={(e) => {
+                                setTimeZone(e.target.value);
+                            }}/>
+                            <InputStandard name="Room Type" defaultValue={roomType}
+                                           onChangeFunction={(e) => setRoomType(e.target.value)}/>
+                        </div>
+                        <div className="Row Start">
+                            {currencyCodes && <Selector name="Select Currency" values={Object.values(currencyCodes)}
+                                                        defaultValue={currencyCode != null ? currencyCodes[currencyCode] : "US Dollar"}
+                                                        onChangeFunction={(e) => {
+                                                            priceExchange(getKeyByValue(currencyCodes, e.target.value))
+                                                        }}/>}
+                            <InputStandard name="Min Price" defaultValue={priceLow}
+                                           onChangeFunction={(e) => setPriceLow(e.target.value)}/>
+                            <InputStandard name="Max Price" defaultValue={priceHigh}
+                                           onChangeFunction={(e) => setPriceHigh(e.target.value)}/>
                         </div>
                         <h2>Roommate Preferences</h2>
                         <div className="Row Start">
-                            <InputBox name="Roommate Preference" defaultValue={roommatePreferences} onChangeFunction={(e) => setRoommatePreferences(e.target.value)}/>
+                            <InputBox name="Roommate Preference" defaultValue={roommatePreferences}
+                                      onChangeFunction={(e) => setRoommatePreferences(e.target.value)}/>
                         </div>
                     </div>
                     <div className="Column End">
