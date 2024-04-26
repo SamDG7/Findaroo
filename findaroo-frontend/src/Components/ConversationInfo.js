@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import './PersonInfo.css';
 import GlobalVariables from "../Utils/GlobalVariables";
 import { useNavigate } from "react-router-dom";
-import {TimeZoneHelper} from "./TimeZoneHelper";
+import TimeZoneHelper from "./TimeZoneHelper";
 
 export function MessageStyle({messageInfo}){
-    //console.log(messageInfo.date_modified)
 
     const [userName, setUserName] = useState();
-    const date = new Date(messageInfo.date_modified);
+    const [lastDate, setLastDate] = useState(null);
 
     useEffect(() => {
         // Get the name of the user who made this message
@@ -25,12 +24,20 @@ export function MessageStyle({messageInfo}){
         );
     }, [messageInfo.user_id]);
 
+    useEffect(() => {
+        fetch(GlobalVariables.backendURL + "/User?user_id=" + GlobalVariables.userCredential.uid)
+            .then(e => e.json())
+            .then(e => TimeZoneHelper(new Date(messageInfo.date_modified), e.time_zone))
+            .then(e => setLastDate(e))
+            .catch(error => console.log(error));
+    }, [messageInfo.date_modified]);
+
     return(
         <div
             className={"Column drop-shadow-xl my-[1.5vh]" + (messageInfo.user_id === GlobalVariables.userCredential.uid ? " End bg-blue-200 ml-auto" : " Start bg-gray-200  mr-auto")}>
             <div className="Row">
                 <h3>{userName}</h3>
-                <h3><TimeZoneHelper time={date} uid={messageInfo.user_id}/></h3>
+                <h3>{lastDate}</h3>
             </div>
             <h2>{messageInfo.message_text}</h2>
         </div>
@@ -44,6 +51,7 @@ export function ConversationInfoSmall({conversationDict}) {
     const uidArr = conversationDict.user_ids;
     const [peopleArr, setPeopleArr] = useState([]);
     const [lastMessage, setLastMessage] = useState();
+    const [lastDate, setLastDate] = useState(null);
 
     useEffect(() => {
         console.log("POST Call")
@@ -63,13 +71,23 @@ export function ConversationInfoSmall({conversationDict}) {
                 console.log(data);
                 setLastMessage(data[data.length - 1]);
             }).catch(error => console.error(error));
-    }, []);
+    }, [conversationDict.conversation_id, uidArr]);
+
+    useEffect(() => {
+        if (lastMessage){
+            fetch(GlobalVariables.backendURL + "/User?user_id=" + GlobalVariables.userCredential.uid)
+                .then(e => e.json())
+                .then(e => TimeZoneHelper(new Date(lastMessage.date_modified), e.time_zone))
+                .then(e => setLastDate(e))
+                .catch(error => console.log(error));
+        }
+    }, [lastMessage]);
 
     if (!conversationDict || peopleArr === []) {
         return;
     }
 
-    const dateString = lastMessage ? "Last Message: " + TimeZoneHelper(new Date(lastMessage.date_modified)) : "Conversation Created: " + conversationDict.date_modified;
+    const dateString = lastMessage && lastDate ? "Last Message: " + lastDate : "Conversation Created: " + conversationDict.date_modified;
 
     return (
         <div className="Row Start bg-gray-200 drop-shadow-xl my-[1.5vh]"
